@@ -95,6 +95,17 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+
+            <section className="w-full px-6 py-24 text-center">
+                <div className="mx-auto max-w-4xl">
+                    <h2 className="mb-8 font-['Space_Grotesk'] text-5xl font-extrabold leading-tight text-[#1b1b1f]">See where you stand today.</h2>
+                    <p className="mb-8 text-xl font-semibold text-[#71717a]">Free full diagnostic practice test.</p>
+                    <button className="inline-flex h-16 min-w-48 items-center justify-center rounded-2xl bg-[#2f61c9] px-10 text-xl font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8]">
+                        Take the diagnostic&nbsp;→
+                    </button>
+                </div>
+            </section>
         </>
     );
 };
