@@ -22,6 +22,25 @@ const Home = () => {
         },
     ];
 
+    const stats = [
+        {
+            value: '+190',
+            label: 'avg. point gain',
+        },
+        {
+            value: '90%',
+            label: 'hit their target',
+        },
+        {
+            value: '2x',
+            label: 'better retention',
+        },
+        {
+            value: '1480',
+            label: 'median final score',
+        },
+    ];
+
     return (
         <>
             <section className="flex flex-col h-[90vh] w-3/5 mx-auto justify-center items-center">
@@ -54,6 +73,24 @@ const Home = () => {
                                 <h3 className="mb-6 font-['Space_Grotesk'] text-xl font-extrabold text-[#1b1b1f]">{step.title}</h3>
                                 <p className="text-md font-semibold leading-8 text-[#71717a]">{step.description}</p>
                             </article>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="w-full bg-[#191a1e] px-6 py-24 text-white">
+                <div className="mx-auto max-w-7xl">
+                    <div className="mb-20 text-center">
+                        <p className="mb-6 text-sm font-extrabold uppercase tracking-[0.35em] text-[#91afe5]">The evidence</p>
+                        <h2 className="font-['Space_Grotesk'] text-5xl font-extrabold leading-tight">Measured, not guessed.</h2>
+                    </div>
+
+                    <div className="grid gap-12 text-center sm:grid-cols-2 lg:grid-cols-4">
+                        {stats.map((stat) => (
+                            <div key={stat.label}>
+                                <p className="mb-5 font-['Space_Grotesk'] text-6xl font-extrabold leading-none lg:text-7xl">{stat.value}</p>
+                                <p className="text-lg font-bold text-[#a3a3aa]">{stat.label}</p>
+                            </div>
                         ))}
                     </div>
                 </div>
