@@ -92,7 +92,7 @@ const Register = () => {
                                 name="confirmPassword"
                                 autoComplete="new-password"
                                 className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
-                                placeholder="Repeat your password"
+                                placeholder="Confirm your password"
                             />
                         </label>
 
