@@ -1,4 +1,30 @@
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+
+import authService from '../../services/authService';
+import type { LoginData } from '../../types/auth';
+
 const Login = () => {
+    const navigate = useNavigate();
+    const [submitError, setSubmitError] = useState('');
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm<LoginData>();
+
+    const onSubmit = async (data: LoginData) => {
+        setSubmitError('');
+
+        try {
+            await authService.login(data);
+            navigate('/');
+        } catch (error) {
+            setSubmitError(error instanceof Error ? error.message : 'Login failed.');
+        }
+    };
+
     return (
         <section className="flex min-h-[calc(100vh-97px)] w-full items-center bg-white px-8 py-10 sm:px-10 lg:px-16 lg:py-12 xl:px-20">
             <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[1fr_0.95fr] xl:gap-14">
@@ -28,18 +54,24 @@ const Login = () => {
                         </h2>
                     </div>
 
-                    <form className="space-y-6">
+                    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                         <label className="block pt-1">
                             <span className="mb-3 block text-sm font-extrabold text-[#1b1b1f]">
                                 Email address
                             </span>
                             <input
                                 type="email"
-                                name="email"
-                                autoComplete="email"
                                 className="h-14 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-base font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
                                 placeholder="pen4o@gmail.com"
+                                {...register('email', {
+                                    required: 'Email address is required',
+                                })}
                             />
+                            {errors.email && (
+                                <span className="mt-2 block text-xs font-bold text-red-500">
+                                    {errors.email.message}
+                                </span>
+                            )}
                         </label>
 
                         <label className="block pt-1">
@@ -48,19 +80,31 @@ const Login = () => {
                             </span>
                             <input
                                 type="password"
-                                name="password"
-                                autoComplete="current-password"
                                 className="h-14 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-base font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
                                 placeholder="Enter your password"
+                                {...register('password', {
+                                    required: 'Password is required',
+                                })}
                             />
+                            {errors.password && (
+                                <span className="mt-2 block text-xs font-bold text-red-500">
+                                    {errors.password.message}
+                                </span>
+                            )}
                         </label>
 
+                        {submitError && (
+                            <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-bold text-red-600">
+                                {submitError}
+                            </p>
+                        )}
 
                         <button
                             type="submit"
-                            className="my-9 flex h-14 w-full items-center justify-center rounded-2xl bg-[#2f61c9] px-10 text-base font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8]"
+                            disabled={isSubmitting}
+                            className="my-9 flex h-14 w-full items-center justify-center rounded-2xl bg-[#2f61c9] px-10 text-base font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8] disabled:cursor-not-allowed disabled:bg-[#8da8df]"
                         >
-                            Log in
+                            {isSubmitting ? 'Logging in...' : 'Log in'}
                         </button>
                     </form>
 
