@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';
 import type { RegisterData } from '../../types/auth';
 
 const Register = () => {
-    const navigate = useNavigate();
     const [submitError, setSubmitError] = useState('');
     const {
         register,
@@ -21,7 +19,7 @@ const Register = () => {
 
         try {
             await authService.register(data);
-            navigate('/');
+            window.location.href = '/';
         } catch (error) {
             setSubmitError(error instanceof Error ? error.message : 'Registration failed.');
         }

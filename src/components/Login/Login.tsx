@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 import authService from '../../services/authService';
 import type { LoginData } from '../../types/auth';
 
 const Login = () => {
-    const navigate = useNavigate();
     const [submitError, setSubmitError] = useState('');
     const {
         register,
@@ -19,7 +17,7 @@ const Login = () => {
 
         try {
             await authService.login(data);
-            navigate('/');
+            window.location.href = '/';
         } catch (error) {
             setSubmitError(error instanceof Error ? error.message : 'Login failed.');
         }

@@ -71,9 +71,7 @@ const logout = async () => {
     });
     const data = await res.json();
 
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
+    clearAuthData();
 
     if (!res.ok) {
         throw new Error(data);
