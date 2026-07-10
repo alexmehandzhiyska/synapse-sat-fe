@@ -1,4 +1,32 @@
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import authService from '../../services/authService';
+import type { RegisterData } from '../../types/auth';
+
 const Register = () => {
+    const navigate = useNavigate();
+    const [submitError, setSubmitError] = useState('');
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors, isSubmitting },
+    } = useForm<RegisterData>();
+
+    const password = watch('password');
+
+    const onSubmit = async (data: RegisterData) => {
+        setSubmitError('');
+
+        try {
+            await authService.register(data);
+            navigate('/');
+        } catch (error) {
+            setSubmitError(error instanceof Error ? error.message : 'Registration failed.');
+        }
+    };
+
     return (
         <section className="min-h-[calc(100vh-97px)] w-full bg-white px-8 py-6 sm:px-10 lg:px-16 lg:py-7 xl:px-20">
             <div className="mx-auto grid max-w-6xl items-center gap-9 lg:grid-cols-[1fr_0.9fr] xl:gap-12">
@@ -28,7 +56,7 @@ const Register = () => {
                         </h2>
                     </div>
 
-                    <form className="space-y-4">
+                    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                         <div className="grid gap-4 sm:grid-cols-2">
                             <label className="block pt-1">
                                 <span className="mb-2 block text-xs font-extrabold text-[#1b1b1f]">
@@ -36,11 +64,17 @@ const Register = () => {
                                 </span>
                                 <input
                                     type="text"
-                                    name="firstName"
-                                    autoComplete="given-name"
                                     className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
                                     placeholder="Pencho"
+                                    {...register('firstName', {
+                                        required: 'First name is required',
+                                    })}
                                 />
+                                {errors.firstName && (
+                                    <span className="mt-2 block text-xs font-bold text-red-500">
+                                        {errors.firstName.message}
+                                    </span>
+                                )}
                             </label>
 
                             <label className="block pt-1">
@@ -49,11 +83,17 @@ const Register = () => {
                                 </span>
                                 <input
                                     type="text"
-                                    name="lastName"
-                                    autoComplete="family-name"
-                                    className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
+                                    className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-bold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
                                     placeholder="Minchov"
+                                    {...register('lastName', {
+                                        required: 'Last name is required',
+                                    })}
                                 />
+                                {errors.lastName && (
+                                    <span className="mt-2 block text-xs font-bold text-red-500">
+                                        {errors.lastName.message}
+                                    </span>
+                                )}
                             </label>
                         </div>
 
@@ -63,11 +103,17 @@ const Register = () => {
                             </span>
                             <input
                                 type="email"
-                                name="email"
-                                autoComplete="email"
-                                className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
+                                className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-bold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
                                 placeholder="pen4o@gmail.com"
+                                {...register('email', {
+                                    required: 'Email address is required',
+                                })}
                             />
+                            {errors.email && (
+                                <span className="mt-2 block text-xs font-bold text-red-500">
+                                    {errors.email.message}
+                                </span>
+                            )}
                         </label>
 
                         <label className="block pt-1">
@@ -76,11 +122,21 @@ const Register = () => {
                             </span>
                             <input
                                 type="password"
-                                name="password"
-                                autoComplete="new-password"
-                                className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
+                                className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-bold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
                                 placeholder="Create a password"
+                                {...register('password', {
+                                    required: 'Password is required',
+                                    minLength: {
+                                        value: 8,
+                                        message: 'Password must be at least 8 characters',
+                                    },
+                                })}
                             />
+                            {errors.password && (
+                                <span className="mt-2 block text-xs font-bold text-red-500">
+                                    {errors.password.message}
+                                </span>
+                            )}
                         </label>
 
                         <label className="block pt-1">
@@ -89,18 +145,32 @@ const Register = () => {
                             </span>
                             <input
                                 type="password"
-                                name="confirmPassword"
-                                autoComplete="new-password"
-                                className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
+                                className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-bold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
                                 placeholder="Confirm your password"
+                                {...register('confirmPassword', {
+                                    required: 'Confirm your password',
+                                    validate: (value) => value === password || 'Passwords do not match',
+                                })}
                             />
+                            {errors.confirmPassword && (
+                                <span className="mt-2 block text-xs font-bold text-red-500">
+                                    {errors.confirmPassword.message}
+                                </span>
+                            )}
                         </label>
+
+                        {submitError && (
+                            <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-bold text-red-600">
+                                {submitError}
+                            </p>
+                        )}
 
                         <button
                             type="submit"
-                            className="my-8 flex h-12 w-full items-center justify-center rounded-2xl bg-[#2f61c9] px-10 text-sm font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8]"
+                            disabled={isSubmitting}
+                            className="my-8 flex h-12 w-full items-center justify-center rounded-2xl bg-[#2f61c9] px-10 text-sm font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8] disabled:cursor-not-allowed disabled:bg-[#8da8df]"
                         >
-                            Create account
+                            {isSubmitting ? 'Creating account...' : 'Create account'}
                         </button>
                     </form>
 
