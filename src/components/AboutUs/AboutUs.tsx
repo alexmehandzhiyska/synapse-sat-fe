@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBullseye, faChartLine, faListCheck } from '@fortawesome/free-solid-svg-icons';
 
 const AboutUs = () => {
-    const values = [
+    const keyPoints = [
         {
             icon: faListCheck,
             title: 'Built for clarity',
@@ -69,7 +69,7 @@ const AboutUs = () => {
 
             <section className="w-full bg-[#191a1e] px-8 py-20 text-white sm:px-10 lg:px-16 xl:px-20">
                 <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
-                    {values.map((value) => (
+                    {keyPoints.map((value) => (
                         <article key={value.title} className="rounded-3xl border border-white/10 p-8">
                             <div className="mb-7 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#2f61c9]/15 text-[#91afe5]">
                                 <FontAwesomeIcon icon={value.icon} className="h-7 w-7" />
