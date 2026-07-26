@@ -27,7 +27,7 @@ const register = async (user: RegisterData) => {
     const data = await res.json();
 
     if (!res.ok) {
-        throw new Error(data);
+        throw new Error(data.message || 'Error creating your account.');
     }
 
     saveAuthData(data);
@@ -46,7 +46,7 @@ const login = async (user: LoginData) => {
     const data = await res.json();
 
     if (!res.ok) {
-        throw new Error(data);
+        throw new Error(data.message || 'Wrong email or password.');
     }
 
     saveAuthData(data);
@@ -74,7 +74,7 @@ const logout = async () => {
     clearAuthData();
 
     if (!res.ok) {
-        throw new Error(data);
+        throw new Error(data.message || 'Logout failed.');
     }
 
     return data;
@@ -100,7 +100,7 @@ const refresh = async () => {
 
     if (!res.ok) {
         clearAuthData();
-        throw new Error(data);
+        throw new Error(data.message || 'Session expired. Please log in again.');
     }
 
     localStorage.setItem('accessToken', data.accessToken);
