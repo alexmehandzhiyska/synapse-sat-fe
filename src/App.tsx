@@ -6,7 +6,8 @@ import Home from './components/Home/Home';
 import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import AboutUs from './components/AboutUs/AboutUs';
-import PracticeTests from './components/PracticeTests/PracticeTests';
+import PracticeTestsList from './components/PracticeTests/PracticeTestsList';
+import PracticeTest from './components/PracticeTests/PracticeTest/PracticeTest';
 
 function App() {
     return (
@@ -16,10 +17,11 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/about-us" element={<AboutUs />} />
-                <Route path="/practice-tests" element={<PracticeTests />} />
+                <Route path="/practice-tests" element={<PracticeTestsList />} />
+                <Route path="/practice-tests/:testId" element={<PracticeTest />} />
             </Routes>
         </Layout>
     )
 }
 
-export default App
+export default App;

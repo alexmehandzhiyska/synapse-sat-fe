@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import practiceTestService from '../../services/practiceTestService';
 import type { PracticeTest } from '../../types/practiceTest';
 
-
-const PracticeTests = () => {
+const PracticeTestsList = () => {
     const [tests, setTests] = useState<PracticeTest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -88,14 +88,13 @@ const PracticeTests = () => {
                                         </h2>
                                     </div>
 
-                                    <div className="ml-auto flex min-w-32 flex-col items-end justify-center px-2">
-                                        <span className="inline-flex items-center gap-2 text-sm font-extrabold text-emerald-700">
-                                            <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-                                            Available
-                                        </span>
-                                        <span className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-slate-400">
-                                            Ready to take
-                                        </span>
+                                    <div className="ml-auto flex min-w-32 flex-col items-end justify-center gap-3 px-2">
+                                        <Link
+                                            to={`/practice-tests/${test.id}`}
+                                            className="inline-flex items-center rounded-xl bg-[#13385A] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#0e2b45]"
+                                        >
+                                            Start test
+                                        </Link>
                                     </div>
                                 </article>
                             );
@@ -107,4 +106,4 @@ const PracticeTests = () => {
     );
 };
 
-export default PracticeTests;
+export default PracticeTestsList;
