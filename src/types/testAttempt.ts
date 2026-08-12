@@ -9,5 +9,6 @@ export interface TestAttempt {
     id: string;
     testId: string;
     status: TestAttemptStatus;
+    currentModuleIndex: number;
     answers: AttemptAnswer[];
 }

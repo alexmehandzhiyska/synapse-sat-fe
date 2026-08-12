@@ -4,12 +4,14 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import practiceTestService from '../../../services/practiceTestService';
 import testAttemptService from '../../../services/testAttemptService';
 import type { FullPracticeTest, Question as QuestionData, SectionName } from '../../../types/practiceTest';
+import ModuleCompletionInterstitial from './ModuleCompletionInterstitial';
 import Question from './Question';
 import TestHeader from './TestHeader';
 
-interface FlatQuestion {
-    question: QuestionData;
+interface TestModule {
     sectionName: SectionName;
+    position: number;
+    questions: QuestionData[];
 }
 
 const SECTION_LABELS: Record<SectionName, string> = {
@@ -17,18 +19,22 @@ const SECTION_LABELS: Record<SectionName, string> = {
     math: 'Math',
 };
 
-const flattenQuestions = (test: FullPracticeTest): FlatQuestion[] => {
-    const flatQuestions: FlatQuestion[] = [];
+const MODULE_TRANSITION_MS = 3000;
+
+const flattenModules = (test: FullPracticeTest): TestModule[] => {
+    const modules: TestModule[] = [];
 
     for (const section of test.sections) {
         for (const module of section.modules) {
-            for (const question of module.questions) {
-                flatQuestions.push({ question, sectionName: section.name });
-            }
+            modules.push({
+                sectionName: section.name,
+                position: module.position,
+                questions: module.questions,
+            });
         }
     }
 
-    return flatQuestions;
+    return modules;
 };
 
 const PracticeTest = () => {
@@ -38,7 +44,9 @@ const PracticeTest = () => {
     const [test, setTest] = useState<FullPracticeTest | null>(null);
     const [attemptId, setAttemptId] = useState<string | null>(null);
     const [answers, setAnswers] = useState<Record<string, string | null>>({});
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -57,6 +65,7 @@ const PracticeTest = () => {
             .then(([fetchedTest, fetchedAttempt]) => {
                 setTest(fetchedTest);
                 setAttemptId(fetchedAttempt.id);
+                setCurrentModuleIndex(fetchedAttempt.currentModuleIndex);
                 setAnswers(
                     Object.fromEntries(
                         fetchedAttempt.answers.map((answer) => [
@@ -74,7 +83,22 @@ const PracticeTest = () => {
             });
     }, [testId]);
 
-    const questions = useMemo(() => (test ? flattenQuestions(test) : []), [test]);
+    // Once the current module is finished, hold intersitial for a bit and then transition to next module
+    useEffect(() => {
+        if (!isTransitioning) {
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setCurrentModuleIndex((index) => index + 1);
+            setCurrentQuestionIndex(0);
+            setIsTransitioning(false);
+        }, MODULE_TRANSITION_MS);
+
+        return () => clearTimeout(timer);
+    }, [isTransitioning]);
+
+    const modules = useMemo(() => (test ? flattenModules(test) : []), [test]);
 
     const handleSelect = (questionId: string, choiceId: string) => {
         if (!attemptId) {
@@ -92,14 +116,14 @@ const PracticeTest = () => {
     };
 
     const handleNavigate = (index: number) => {
-        if (index < 0 || index >= questions.length) {
+        if (index < 0 || index >= modules[currentModuleIndex].questions.length) {
             return;
         }
 
-        setCurrentIndex(index);
+        setCurrentQuestionIndex(index);
     };
 
-    const handleSubmit = () => {
+    const finishTest = () => {
         if (!attemptId) {
             return;
         }
@@ -116,6 +140,27 @@ const PracticeTest = () => {
                 setSaveError("We couldn't submit the test. Try again.");
                 setIsSubmitting(false);
             });
+    };
+
+    const handleFinishModule = () => {
+        if (!attemptId) {
+            return;
+        }
+
+        const isLastModule = currentModuleIndex === modules.length - 1;
+
+        if (isLastModule) {
+            finishTest();
+            return;
+        }
+
+        setSaveError('');
+        setIsTransitioning(true);
+
+        testAttemptService.advanceModule(attemptId).catch(() => {
+            setIsTransitioning(false);
+            setSaveError("We couldn't move to the next module. Try again.");
+        });
     };
 
     if (isLoading) {
@@ -145,18 +190,26 @@ const PracticeTest = () => {
         );
     }
 
-    const { question, sectionName } = questions[currentIndex];
+    if (isTransitioning) {
+        return <ModuleCompletionInterstitial />;
+    }
+
+    const currentModule = modules[currentModuleIndex];
+    const moduleQuestions = currentModule.questions;
+    const question = moduleQuestions[currentQuestionIndex];
     const selectedChoiceId = answers[question.id] ?? null;
+
+    const isLastQuestion = currentQuestionIndex === moduleQuestions.length - 1;
+    const isLastModule = currentModuleIndex === modules.length - 1;
 
     return (
         <section className="flex h-screen flex-col overflow-hidden bg-[#f4f7fb]">
             <TestHeader
                 title={test.title}
-                sectionLabel={SECTION_LABELS[sectionName]}
-                currentNumber={currentIndex + 1}
-                totalQuestions={questions.length}
-                isSubmitting={isSubmitting}
-                onSubmit={handleSubmit}
+                sectionLabel={SECTION_LABELS[currentModule.sectionName]}
+                moduleLabel={`Module ${currentModule.position}`}
+                currentNumber={currentQuestionIndex + 1}
+                totalQuestions={moduleQuestions.length}
             />
 
             {saveError && (
@@ -168,7 +221,7 @@ const PracticeTest = () => {
             <div className="min-h-0 flex-1">
                 <Question
                     question={question}
-                    sectionName={sectionName}
+                    sectionName={currentModule.sectionName}
                     selectedChoiceId={selectedChoiceId}
                     onSelect={(choiceId) => handleSelect(question.id, choiceId)}
                 />
@@ -177,21 +230,35 @@ const PracticeTest = () => {
             <div className="flex items-center justify-end gap-3 border-t border-slate-200 bg-white px-6 py-4 sm:px-10">
                 <button
                     type="button"
-                    onClick={() => handleNavigate(currentIndex - 1)}
-                    disabled={currentIndex === 0}
+                    onClick={() => handleNavigate(currentQuestionIndex - 1)}
+                    disabled={currentQuestionIndex === 0}
                     className="rounded-xl border-2 border-slate-200 px-5 py-2.5 text-sm font-bold text-[#13385A] transition hover:border-blue-200 disabled:opacity-40"
                 >
                     Back
                 </button>
 
-                <button
-                    type="button"
-                    onClick={() => handleNavigate(currentIndex + 1)}
-                    disabled={currentIndex === questions.length - 1}
-                    className="rounded-xl bg-[#2f61c9] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#2450a8] disabled:opacity-40"
-                >
-                    Next
-                </button>
+                {isLastQuestion ? (
+                    <button
+                        type="button"
+                        onClick={handleFinishModule}
+                        disabled={isSubmitting}
+                        className="rounded-xl bg-[#13385A] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#0e2b45] disabled:opacity-60"
+                    >
+                        {isLastModule
+                            ? isSubmitting
+                                ? 'Submitting…'
+                                : 'Finish test'
+                            : 'Next module'}
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={() => handleNavigate(currentQuestionIndex + 1)}
+                        className="rounded-xl bg-[#2f61c9] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#2450a8]"
+                    >
+                        Next
+                    </button>
+                )}
             </div>
         </section>
     );

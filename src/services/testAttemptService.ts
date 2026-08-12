@@ -43,6 +43,24 @@ const upsertAnswer = async (
     }
 };
 
+const advanceModule = async (attemptId: string): Promise<TestAttempt> => {
+    const response = await fetch(
+        `${BASE_URL}/test-attempts/${attemptId}/advance-module`,
+        {
+            method: 'POST',
+            headers: getAuthHeaders(),
+        },
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || 'Error moving to the next module.');
+    }
+
+    return data;
+};
+
 const submit = async (attemptId: string): Promise<TestAttempt> => {
     const response = await fetch(`${BASE_URL}/test-attempts/${attemptId}/submit`, {
         method: 'POST',
@@ -58,6 +76,6 @@ const submit = async (attemptId: string): Promise<TestAttempt> => {
     return data;
 };
 
-const testAttemptService = { startOrResume, upsertAnswer, submit };
+const testAttemptService = { startOrResume, upsertAnswer, advanceModule, submit };
 
 export default testAttemptService;
