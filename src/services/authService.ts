@@ -1,8 +1,7 @@
-import type { LoginData, RegisterData } from "../types/auth";
+import type { AuthResponse, LoginData, RegisterData } from '../types/auth';
+import { post } from './requester';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-
-const saveAuthData = (data: { accessToken: string; refreshToken: string; user?: unknown }) => {
+const saveAuthData = (data: AuthResponse) => {
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
 
@@ -11,24 +10,17 @@ const saveAuthData = (data: { accessToken: string; refreshToken: string; user?: 
     }
 };
 
-const register = async (user: RegisterData) => {
-    const res = await fetch(`${BASE_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            password: user.password
-        })
-    });
-    const data = await res.json();
+const clearAuthData = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+};
 
-    if (!res.ok) {
-        throw new Error(data.message || 'Error creating your account.');
-    }
+const register = async (user: RegisterData) => {
+    const data = await post<AuthResponse>('/auth/register', {
+        auth: false,
+        body: user
+    });
 
     saveAuthData(data);
 
@@ -36,18 +28,10 @@ const register = async (user: RegisterData) => {
 };
 
 const login = async (user: LoginData) => {
-    const res = await fetch(`${BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
+    const data = await post<AuthResponse>('/auth/login', {
+        auth: false,
+        body: user
     });
-    const data = await res.json();
-
-    if (!res.ok) {
-        throw new Error(data.message || 'Wrong email or password.');
-    }
 
     saveAuthData(data);
 
@@ -62,22 +46,14 @@ const logout = async () => {
         return;
     }
 
-    const res = await fetch(`${BASE_URL}/auth/logout`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ refreshToken })
-    });
-    const data = await res.json();
-
-    clearAuthData();
-
-    if (!res.ok) {
-        throw new Error(data.message || 'Logout failed.');
+    try {
+        return await post<AuthResponse>('/auth/logout', {
+            auth: false,
+            body: { refreshToken }
+        });
+    } finally {
+        clearAuthData();
     }
-
-    return data;
 };
 
 const refresh = async () => {
@@ -88,31 +64,22 @@ const refresh = async () => {
         throw new Error('No refresh token found.');
     }
 
-    const res = await fetch(`${BASE_URL}/auth/refresh`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ refreshToken })
-    });
+    let data: AuthResponse;
 
-    const data = await res.json();
-
-    if (!res.ok) {
+    try {
+        data = await post<AuthResponse>('/auth/refresh', {
+            auth: false,
+            body: { refreshToken }
+        });
+    } catch (error) {
         clearAuthData();
-        throw new Error(data.message || 'Session expired. Please log in again.');
+        throw error;
     }
 
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
 
     return data;
-};
-
-const clearAuthData = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
 };
 
 const authService = { register, login, logout, refresh };
