@@ -2,17 +2,9 @@ interface TestHeaderProps {
     title: string;
     sectionLabel: string;
     moduleLabel: string;
-    currentNumber: number;
-    totalQuestions: number;
 }
 
-const TestHeader = ({
-    title,
-    sectionLabel,
-    moduleLabel,
-    currentNumber,
-    totalQuestions,
-}: TestHeaderProps) => {
+const TestHeader = ({ title, sectionLabel, moduleLabel }: TestHeaderProps) => {
     return (
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-6 py-4 sm:px-10">
             <div>
@@ -23,9 +15,6 @@ const TestHeader = ({
                     {title}
                 </h1>
             </div>
-            <span className="text-sm font-bold text-[#5A6B7B]">
-                Question {currentNumber} of {totalQuestions}
-            </span>
         </div>
     );
 };

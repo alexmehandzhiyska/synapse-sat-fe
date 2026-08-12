@@ -6,6 +6,8 @@ import testAttemptService from '../../../services/testAttemptService';
 import type { FullPracticeTest, Question as QuestionData, SectionName } from '../../../types/practiceTest';
 import ModuleCompletionInterstitial from './ModuleCompletionInterstitial';
 import Question from './Question';
+import QuestionNavigator from './QuestionNavigator';
+import type { QuestionStatus } from './QuestionNavigator';
 import TestHeader from './TestHeader';
 
 interface TestModule {
@@ -46,6 +48,8 @@ const PracticeTest = () => {
     const [answers, setAnswers] = useState<Record<string, string | null>>({});
     const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [visitedQuestionIds, setVisitedQuestionIds] = useState<Set<string>>(new Set());
+    const [isNavigatorOpen, setIsNavigatorOpen] = useState(false);
     const [isTransitioning, setIsTransitioning] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -92,6 +96,7 @@ const PracticeTest = () => {
         const timer = setTimeout(() => {
             setCurrentModuleIndex((index) => index + 1);
             setCurrentQuestionIndex(0);
+            setIsNavigatorOpen(false);
             setIsTransitioning(false);
         }, MODULE_TRANSITION_MS);
 
@@ -99,6 +104,26 @@ const PracticeTest = () => {
     }, [isTransitioning]);
 
     const modules = useMemo(() => (test ? flattenModules(test) : []), [test]);
+
+    // Mark the question currently on screen as visited
+    useEffect(() => {
+        const question = modules[currentModuleIndex]?.questions[currentQuestionIndex];
+
+        if (!question) {
+            return;
+        }
+
+        setVisitedQuestionIds((prev) => {
+            if (prev.has(question.id)) {
+                return prev;
+            }
+
+            const next = new Set(prev);
+            next.add(question.id);
+
+            return next;
+        });
+    }, [modules, currentModuleIndex, currentQuestionIndex]);
 
     const handleSelect = (questionId: string, choiceId: string) => {
         if (!attemptId) {
@@ -121,6 +146,11 @@ const PracticeTest = () => {
         }
 
         setCurrentQuestionIndex(index);
+    };
+
+    const handleNavigatorSelect = (questionIdx: number) => {
+        handleNavigate(questionIdx);
+        setIsNavigatorOpen(false);
     };
 
     const finishTest = () => {
@@ -202,14 +232,30 @@ const PracticeTest = () => {
     const isLastQuestion = currentQuestionIndex === moduleQuestions.length - 1;
     const isLastModule = currentModuleIndex === modules.length - 1;
 
+    const sectionLabel = SECTION_LABELS[currentModule.sectionName];
+    const moduleLabel = `Module ${currentModule.position}`;
+    const questionStatuses: QuestionStatus[] = moduleQuestions.map((moduleQuestion, index) => {
+        if (index === currentQuestionIndex) {
+            return 'current';
+        }
+
+        if (answers[moduleQuestion.id]) {
+            return 'answered';
+        }
+
+        if (visitedQuestionIds.has(moduleQuestion.id)) {
+            return 'skipped';
+        }
+
+        return 'unreached';
+    });
+
     return (
-        <section className="flex h-screen flex-col overflow-hidden bg-[#f4f7fb]">
+        <section className="relative flex h-screen flex-col overflow-hidden bg-[#f4f7fb]">
             <TestHeader
                 title={test.title}
-                sectionLabel={SECTION_LABELS[currentModule.sectionName]}
-                moduleLabel={`Module ${currentModule.position}`}
-                currentNumber={currentQuestionIndex + 1}
-                totalQuestions={moduleQuestions.length}
+                sectionLabel={sectionLabel}
+                moduleLabel={moduleLabel}
             />
 
             {saveError && (
@@ -227,7 +273,7 @@ const PracticeTest = () => {
                 />
             </div>
 
-            <div className="flex items-center justify-end gap-3 border-t border-slate-200 bg-white px-6 py-4 sm:px-10">
+            <div className="flex items-center justify-between gap-3 border-t border-slate-200 bg-white px-6 py-4 sm:px-10">
                 <button
                     type="button"
                     onClick={() => handleNavigate(currentQuestionIndex - 1)}
@@ -235,6 +281,16 @@ const PracticeTest = () => {
                     className="rounded-xl border-2 border-slate-200 px-5 py-2.5 text-sm font-bold text-[#13385A] transition hover:border-blue-200 disabled:opacity-40"
                 >
                     Back
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() => setIsNavigatorOpen((open) => !open)}
+                    aria-expanded={isNavigatorOpen}
+                    className="rounded-xl border-2 border-slate-200 px-4 py-2.5 text-sm font-bold text-[#13385A] transition hover:border-blue-200"
+                >
+                    Question {currentQuestionIndex + 1} of {moduleQuestions.length}
+                    <span className="ml-2 text-xs text-[#5A6B7B]">{isNavigatorOpen ? '▾' : '▴'}</span>
                 </button>
 
                 {isLastQuestion ? (
@@ -260,6 +316,16 @@ const PracticeTest = () => {
                     </button>
                 )}
             </div>
+
+            {isNavigatorOpen && (
+                <QuestionNavigator
+                    sectionLabel={sectionLabel}
+                    moduleLabel={moduleLabel}
+                    statuses={questionStatuses}
+                    onSelect={handleNavigatorSelect}
+                    onClose={() => setIsNavigatorOpen(false)}
+                />
+            )}
         </section>
     );
 };
