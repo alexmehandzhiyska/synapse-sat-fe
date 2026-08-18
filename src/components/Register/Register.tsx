@@ -58,7 +58,7 @@ const Register = () => {
                         <div className="grid gap-4 sm:grid-cols-2">
                             <label className="block pt-1">
                                 <span className="mb-2 block text-xs font-extrabold text-[#1b1b1f]">
-                                    First name
+                                    First name <span className="text-red-500">*</span>
                                 </span>
                                 <input
                                     type="text"
@@ -77,7 +77,7 @@ const Register = () => {
 
                             <label className="block pt-1">
                                 <span className="mb-2 block text-xs font-extrabold text-[#1b1b1f]">
-                                    Last name
+                                    Last name <span className="text-red-500">*</span>
                                 </span>
                                 <input
                                     type="text"
@@ -97,7 +97,7 @@ const Register = () => {
 
                         <label className="block pt-1">
                             <span className="mb-2 block text-xs font-extrabold text-[#1b1b1f]">
-                                Email address
+                                Email address <span className="text-red-500">*</span>
                             </span>
                             <input
                                 type="email"
@@ -116,7 +116,7 @@ const Register = () => {
 
                         <label className="block pt-1">
                             <span className="mb-2 block text-xs font-extrabold text-[#1b1b1f]">
-                                Password
+                                Password <span className="text-red-500">*</span>
                             </span>
                             <input
                                 type="password"
@@ -139,7 +139,7 @@ const Register = () => {
 
                         <label className="block pt-1">
                             <span className="mb-2 block text-xs font-extrabold text-[#1b1b1f]">
-                                Confirm password
+                                Confirm password <span className="text-red-500">*</span>
                             </span>
                             <input
                                 type="password"
@@ -155,6 +155,44 @@ const Register = () => {
                                     {errors.confirmPassword.message}
                                 </span>
                             )}
+                        </label>
+
+                        <div className="grid gap-4 sm:grid-cols-2">
+                            <label className="block pt-1">
+                                <span className="mb-2 block text-xs font-extrabold text-[#1b1b1f]">
+                                    Country
+                                </span>
+                                <input
+                                    type="text"
+                                    className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-bold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
+                                    placeholder="Bulgaria"
+                                    {...register('country')}
+                                />
+                            </label>
+
+                            <label className="block pt-1">
+                                <span className="mb-2 block text-xs font-extrabold text-[#1b1b1f]">
+                                    City
+                                </span>
+                                <input
+                                    type="text"
+                                    className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-bold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
+                                    placeholder="Sofia"
+                                    {...register('city')}
+                                />
+                            </label>
+                        </div>
+
+                        <label className="block pt-1">
+                            <span className="mb-2 block text-xs font-extrabold text-[#1b1b1f]">
+                                School
+                            </span>
+                            <input
+                                type="text"
+                                className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-bold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
+                                placeholder="Your school"
+                                {...register('school')}
+                            />
                         </label>
 
                         {submitError && (

@@ -4,6 +4,9 @@ export type RegisterData = {
     email: string;
     password: string;
     confirmPassword: string;
+    country?: string;
+    city?: string;
+    school?: string;
 }
 
 export type LoginData = {
