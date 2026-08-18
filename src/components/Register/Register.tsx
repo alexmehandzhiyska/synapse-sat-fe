@@ -66,6 +66,10 @@ const Register = () => {
                                     placeholder="Pencho"
                                     {...register('firstName', {
                                         required: 'First name is required',
+                                        maxLength: {
+                                            value: 100,
+                                            message: 'First name must be at most 100 characters',
+                                        },
                                     })}
                                 />
                                 {errors.firstName && (
@@ -85,6 +89,10 @@ const Register = () => {
                                     placeholder="Minchov"
                                     {...register('lastName', {
                                         required: 'Last name is required',
+                                        maxLength: {
+                                            value: 100,
+                                            message: 'Last name must be at most 100 characters',
+                                        },
                                     })}
                                 />
                                 {errors.lastName && (
@@ -105,6 +113,18 @@ const Register = () => {
                                 placeholder="pen4o@gmail.com"
                                 {...register('email', {
                                     required: 'Email address is required',
+                                    minLength: {
+                                        value: 5,
+                                        message: 'Email address must be at least 5 characters',
+                                    },
+                                    maxLength: {
+                                        value: 200,
+                                        message: 'Email address must be at most 200 characters',
+                                    },
+                                    pattern: {
+                                        value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
+                                        message: 'Enter a valid email address',
+                                    }
                                 })}
                             />
                             {errors.email && (
@@ -127,6 +147,14 @@ const Register = () => {
                                     minLength: {
                                         value: 8,
                                         message: 'Password must be at least 8 characters',
+                                    },
+                                    maxLength: {
+                                        value: 72,
+                                        message: 'Password must be at most 72 characters',
+                                    },
+                                    pattern: {
+                                        value: /(?=.*\d)(?=.*[^A-Za-z0-9])/,
+                                        message: 'Password must contain at least 1 digit and 1 special character',
                                     },
                                 })}
                             />
