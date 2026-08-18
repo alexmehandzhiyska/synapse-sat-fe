@@ -28,3 +28,24 @@ export type AuthResponse = {
     accessToken: string;
     refreshToken: string;
 }
+
+export type ForgotPasswordData = {
+    email: string;
+}
+
+export type VerifyResetCodeData = {
+    email: string;
+    code: string;
+}
+
+export type ResetPasswordData = {
+    email: string;
+    code: string;
+    newPassword: string;
+    confirmNewPassword: string;
+}
+
+export type MessageResponse = {
+    success: boolean;
+    message: string;
+}

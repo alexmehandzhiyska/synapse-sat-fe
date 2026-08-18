@@ -1,4 +1,4 @@
-import type { AuthResponse, LoginData, RegisterData } from '../types/auth';
+import type { AuthResponse, ForgotPasswordData, LoginData, MessageResponse, RegisterData, ResetPasswordData, VerifyResetCodeData } from '../types/auth';
 import { post } from './requester';
 
 const saveAuthData = (data: AuthResponse) => {
@@ -82,5 +82,26 @@ const refresh = async () => {
     return data;
 };
 
-const authService = { register, login, logout, refresh };
+const forgotPassword = async (data: ForgotPasswordData) => {
+    return await post<MessageResponse>('/auth/forgot-password', {
+        auth: false,
+        body: data
+    });
+};
+
+const verifyResetCode = async (data: VerifyResetCodeData) => {
+    return await post<MessageResponse>('/auth/verify-reset-code', {
+        auth: false,
+        body: data
+    });
+};
+
+const resetPassword = async (data: ResetPasswordData) => {
+    return await post<MessageResponse>('/auth/reset-password', {
+        auth: false,
+        body: data
+    });
+};
+
+const authService = { register, login, logout, refresh, forgotPassword, verifyResetCode, resetPassword };
 export default authService;

@@ -89,6 +89,9 @@ const Login = () => {
                                     {errors.password.message}
                                 </span>
                             )}
+                            <a href="/forgot-password" className="mt-2 block text-right text-xs font-bold text-[#2f61c9] hover:text-[#244fa8]">
+                                Forgot password?
+                            </a>
                         </label>
 
                         {submitError && (
