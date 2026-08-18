@@ -164,7 +164,7 @@ const PracticeTest = () => {
         testAttemptService
             .submit(attemptId)
             .then(() => {
-                navigate('/');
+                navigate(`/practice-tests/${testId}/results/${attemptId}`);
             })
             .catch(() => {
                 setSaveError("We couldn't submit the test. Try again.");

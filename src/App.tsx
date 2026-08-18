@@ -8,6 +8,7 @@ import Login from './components/Login/Login';
 import AboutUs from './components/AboutUs/AboutUs';
 import PracticeTestsList from './components/PracticeTests/PracticeTestsList';
 import PracticeTest from './components/PracticeTests/PracticeTest/PracticeTest';
+import ScoreReport from './components/PracticeTests/ScoreReport/ScoreReport';
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/practice-tests" element={<PracticeTestsList />} />
                 <Route path="/practice-tests/:testId" element={<PracticeTest />} />
+                <Route path="/practice-tests/:testId/results/:attemptId" element={<ScoreReport />}/>
             </Routes>
         </Layout>
     )
