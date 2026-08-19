@@ -115,7 +115,7 @@ const SectionPerformanceChart = ({ testResults }: SectionPerformanceChartProps) 
     );
 
     return (
-        <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
             <h3 className="mb-4 font-['Space_Grotesk'] text-lg font-extrabold text-[#13385A]">
                 Reading &amp; Writing vs. Math
             </h3>

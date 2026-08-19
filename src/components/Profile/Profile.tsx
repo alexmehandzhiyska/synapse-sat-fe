@@ -96,7 +96,7 @@ const Profile = () => {
 
     return (
         <section className="min-h-[calc(100vh-73px)] bg-[#f4f7fb] px-6 py-12 sm:px-10 lg:px-16">
-            <div className="mx-auto max-w-3xl">
+            <div className="mx-auto max-w-5xl">
                 <div className="mb-9">
                     <h1 className="mb-3 font-['Space_Grotesk'] text-4xl font-extrabold leading-tight text-[#13385A] sm:text-5xl">
                         Profile
@@ -186,10 +186,10 @@ const Profile = () => {
                     )}
 
                     {!isLoadingResults && !resultsError && testResults.length > 0 && (
-                        <>
+                        <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
                             <ScoreTrendChart testResults={testResults} />
                             <SectionPerformanceChart testResults={testResults} />
-                        </>
+                        </div>
                     )}
 
                     {!isLoadingResults && resultsError && (

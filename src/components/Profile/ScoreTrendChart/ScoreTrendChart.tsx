@@ -73,7 +73,7 @@ const ScoreTrendChart = ({ testResults }: ScoreTrendChartProps) => {
     const scoreDomain = getScoreDomain(chartData.map((point) => point.score));
 
     return (
-        <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
             <h3 className="mb-4 font-['Space_Grotesk'] text-lg font-extrabold text-[#13385A]">
                 Score over time
             </h3>
