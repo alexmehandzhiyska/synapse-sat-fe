@@ -60,15 +60,35 @@ const ScoreReport = () => {
     }
 
     return (
-        <section className="min-h-screen bg-[#f4f7fb] px-6 py-10 sm:px-10">
+        <section className="flex min-h-screen items-center bg-[#f4f7fb] px-6 py-10 sm:px-10">
             <div className="mx-auto max-w-4xl space-y-6">
-                <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                {report.isDiagnostic && (
+                    <div className="text-center">
+                        <div className="mb-4 inline-flex items-center rounded-full bg-blue-100 px-4 py-2">
+                            <span className="mr-3 h-1.5 w-1.5 rounded-full bg-blue-900" />
+                            <span className="text-sm font-bold text-blue-900">Baseline set</span>
+                        </div>
+                        <h1 className="mb-3 font-['Space_Grotesk'] text-4xl font-extrabold leading-tight text-[#13385A] sm:text-5xl">
+                            Now you know where to start.
+                        </h1>
+                        <p className="mx-auto mt-8 max-w-xl text-base font-medium text-[#5A6B7B]">
+                            Every prep plan starts with a number like this one.
+                        </p>
+                        <p className="mx-auto mt-2 mb-8 max-w-xl text-base font-medium text-[#5A6B7B]">
+                            Let's turn it into a study routine.
+                        </p>
+
+                        
+                    </div>
+                )}
+
+                <div className="rounded-2xl my-16 border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
                     <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                         <div className="text-center sm:text-left">
                             <p className="text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
                                 {report.isDiagnostic ? 'Your estimated score' : 'Your total score'}
                             </p>
-                            <p className="mt-1 font-['Space_Grotesk'] text-5xl font-extrabold leading-none text-[#13385A]">
+                            <p className={`mt-1 font-['Space_Grotesk'] font-extrabold leading-none text-[#13385A] ${report.isDiagnostic ? 'text-4xl' : 'text-5xl'}`}>
                                 {report.totalScaled}
                                 <span className="ml-2 text-xl font-bold text-[#5A6B7B]">
                                     / 1600
@@ -97,18 +117,29 @@ const ScoreReport = () => {
                     </div>
                 </div>
 
-                {report.sections.map((section) => (
+                {!report.isDiagnostic && report.sections.map((section) => (
                     <SectionBreakdown key={section.name} section={section} />
                 ))}
 
-                <div className="text-center">
-                    <Link
-                        to="/practice-tests"
-                        className="inline-flex rounded-xl bg-[#13385A] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#0e2b45]"
-                    >
-                        Back to practice tests
-                    </Link>
-                </div>
+                {report.isDiagnostic ? (
+                    <div className="flex flex-col items-center gap-3 pt-2 sm:flex-row sm:justify-center">
+                        <Link
+                            to="/practice-tests"
+                            className="inline-flex rounded-xl bg-[#2f61c9] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#244fa8]"
+                        >
+                            Begin your prep plan&nbsp;→
+                        </Link>
+                    </div>
+                ) : (
+                    <div className="text-center">
+                        <Link
+                            to="/practice-tests"
+                            className="inline-flex rounded-xl bg-[#13385A] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#0e2b45]"
+                        >
+                            Back to practice tests
+                        </Link>
+                    </div>
+                )}
             </div>
         </section>
     );
