@@ -33,6 +33,7 @@ export interface SectionScore {
 
 export interface ScoreReport {
     attemptId: string;
+    isDiagnostic: boolean;
     totalRaw: number;
     totalScaled: number;
     sections: SectionScore[];

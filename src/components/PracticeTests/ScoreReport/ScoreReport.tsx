@@ -66,7 +66,7 @@ const ScoreReport = () => {
                     <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                         <div className="text-center sm:text-left">
                             <p className="text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
-                                Your total score
+                                {report.isDiagnostic ? 'Your estimated score' : 'Your total score'}
                             </p>
                             <p className="mt-1 font-['Space_Grotesk'] text-5xl font-extrabold leading-none text-[#13385A]">
                                 {report.totalScaled}
