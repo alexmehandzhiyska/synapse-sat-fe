@@ -24,11 +24,6 @@ const AboutUs = () => {
         <>
             <section className="flex min-h-[calc(100vh-97px)] w-full items-center bg-white px-8 py-16 sm:px-10 lg:px-16 xl:px-20">
                 <div className="mx-auto max-w-5xl text-center">
-                    <div className="mb-6 inline-flex items-center rounded-4xl bg-blue-100 px-4 py-2">
-                        <span className="mr-5 h-1.25 w-1.25 rounded-[50%] bg-blue-900"></span>
-                        <p className="text-sm font-semibold text-blue-900">About SynapseSAT</p>
-                    </div>
-
                     <h1 className="mb-8 font-['Space_Grotesk'] text-5xl font-extrabold leading-tight text-[#13385A] lg:text-7xl">
                         SAT prep that feels less random.
                     </h1>

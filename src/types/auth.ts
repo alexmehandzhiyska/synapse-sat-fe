@@ -49,3 +49,13 @@ export type MessageResponse = {
     success: boolean;
     message: string;
 }
+
+export type UserProfile = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    country: string | null;
+    city: string | null;
+    school: string | null;
+}

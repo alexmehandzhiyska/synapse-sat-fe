@@ -27,11 +27,6 @@ const PracticeTestsList = () => {
         <section className="min-h-[calc(100vh-73px)] bg-[#f4f7fb] px-6 py-12 sm:px-10 lg:px-16">
             <div className="mx-auto max-w-6xl">
                 <div className="mb-9 max-w-3xl">
-                    <div className="mb-4 inline-flex items-center rounded-full bg-blue-100 px-4 py-2">
-                        <span className="mr-3 h-1.5 w-1.5 rounded-full bg-blue-900" />
-                        <span className="text-sm font-bold text-blue-900">Test-day practice</span>
-                    </div>
-
                     <h1 className="mb-3 font-['Space_Grotesk'] text-4xl font-extrabold leading-tight text-[#13385A] sm:text-5xl">
                         Practice tests
                     </h1>

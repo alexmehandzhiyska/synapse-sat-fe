@@ -44,13 +44,22 @@ const Header = () => {
 
                 <div className="flex items-center gap-3">
                     {isLoggedIn ? (
-                        <button
-                            type="button"
-                            onClick={handleLogout}
-                            className="rounded-lg bg-[#0070E0] px-3 py-2 text-sm font-bold text-white shadow-[0_10px_25px_rgba(0,0,0,0.16)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#0063C6] hover:shadow-[0_15px_30px_#00000038]"
-                        >
-                            Logout
-                        </button>
+                        <>
+                            <a
+                                href="/profile"
+                                className="relative px-3 py-2 text-sm font-bold text-black transition after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-stone-950 after:transition-transform hover:after:scale-x-100"
+                            >
+                                Profile
+                            </a>
+
+                            <button
+                                type="button"
+                                onClick={handleLogout}
+                                className="rounded-lg bg-[#0070E0] px-3 py-2 text-sm font-bold text-white shadow-[0_10px_25px_rgba(0,0,0,0.16)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#0063C6] hover:shadow-[0_15px_30px_#00000038]"
+                            >
+                                Logout
+                            </button>
+                        </>
                     ) : (
                         <>
                             <a
