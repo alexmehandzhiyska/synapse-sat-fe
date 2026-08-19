@@ -26,7 +26,6 @@ export type AuthResponse = {
     message: string;
     user: AuthUser;
     accessToken: string;
-    refreshToken: string;
 }
 
 export type ForgotPasswordData = {

@@ -3,7 +3,6 @@ import { post } from './requester';
 
 const saveAuthData = (data: AuthResponse) => {
     localStorage.setItem('accessToken', data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
 
     if (data.user) {
         localStorage.setItem('user', JSON.stringify(data.user));
@@ -12,7 +11,6 @@ const saveAuthData = (data: AuthResponse) => {
 
 const clearAuthData = () => {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
 };
 
@@ -38,48 +36,8 @@ const login = async (user: LoginData) => {
     return data;
 };
 
-const logout = async () => {
-    const refreshToken = localStorage.getItem('refreshToken');
-
-    if (!refreshToken) {
-        clearAuthData();
-        return;
-    }
-
-    try {
-        return await post<AuthResponse>('/auth/logout', {
-            auth: false,
-            body: { refreshToken }
-        });
-    } finally {
-        clearAuthData();
-    }
-};
-
-const refresh = async () => {
-    const refreshToken = localStorage.getItem('refreshToken');
-
-    if (!refreshToken) {
-        clearAuthData();
-        throw new Error('No refresh token found.');
-    }
-
-    let data: AuthResponse;
-
-    try {
-        data = await post<AuthResponse>('/auth/refresh', {
-            auth: false,
-            body: { refreshToken }
-        });
-    } catch (error) {
-        clearAuthData();
-        throw error;
-    }
-
-    localStorage.setItem('accessToken', data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
-
-    return data;
+const logout = () => {
+    clearAuthData();
 };
 
 const forgotPassword = async (data: ForgotPasswordData) => {
@@ -103,5 +61,5 @@ const resetPassword = async (data: ResetPasswordData) => {
     });
 };
 
-const authService = { register, login, logout, refresh, forgotPassword, verifyResetCode, resetPassword };
+const authService = { register, login, logout, forgotPassword, verifyResetCode, resetPassword };
 export default authService;
