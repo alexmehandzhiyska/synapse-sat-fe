@@ -9,6 +9,7 @@ import { SECTION_LABELS } from '../PracticeTests/ScoreReport/labels';
 
 import EditProfileForm from './EditProfileForm/EditProfileForm';
 import ScoreTrendChart from './ScoreTrendChart/ScoreTrendChart';
+import SectionPerformanceChart from './SectionPerformanceChart/SectionPerformanceChart';
 
 const profileFields: { label: string; value: (profile: UserProfile) => string | null }[] = [
     { label: 'First name', value: (profile) => profile.firstName },
@@ -185,7 +186,10 @@ const Profile = () => {
                     )}
 
                     {!isLoadingResults && !resultsError && testResults.length > 0 && (
-                        <ScoreTrendChart testResults={testResults} />
+                        <>
+                            <ScoreTrendChart testResults={testResults} />
+                            <SectionPerformanceChart testResults={testResults} />
+                        </>
                     )}
 
                     {!isLoadingResults && resultsError && (
