@@ -223,7 +223,7 @@ const Profile = () => {
                                             </p>
                                         </div>
 
-                                        <div className="flex items-center gap-4">
+                                        <div className="flex items-center gap-8">
                                             {result.sections.map((section) => (
                                                 <div key={section.name} className="text-center">
                                                     <p className="text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
@@ -235,7 +235,7 @@ const Profile = () => {
                                                 </div>
                                             ))}
 
-                                            <div className="border-l border-slate-200 pl-4 text-center">
+                                            <div className="border-l border-slate-200 pl-6 text-center">
                                                 <p className="text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
                                                     Total
                                                 </p>
