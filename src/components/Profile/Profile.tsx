@@ -60,6 +60,38 @@ const Profile = () => {
             });
     }, [navigate]);
 
+    const bestScore = testResults.length > 0
+        ? Math.max(...testResults.map((result) => result.totalScaled))
+        : 0;
+        
+    const latestScore = testResults.length > 0 
+        ? testResults[0].totalScaled 
+        : 0;
+
+    const averageScore = testResults.length > 0
+        ? Math.round(testResults.reduce((sum, result) => sum + result.totalScaled, 0) / testResults.length)
+        : 0;
+
+    const trend = testResults.length > 1
+        ? Math.round(((latestScore - testResults[1].totalScaled) / testResults[1].totalScaled) * 100)
+        : null;
+
+    const summaryStats = [
+        { label: 'Best score', value: String(bestScore), valueClassName: 'text-[#13385A]' },
+        { label: 'Latest score', value: String(latestScore), valueClassName: 'text-[#13385A]' },
+        { label: 'Average score', value: String(averageScore), valueClassName: 'text-[#13385A]' },
+        {
+            label: 'Trend',
+            value: trend === null ? '—' : `${trend > 0 ? '+' : ''}${trend}%`,
+            valueClassName:
+                trend === null || trend === 0
+                    ? 'text-[#13385A]'
+                    : trend > 0
+                        ? 'text-emerald-600'
+                        : 'text-red-600',
+        },
+    ];
+
     return (
         <section className="min-h-[calc(100vh-73px)] bg-[#f4f7fb] px-6 py-12 sm:px-10 lg:px-16">
             <div className="mx-auto max-w-3xl">
@@ -131,6 +163,24 @@ const Profile = () => {
 
                     {isLoadingResults && (
                         <div className="h-28 animate-pulse rounded-2xl border border-slate-200 bg-white" />
+                    )}
+
+                    {!isLoadingResults && !resultsError && testResults.length > 0 && (
+                        <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                            {summaryStats.map((stat) => (
+                                <div
+                                    key={stat.label}
+                                    className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm"
+                                >
+                                    <p className="text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
+                                        {stat.label}
+                                    </p>
+                                    <p className={`mt-1 font-['Space_Grotesk'] text-2xl font-extrabold ${stat.valueClassName}`}>
+                                        {stat.value}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
                     )}
 
                     {!isLoadingResults && resultsError && (
