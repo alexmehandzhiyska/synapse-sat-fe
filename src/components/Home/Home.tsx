@@ -1,4 +1,32 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import practiceTestService from '../../services/practiceTestService';
+
 const Home = () => {
+    const navigate = useNavigate();
+    const [isStartingDiagnostic, setIsStartingDiagnostic] = useState(false);
+    const [diagnosticError, setDiagnosticError] = useState('');
+
+    const handleTakeDiagnostic = async () => {
+        if (!localStorage.getItem('accessToken')) {
+            navigate('/login');
+            return;
+        }
+
+        setDiagnosticError('');
+        setIsStartingDiagnostic(true);
+
+        try {
+            const diagnosticTest = await practiceTestService.getDiagnostic();
+            navigate(`/practice-tests/${diagnosticTest.id}`);
+        } catch (error) {
+            setDiagnosticError(error instanceof Error ? error.message : 'Could not start the diagnostic test.');
+        } finally {
+            setIsStartingDiagnostic(false);
+        }
+    };
+
     const steps = [
         {
             number: '1',
@@ -51,10 +79,23 @@ const Home = () => {
                 <h1 className="text-7xl font-['Space_Grotesk'] font-extrabold text-[#13385A] text-center mb-8">Prep smarter for the digital SAT</h1>
                 <p className="text-lg font-medium text-[#5A6B7B] text-center my-8">High-quality practice questions that mirror the real exam, with clear explanations and full-length tests that simulate test day.</p>
 
-                <div className="flex">
-                    <button className="btn btn-primary">Take a diagnostic test</button>
+                <div className="flex items-center gap-4">
+                    <button
+                        type="button"
+                        onClick={handleTakeDiagnostic}
+                        disabled={isStartingDiagnostic}
+                        className="inline-flex h-12 items-center justify-center rounded-2xl bg-[#2f61c9] px-8 text-base font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8] disabled:cursor-not-allowed disabled:bg-[#8da8df]"
+                    >
+                        {isStartingDiagnostic ? 'Starting...' : 'Take a diagnostic test'}
+                    </button>
                     <button className="btn btn-secondary">How it works</button>
                 </div>
+
+                {diagnosticError && (
+                    <p className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm font-bold text-red-600">
+                        {diagnosticError}
+                    </p>
+                )}
             </section>
 
             <section className="w-full px-6 py-28">
@@ -101,9 +142,24 @@ const Home = () => {
                 <div className="mx-auto max-w-4xl">
                     <h2 className="mb-8 font-['Space_Grotesk'] text-5xl font-extrabold leading-tight text-[#1b1b1f]">See where you stand today.</h2>
                     <p className="mb-8 text-xl font-semibold text-[#71717a]">Free full diagnostic practice test.</p>
-                    <button className="inline-flex h-16 min-w-48 items-center justify-center rounded-2xl bg-[#2f61c9] px-10 text-xl font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8]">
-                        Take the diagnostic&nbsp;→
+                    <button
+                        type="button"
+                        onClick={handleTakeDiagnostic}
+                        disabled={isStartingDiagnostic}
+                        className="inline-flex h-12 min-w-40 items-center justify-center rounded-2xl bg-[#2f61c9] px-8 text-base font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8] disabled:cursor-not-allowed disabled:bg-[#8da8df]"
+                    >
+                        {isStartingDiagnostic ? 'Starting...' : (
+                            <>
+                                Take the diagnostic&nbsp;→
+                            </>
+                        )}
                     </button>
+
+                    {diagnosticError && (
+                        <p className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm font-bold text-red-600">
+                            {diagnosticError}
+                        </p>
+                    )}
                 </div>
             </section>
         </>

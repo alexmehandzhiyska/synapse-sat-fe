@@ -7,6 +7,9 @@ const getAll = (): Promise<PracticeTest[]> =>
 const getOne = (id: string): Promise<FullPracticeTest> =>
     get<FullPracticeTest>(`/practice-test/${id}`, { auth: true });
 
-const practiceTestService = { getAll, getOne };
+const getDiagnostic = (): Promise<PracticeTest> =>
+    get<PracticeTest>('/practice-test/diagnostic', { auth: true });
+
+const practiceTestService = { getAll, getOne, getDiagnostic };
 
 export default practiceTestService;
