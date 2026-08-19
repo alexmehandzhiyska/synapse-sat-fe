@@ -206,7 +206,7 @@ const Profile = () => {
                                 <Link
                                     key={result.id}
                                     to={`/practice-tests/${result.testId}/results/${result.id}`}
-                                    className="block rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:border-blue-200 sm:p-8"
+                                    className="block rounded-2xl border border-slate-200 bg-white px-6 py-4 shadow-sm transition duration-300 hover:border-blue-200 sm:px-8 sm:py-5"
                                 >
                                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                         <div>
