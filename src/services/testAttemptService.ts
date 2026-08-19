@@ -1,6 +1,9 @@
 import type { ScoreReport } from '../types/score';
-import type { TestAttempt } from '../types/testAttempt';
+import type { TestAttempt, TestResult } from '../types/testAttempt';
 import { get, post, put } from './requester';
+
+const getAllCompleted = (): Promise<TestResult[]> =>
+    get<TestResult[]>('/test-attempts', { auth: true });
 
 const startOrResume = (testId: string): Promise<TestAttempt> =>
     post<TestAttempt>('/test-attempts', { body: { testId } });
@@ -23,6 +26,6 @@ const submit = (attemptId: string): Promise<TestAttempt> =>
 const getScore = (attemptId: string): Promise<ScoreReport> =>
     get<ScoreReport>(`/test-attempts/${attemptId}/score`, { auth: true });
 
-const testAttemptService = { startOrResume, upsertAnswer, advanceModule, submit, getScore };
+const testAttemptService = { getAllCompleted, startOrResume, upsertAnswer, advanceModule, submit, getScore };
 
 export default testAttemptService;
