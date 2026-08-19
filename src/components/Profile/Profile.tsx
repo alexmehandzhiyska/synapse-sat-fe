@@ -7,6 +7,8 @@ import type { UserProfile } from '../../types/auth';
 import type { TestResult } from '../../types/testAttempt';
 import { SECTION_LABELS } from '../PracticeTests/ScoreReport/labels';
 
+import EditProfileForm from './EditProfileForm/EditProfileForm';
+
 const profileFields: { label: string; value: (profile: UserProfile) => string | null }[] = [
     { label: 'First name', value: (profile) => profile.firstName },
     { label: 'Last name', value: (profile) => profile.lastName },
@@ -21,6 +23,7 @@ const Profile = () => {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
 
     const [testResults, setTestResults] = useState<TestResult[]>([]);
     const [isLoadingResults, setIsLoadingResults] = useState(true);
@@ -79,7 +82,7 @@ const Profile = () => {
                     </div>
                 )}
 
-                {!isLoading && !error && profile && (
+                {!isLoading && !error && profile && !isEditing && (
                     <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-[0_8px_24px_rgba(19,56,90,0.06)] sm:p-10">
                         <dl className="grid gap-6 sm:grid-cols-2">
                             {profileFields.map((field) => (
@@ -97,6 +100,27 @@ const Profile = () => {
                                 </div>
                             ))}
                         </dl>
+
+                        <button
+                            type="button"
+                            onClick={() => setIsEditing(true)}
+                            className="mt-8 flex h-12 items-center justify-center rounded-2xl bg-[#2f61c9] px-5 text-sm font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8]"
+                        >
+                            Edit profile
+                        </button>
+                    </div>
+                )}
+
+                {!isLoading && !error && profile && isEditing && (
+                    <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-[0_8px_24px_rgba(19,56,90,0.06)] sm:p-10">
+                        <EditProfileForm
+                            profile={profile}
+                            onSuccess={(updatedProfile) => {
+                                setProfile(updatedProfile);
+                                setIsEditing(false);
+                            }}
+                            onCancel={() => setIsEditing(false)}
+                        />
                     </div>
                 )}
 

@@ -59,3 +59,11 @@ export type UserProfile = {
     city: string | null;
     school: string | null;
 }
+
+export type UpdateProfileData = {
+    firstName: string;
+    lastName: string;
+    country?: string;
+    city?: string;
+    school?: string;
+}
