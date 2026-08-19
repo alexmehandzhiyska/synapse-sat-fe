@@ -8,6 +8,7 @@ import type { TestResult } from '../../types/testAttempt';
 import { SECTION_LABELS } from '../PracticeTests/ScoreReport/labels';
 
 import EditProfileForm from './EditProfileForm/EditProfileForm';
+import ScoreTrendChart from './ScoreTrendChart/ScoreTrendChart';
 
 const profileFields: { label: string; value: (profile: UserProfile) => string | null }[] = [
     { label: 'First name', value: (profile) => profile.firstName },
@@ -181,6 +182,10 @@ const Profile = () => {
                                 </div>
                             ))}
                         </div>
+                    )}
+
+                    {!isLoadingResults && !resultsError && testResults.length > 0 && (
+                        <ScoreTrendChart testResults={testResults} />
                     )}
 
                     {!isLoadingResults && resultsError && (
