@@ -42,7 +42,9 @@ const StudyPlanOverview = ({ studyPlan, bestScore }: StudyPlanOverviewProps) => 
     const stats = [
         {
             label: 'Days until test',
-            value: daysUntilTest > 0 ? `${daysUntilTest} day(s)` : daysUntilTest === 0 ? 'Today' : 'Passed',
+            value: daysUntilTest > 0
+                ? `${daysUntilTest} ${daysUntilTest === 1 ? 'day' : 'days'}`
+                : daysUntilTest === 0 ? 'Today' : 'Passed',
         },
         {
             label: 'Days into prep',
