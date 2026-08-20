@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import studyPlanService from '../../../services/studyPlanService';
+import studyPlanService from '../../../../services/studyPlanService';
 
 type TestDateStepProps = {
     value: string;

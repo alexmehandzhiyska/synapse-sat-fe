@@ -66,7 +66,7 @@ const StudyPlanOverview = ({ studyPlan, bestScore }: StudyPlanOverviewProps) => 
                     Study plan
                 </h2>
                 <Link
-                    to="/study-plan-setup"
+                    to="/study-plan-edit"
                     className="text-xs font-bold text-[#2f61c9] transition hover:text-[#244fa8]"
                 >
                     Update

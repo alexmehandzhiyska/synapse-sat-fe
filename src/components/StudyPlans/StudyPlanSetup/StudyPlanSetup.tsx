@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import studyPlanService from '../../services/studyPlanService';
+import studyPlanService from '../../../services/studyPlanService';
 import GoalScoreStep from './GoalScoreStep/GoalScoreStep';
 import PrepStartDateStep from './PrepStartDateStep/PrepStartDateStep';
 import StepProgressBar from './StepProgressBar/StepProgressBar';

@@ -11,7 +11,8 @@ import AboutUs from './components/AboutUs/AboutUs';
 import PracticeTestsList from './components/PracticeTests/PracticeTestsList';
 import PracticeTest from './components/PracticeTests/PracticeTest/PracticeTest';
 import ScoreReport from './components/PracticeTests/ScoreReport/ScoreReport';
-import StudyPlanSetup from './components/StudyPlanSetup/StudyPlanSetup';
+import StudyPlanSetup from './components/StudyPlans/StudyPlanSetup/StudyPlanSetup';
+import StudyPlanEditForm from './components/StudyPlans/StudyPlanEditForm/StudyPlanEditForm';
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
                 <Route path="/practice-tests/:testId" element={<PracticeTest />} />
                 <Route path="/practice-tests/:testId/results/:attemptId" element={<ScoreReport />}/>
                 <Route path="/study-plan-setup" element={<StudyPlanSetup />} />
+                <Route path="/study-plan-edit" element={<StudyPlanEditForm />} />
             </Routes>
         </Layout>
     )
