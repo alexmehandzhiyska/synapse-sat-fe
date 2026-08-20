@@ -11,6 +11,7 @@ import AboutUs from './components/AboutUs/AboutUs';
 import PracticeTestsList from './components/PracticeTests/PracticeTestsList';
 import PracticeTest from './components/PracticeTests/PracticeTest/PracticeTest';
 import ScoreReport from './components/PracticeTests/ScoreReport/ScoreReport';
+import StudyPlanSetup from './components/StudyPlanSetup/StudyPlanSetup';
 
 function App() {
     return (
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/practice-tests" element={<PracticeTestsList />} />
                 <Route path="/practice-tests/:testId" element={<PracticeTest />} />
                 <Route path="/practice-tests/:testId/results/:attemptId" element={<ScoreReport />}/>
+                <Route path="/study-plan-setup" element={<StudyPlanSetup />} />
             </Routes>
         </Layout>
     )

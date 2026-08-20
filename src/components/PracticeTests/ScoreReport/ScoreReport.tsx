@@ -124,7 +124,7 @@ const ScoreReport = () => {
                 {report.isDiagnostic ? (
                     <div className="flex flex-col items-center gap-3 pt-2 sm:flex-row sm:justify-center">
                         <Link
-                            to="/practice-tests"
+                            to="/study-plan-setup"
                             className="inline-flex rounded-xl bg-[#2f61c9] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#244fa8]"
                         >
                             Begin your prep plan&nbsp;→
