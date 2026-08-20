@@ -30,8 +30,9 @@ const request = async <T>(
         body: body === undefined ? undefined : JSON.stringify(body),
     });
 
-    // 204 No Content responses have no body to parse.
-    const data = response.status === 204 ? null : await response.json();
+    // Empty bodies have nothing to parse.
+    const responseText = await response.text();
+    const data = responseText ? JSON.parse(responseText) : null;
 
     if (!response.ok) {
         throw new Error(data?.message || 'Something went wrong.');

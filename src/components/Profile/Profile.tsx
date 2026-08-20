@@ -3,13 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import userService from '../../services/userService';
 import testAttemptService from '../../services/testAttemptService';
+import studyPlanService from '../../services/studyPlanService';
 import type { UserProfile } from '../../types/auth';
 import type { TestResult } from '../../types/testAttempt';
+import type { StudyPlanData } from '../../types/studyPlan';
 import { SECTION_LABELS } from '../PracticeTests/ScoreReport/labels';
 
 import EditProfileForm from './EditProfileForm/EditProfileForm';
 import ScoreTrendChart from './ScoreTrendChart/ScoreTrendChart';
 import SectionPerformanceChart from './SectionPerformanceChart/SectionPerformanceChart';
+import StudyPlanOverview from './StudyPlanOverview/StudyPlanOverview';
 
 const profileFields: { label: string; value: (profile: UserProfile) => string | null }[] = [
     { label: 'First name', value: (profile) => profile.firstName },
@@ -30,6 +33,10 @@ const Profile = () => {
     const [testResults, setTestResults] = useState<TestResult[]>([]);
     const [isLoadingResults, setIsLoadingResults] = useState(true);
     const [resultsError, setResultsError] = useState('');
+
+    const [studyPlan, setStudyPlan] = useState<StudyPlanData | null>(null);
+    const [isLoadingStudyPlan, setIsLoadingStudyPlan] = useState(true);
+    const [studyPlanError, setStudyPlanError] = useState('');
 
     useEffect(() => {
         if (!localStorage.getItem('accessToken')) {
@@ -59,6 +66,16 @@ const Profile = () => {
             })
             .finally(() => {
                 setIsLoadingResults(false);
+            });
+
+        studyPlanService
+            .getOne()
+            .then(setStudyPlan)
+            .catch(() => {
+                setStudyPlanError('Error loading your study plan. Try again later');
+            })
+            .finally(() => {
+                setIsLoadingStudyPlan(false);
             });
     }, [navigate]);
 
@@ -102,6 +119,14 @@ const Profile = () => {
                         Profile
                     </h1>
                 </div>
+
+                {isLoadingStudyPlan && (
+                    <div className="mb-9 h-56 animate-pulse rounded-2xl border border-slate-200 bg-white" />
+                )}
+
+                {!isLoadingStudyPlan && !studyPlanError && (
+                    <StudyPlanOverview studyPlan={studyPlan} bestScore={bestScore} />
+                )}
 
                 {isLoading && (
                     <div className="h-72 animate-pulse rounded-2xl border border-slate-200 bg-white" />
