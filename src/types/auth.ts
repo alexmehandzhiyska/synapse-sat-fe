@@ -14,11 +14,14 @@ export type LoginData = {
     password: string;
 }
 
-type AuthUser = {
+export type UserRole = 'student' | 'teacher' | 'admin';
+
+export type AuthUser = {
     id: string;
     firstName: string;
     lastName: string;
     email: string;
+    role: UserRole;
 }
 
 export type AuthResponse = {
@@ -48,8 +51,6 @@ export type MessageResponse = {
     success: boolean;
     message: string;
 }
-
-type UserRole = 'student' | 'teacher' | 'admin';
 
 export type UserProfile = {
     id: string;

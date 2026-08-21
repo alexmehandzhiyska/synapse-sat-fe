@@ -1,4 +1,4 @@
-import type { AuthResponse, ForgotPasswordData, LoginData, MessageResponse, RegisterData, ResetPasswordData, VerifyResetCodeData } from '../types/auth';
+import type { AuthResponse, AuthUser, ForgotPasswordData, LoginData, MessageResponse, RegisterData, ResetPasswordData, VerifyResetCodeData } from '../types/auth';
 import { post } from './requester';
 
 const saveAuthData = (data: AuthResponse) => {
@@ -40,6 +40,12 @@ const logout = () => {
     clearAuthData();
 };
 
+const getCurrentUser = (): AuthUser | null => {
+    const user = localStorage.getItem('user');
+
+    return user ? JSON.parse(user) : null;
+};
+
 const forgotPassword = async (data: ForgotPasswordData) => {
     return await post<MessageResponse>('/auth/forgot-password', {
         auth: false,
@@ -61,5 +67,5 @@ const resetPassword = async (data: ResetPasswordData) => {
     });
 };
 
-const authService = { register, login, logout, forgotPassword, verifyResetCode, resetPassword };
+const authService = { register, login, logout, forgotPassword, verifyResetCode, resetPassword, getCurrentUser };
 export default authService;
