@@ -49,6 +49,8 @@ export type MessageResponse = {
     message: string;
 }
 
+type UserRole = 'student' | 'teacher' | 'admin';
+
 export type UserProfile = {
     id: string;
     firstName: string;
@@ -57,6 +59,7 @@ export type UserProfile = {
     country: string | null;
     city: string | null;
     school: string | null;
+    role: UserRole;
 }
 
 export type UpdateProfileData = {
