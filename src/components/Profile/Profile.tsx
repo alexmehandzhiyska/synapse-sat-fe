@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import authService from '../../services/authService';
 import userService from '../../services/userService';
 import testAttemptService from '../../services/testAttemptService';
 import studyPlanService from '../../services/studyPlanService';
@@ -25,17 +26,18 @@ const profileFields: { label: string; value: (profile: UserProfile) => string | 
 
 const Profile = () => {
     const navigate = useNavigate();
+    const isStudent = authService.getCurrentUser()?.role === 'student';
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
     const [isEditing, setIsEditing] = useState(false);
 
     const [testResults, setTestResults] = useState<TestResult[]>([]);
-    const [isLoadingResults, setIsLoadingResults] = useState(true);
+    const [isLoadingResults, setIsLoadingResults] = useState(isStudent);
     const [resultsError, setResultsError] = useState('');
 
     const [studyPlan, setStudyPlan] = useState<StudyPlanData | null>(null);
-    const [isLoadingStudyPlan, setIsLoadingStudyPlan] = useState(true);
+    const [isLoadingStudyPlan, setIsLoadingStudyPlan] = useState(isStudent);
     const [studyPlanError, setStudyPlanError] = useState('');
 
     useEffect(() => {
@@ -55,6 +57,10 @@ const Profile = () => {
             .finally(() => {
                 setIsLoading(false);
             });
+
+        if (!isStudent) {
+            return;
+        }
 
         testAttemptService
             .getAllCompleted()
@@ -77,7 +83,7 @@ const Profile = () => {
             .finally(() => {
                 setIsLoadingStudyPlan(false);
             });
-    }, [navigate]);
+    }, [navigate, isStudent]);
 
     const bestScore = testResults.length > 0
         ? Math.max(...testResults.map((result) => result.totalScaled))
@@ -120,11 +126,11 @@ const Profile = () => {
                     </h1>
                 </div>
 
-                {isLoadingStudyPlan && (
+                {isStudent && isLoadingStudyPlan && (
                     <div className="mb-9 h-56 animate-pulse rounded-2xl border border-slate-200 bg-white" />
                 )}
 
-                {!isLoadingStudyPlan && !studyPlanError && (
+                {isStudent && !isLoadingStudyPlan && !studyPlanError && (
                     <StudyPlanOverview studyPlan={studyPlan} bestScore={bestScore} />
                 )}
 
@@ -183,6 +189,7 @@ const Profile = () => {
                     </div>
                 )}
 
+                {isStudent && (
                 <div className="mt-10">
                     <h2 className="mb-4 font-['Space_Grotesk'] text-2xl font-extrabold text-[#13385A]">
                         Test results
@@ -279,6 +286,7 @@ const Profile = () => {
                         </div>
                     )}
                 </div>
+                )}
             </div>
         </section>
     );
