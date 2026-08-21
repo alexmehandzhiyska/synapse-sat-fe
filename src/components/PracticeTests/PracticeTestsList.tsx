@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import authService from '../../services/authService';
 import practiceTestService from '../../services/practiceTestService';
 import type { PracticeTest } from '../../types/practiceTest';
 
 const PracticeTestsList = () => {
+    const isTeacher = authService.getCurrentUser()?.role === 'teacher';
     const [tests, setTests] = useState<PracticeTest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -26,13 +28,24 @@ const PracticeTestsList = () => {
     return (
         <section className="min-h-[calc(100vh-73px)] bg-[#f4f7fb] px-6 py-12 sm:px-10 lg:px-16">
             <div className="mx-auto max-w-6xl">
-                <div className="mb-9 max-w-3xl">
-                    <h1 className="mb-3 font-['Space_Grotesk'] text-4xl font-extrabold leading-tight text-[#13385A] sm:text-5xl">
-                        Practice tests
-                    </h1>
-                    <p className="text-lg font-semibold leading-8 text-[#5A6B7B]">
-                        Build confidence with full digital SAT practice in Reading and Writing and Math.
-                    </p>
+                <div className="mb-9 flex flex-wrap items-end justify-between gap-6">
+                    <div className="max-w-3xl">
+                        <h1 className="mb-3 font-['Space_Grotesk'] text-4xl font-extrabold leading-tight text-[#13385A] sm:text-5xl">
+                            Practice tests
+                        </h1>
+                        <p className="text-lg font-semibold leading-8 text-[#5A6B7B]">
+                            Build confidence with full digital SAT practice in Reading and Writing and Math.
+                        </p>
+                    </div>
+
+                    {isTeacher && (
+                        <Link
+                            to="/practice-tests/add"
+                            className="inline-flex h-12 items-center justify-center rounded-2xl bg-[#2f61c9] px-6 text-sm font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8]"
+                        >
+                            Add practice test
+                        </Link>
+                    )}
                 </div>
 
                 {isLoading && (

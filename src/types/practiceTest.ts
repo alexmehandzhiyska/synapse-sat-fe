@@ -9,6 +9,11 @@ export interface PracticeTest {
     updatedAt: string;
 }
 
+export type CreatePracticeTestData = {
+    title: string;
+    type: PracticeTestType;
+}
+
 export interface AnswerChoice {
     id: string;
     label: string;

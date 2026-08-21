@@ -27,6 +27,7 @@ const profileFields: { label: string; value: (profile: UserProfile) => string | 
 const Profile = () => {
     const navigate = useNavigate();
     const isStudent = authService.getCurrentUser()?.role === 'student';
+    
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
