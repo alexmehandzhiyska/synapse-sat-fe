@@ -13,6 +13,7 @@ import PracticeTest from './components/PracticeTests/PracticeTest/PracticeTest';
 import ScoreReport from './components/PracticeTests/ScoreReport/ScoreReport';
 import StudyPlanSetup from './components/StudyPlans/StudyPlanSetup/StudyPlanSetup';
 import StudyPlanEditForm from './components/StudyPlans/StudyPlanEditForm/StudyPlanEditForm';
+import StudentGuard from './components/common/guards/StudentGuard/StudentGuard';
 
 function App() {
     return (
@@ -25,10 +26,10 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/practice-tests" element={<PracticeTestsList />} />
-                <Route path="/practice-tests/:testId" element={<PracticeTest />} />
-                <Route path="/practice-tests/:testId/results/:attemptId" element={<ScoreReport />}/>
-                <Route path="/study-plan-setup" element={<StudyPlanSetup />} />
-                <Route path="/study-plan-edit" element={<StudyPlanEditForm />} />
+                <Route path="/practice-tests/:testId" element={<StudentGuard><PracticeTest /></StudentGuard>} />
+                <Route path="/practice-tests/:testId/results/:attemptId" element={<StudentGuard><ScoreReport /></StudentGuard>}/>
+                <Route path="/study-plan-setup" element={<StudentGuard><StudyPlanSetup /></StudentGuard>} />
+                <Route path="/study-plan-edit" element={<StudentGuard><StudyPlanEditForm /></StudentGuard>} />
             </Routes>
         </Layout>
     )
