@@ -20,6 +20,7 @@ import AddQuestion from './components/PracticeTests/AddQuestion/AddQuestion';
 import ReviewQuestions from './components/PracticeTests/ReviewQuestions/ReviewQuestions';
 import AdminGuard from './components/common/guards/AdminGuard/AdminGuard';
 import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
+import Notebook from './components/Notebook/Notebook';
 
 function App() {
     return (
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/study-plan-setup" element={<StudentGuard><StudyPlanSetup /></StudentGuard>} />
                 <Route path="/study-plan-edit" element={<StudentGuard><StudyPlanEditForm /></StudentGuard>} />
                 <Route path="/admin/users" element={<AdminGuard><AdminUsers /></AdminGuard>} />
+                <Route path="/notebook" element={<StudentGuard><Notebook /></StudentGuard>} />
             </Routes>
         </Layout>
     )

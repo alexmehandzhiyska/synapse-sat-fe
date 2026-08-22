@@ -1,11 +1,12 @@
-import type { ModuleScore } from '../../../types/score';
+import type { ModuleScore, QuestionResult } from '../../../types/score';
 import QuestionTiles from './QuestionTiles';
 
 interface ModuleCardProps {
     module: ModuleScore;
+    onSelectQuestion: (question: QuestionResult) => void;
 }
 
-const ModuleCard = ({ module }: ModuleCardProps) => {
+const ModuleCard = ({ module, onSelectQuestion }: ModuleCardProps) => {
     return (
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="flex items-baseline justify-between">
@@ -34,7 +35,7 @@ const ModuleCard = ({ module }: ModuleCardProps) => {
             </div>
 
             <div className="mt-3">
-                <QuestionTiles questions={module.questions} />
+                <QuestionTiles questions={module.questions} onSelectQuestion={onSelectQuestion} />
             </div>
         </div>
     );

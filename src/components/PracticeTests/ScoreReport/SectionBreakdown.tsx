@@ -1,13 +1,14 @@
-import type { SectionScore } from '../../../types/score';
+import type { QuestionResult, SectionScore } from '../../../types/score';
 import DomainCard from './DomainCard';
 import ModuleCard from './ModuleCard';
 import { SECTION_LABELS } from './labels';
 
 interface SectionBreakdownProps {
     section: SectionScore;
+    onSelectQuestion: (question: QuestionResult) => void;
 }
 
-const SectionBreakdown = ({ section }: SectionBreakdownProps) => {
+const SectionBreakdown = ({ section, onSelectQuestion }: SectionBreakdownProps) => {
     return (
         <div className="rounded-2xl border border-slate-200 bg-white/60 p-5 sm:p-6">
             <div className="flex flex-wrap items-baseline justify-between gap-3">
@@ -27,7 +28,7 @@ const SectionBreakdown = ({ section }: SectionBreakdownProps) => {
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 {section.modules.map((module) => (
-                    <ModuleCard key={module.position} module={module} />
+                    <ModuleCard key={module.position} module={module} onSelectQuestion={onSelectQuestion} />
                 ))}
             </div>
 

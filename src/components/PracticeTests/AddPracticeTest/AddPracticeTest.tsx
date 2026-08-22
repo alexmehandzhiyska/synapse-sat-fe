@@ -23,8 +23,8 @@ const AddPracticeTest = () => {
         setSubmitError('');
 
         try {
-            await practiceTestService.create(data);
-            navigate('/practice-tests');
+            const created = await practiceTestService.create(data);
+            navigate(`/practice-tests/${created.id}/questions/add`);
         } catch (error) {
             setSubmitError(error instanceof Error ? error.message : 'Something went wrong.');
         }
@@ -73,6 +73,7 @@ const AddPracticeTest = () => {
                             >
                                 <option value="standard">Standard</option>
                                 <option value="diagnostic">Diagnostic</option>
+                                <option value="check_in">Check-in</option>
                             </select>
                         </label>
 

@@ -1,4 +1,4 @@
-export type PracticeTestType = 'diagnostic' | 'standard';
+export type PracticeTestType = 'diagnostic' | 'standard' | 'check_in';
 export type SectionName = 'reading_writing' | 'math';
 export type Difficulty = 'easy' | 'medium' | 'hard';
 export type Domain =

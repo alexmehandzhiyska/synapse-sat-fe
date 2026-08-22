@@ -11,6 +11,7 @@ const navItems = [
 const Header = () => {
     const isLoggedIn = Boolean(localStorage.getItem('accessToken'));
     const isAdmin = authService.getCurrentUser()?.role === 'admin';
+    const isStudent = authService.getCurrentUser()?.role === 'student';
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -52,6 +53,15 @@ const Header = () => {
                             >
                                 Profile
                             </a>
+
+                            {isStudent && (
+                                <a
+                                    href="/notebook"
+                                    className="relative px-3 py-2 text-sm font-bold text-black transition after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-stone-950 after:transition-transform hover:after:scale-x-100"
+                                >
+                                    My Notebook
+                                </a>
+                            )}
 
                             {isAdmin && (
                                 <a

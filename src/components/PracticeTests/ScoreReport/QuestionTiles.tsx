@@ -8,16 +8,19 @@ const STATUS_CLASSES: Record<QuestionStatus, string> = {
 
 interface QuestionTilesProps {
     questions: QuestionResult[];
+    onSelectQuestion: (question: QuestionResult) => void;
 }
 
-const QuestionTiles = ({ questions }: QuestionTilesProps) => {
+const QuestionTiles = ({ questions, onSelectQuestion }: QuestionTilesProps) => {
     return (
         <div className="flex flex-wrap gap-1">
             {questions.map((question) => (
-                <span
+                <button
                     key={question.position}
+                    type="button"
+                    onClick={() => onSelectQuestion(question)}
                     title={`Question ${question.position}: ${question.status}`}
-                    className={`h-4 w-4 rounded border-2 ${STATUS_CLASSES[question.status]}`}
+                    className={`h-4 w-4 rounded border-2 transition hover:scale-125 ${STATUS_CLASSES[question.status]}`}
                 />
             ))}
         </div>

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import testAttemptService from '../../../services/testAttemptService';
-import type { ScoreReport as ScoreReportData } from '../../../types/score';
+import type { QuestionResult, ScoreReport as ScoreReportData } from '../../../types/score';
+import QuestionReviewModal from './QuestionReviewModal';
 import SectionBreakdown from './SectionBreakdown';
 import { SECTION_LABELS } from './labels';
 
@@ -12,6 +13,7 @@ const ScoreReport = () => {
     const [report, setReport] = useState<ScoreReportData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
+    const [selectedQuestion, setSelectedQuestion] = useState<QuestionResult | null>(null);
 
     // Load test score
     useEffect(() => {
@@ -118,7 +120,7 @@ const ScoreReport = () => {
                 </div>
 
                 {!report.isDiagnostic && report.sections.map((section) => (
-                    <SectionBreakdown key={section.name} section={section} />
+                    <SectionBreakdown key={section.name} section={section} onSelectQuestion={setSelectedQuestion} />
                 ))}
 
                 {report.isDiagnostic ? (
@@ -141,6 +143,13 @@ const ScoreReport = () => {
                     </div>
                 )}
             </div>
+
+            {selectedQuestion && (
+                <QuestionReviewModal
+                    question={selectedQuestion}
+                    onClose={() => setSelectedQuestion(null)}
+                />
+            )}
         </section>
     );
 };
