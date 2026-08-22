@@ -10,6 +10,7 @@ const PracticeTestsList = () => {
     const [tests, setTests] = useState<PracticeTest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
+    const [deletingTestId, setDeletingTestId] = useState<string | null>(null);
 
     useEffect(() => {
         practiceTestService
@@ -24,6 +25,24 @@ const PracticeTestsList = () => {
                 setIsLoading(false);
             });
     }, []);
+
+    const handleDelete = async (test: PracticeTest) => {
+        if (!window.confirm(`Delete "${test.title}"? This also removes all of its questions and any student results for it.`)) {
+            return;
+        }
+
+        setError('');
+        setDeletingTestId(test.id);
+
+        try {
+            await practiceTestService.remove(test.id);
+            setTests((prev) => prev.filter((item) => item.id !== test.id));
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Something went wrong.');
+        } finally {
+            setDeletingTestId(null);
+        }
+    };
 
     return (
         <section className="min-h-[calc(100vh-73px)] bg-[#f4f7fb] px-6 py-12 sm:px-10 lg:px-16">
@@ -59,7 +78,7 @@ const PracticeTestsList = () => {
                     </div>
                 )}
 
-                {!isLoading && error && (
+                {!isLoading && error && tests.length === 0 && (
                     <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-red-800">
                         <h2 className="mb-2 font-['Space_Grotesk'] text-xl font-extrabold">
                             We couldn't load the tests
@@ -79,7 +98,13 @@ const PracticeTestsList = () => {
                     </div>
                 )}
 
-                {!isLoading && !error && tests.length > 0 && (
+                {!isLoading && error && tests.length > 0 && (
+                    <p className="mb-6 rounded-2xl bg-red-50 px-4 py-3 text-sm font-bold text-red-600">
+                        {error}
+                    </p>
+                )}
+
+                {!isLoading && tests.length > 0 && (
                     <div className="space-y-8">
                         {tests.map((test) => {
                             return (
@@ -111,6 +136,14 @@ const PracticeTestsList = () => {
                                                 >
                                                     Review questions
                                                 </Link>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDelete(test)}
+                                                    disabled={deletingTestId === test.id}
+                                                    className="inline-flex items-center rounded-xl border border-red-200 px-5 py-2.5 text-sm font-bold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+                                                >
+                                                    {deletingTestId === test.id ? 'Deleting...' : 'Delete'}
+                                                </button>
                                             </>
                                         ) : (
                                             <Link

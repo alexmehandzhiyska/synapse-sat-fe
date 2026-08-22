@@ -1,5 +1,5 @@
 import type { CreatePracticeTestData, CreateQuestionData, FullPracticeTest, PracticeTest, Question, UpdateQuestionData } from '../types/practiceTest';
-import { get, patch, post } from './requester';
+import { del, get, patch, post } from './requester';
 
 const getAll = (): Promise<PracticeTest[]> =>
     get<PracticeTest[]>('/practice-test');
@@ -19,6 +19,9 @@ const createQuestion = (moduleId: string, data: CreateQuestionData): Promise<Que
 const updateQuestion = (questionId: string, data: UpdateQuestionData): Promise<Question> =>
     patch<Question>(`/practice-test/questions/${questionId}`, { body: data });
 
-const practiceTestService = { getAll, getOne, getDiagnostic, create, createQuestion, updateQuestion };
+const remove = (id: string): Promise<void> =>
+    del<void>(`/practice-test/${id}`);
+
+const practiceTestService = { getAll, getOne, getDiagnostic, create, createQuestion, updateQuestion, remove };
 
 export default practiceTestService;
