@@ -1,6 +1,7 @@
 import type { QuestionResult, SectionScore } from '../../../types/score';
 import DomainCard from './DomainCard';
 import ModuleCard from './ModuleCard';
+import QuestionDetailsTable from './QuestionDetailsTable';
 import { SECTION_LABELS } from './labels';
 
 interface SectionBreakdownProps {
@@ -40,6 +41,11 @@ const SectionBreakdown = ({ section, onSelectQuestion }: SectionBreakdownProps) 
                     <DomainCard key={domain.domain} domain={domain} />
                 ))}
             </div>
+
+            <h4 className="mt-6 mb-2 text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
+                Question breakdown
+            </h4>
+            <QuestionDetailsTable section={section} onSelectQuestion={onSelectQuestion} />
         </div>
     );
 };
