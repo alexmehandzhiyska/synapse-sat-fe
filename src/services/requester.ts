@@ -52,3 +52,6 @@ export const put = <T>(path: string, options?: RequestOptions): Promise<T> =>
 
 export const patch = <T>(path: string, options?: RequestOptions): Promise<T> =>
     request<T>(path, 'PATCH', { auth: true, ...options });
+
+export const del = <T>(path: string, options?: RequestOptions): Promise<T> =>
+    request<T>(path, 'DELETE', { auth: true, ...options });

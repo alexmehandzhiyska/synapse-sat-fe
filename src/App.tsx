@@ -18,6 +18,8 @@ import TeacherGuard from './components/common/guards/TeacherGuard/TeacherGuard';
 import AddPracticeTest from './components/PracticeTests/AddPracticeTest/AddPracticeTest';
 import AddQuestion from './components/PracticeTests/AddQuestion/AddQuestion';
 import ReviewQuestions from './components/PracticeTests/ReviewQuestions/ReviewQuestions';
+import AdminGuard from './components/common/guards/AdminGuard/AdminGuard';
+import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
 
 function App() {
     return (
@@ -37,6 +39,7 @@ function App() {
                 <Route path="/practice-tests/:testId/results/:attemptId" element={<StudentGuard><ScoreReport /></StudentGuard>}/>
                 <Route path="/study-plan-setup" element={<StudentGuard><StudyPlanSetup /></StudentGuard>} />
                 <Route path="/study-plan-edit" element={<StudentGuard><StudyPlanEditForm /></StudentGuard>} />
+                <Route path="/admin/users" element={<AdminGuard><AdminUsers /></AdminGuard>} />
             </Routes>
         </Layout>
     )

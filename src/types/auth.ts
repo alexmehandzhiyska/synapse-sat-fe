@@ -70,3 +70,24 @@ export type UpdateProfileData = {
     city?: string;
     school?: string;
 }
+
+export type AdminUser = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: UserRole;
+    country: string | null;
+    city: string | null;
+    school: string | null;
+    isActive: boolean;
+}
+
+export type UpdateUserData = {
+    firstName: string;
+    lastName: string;
+    country?: string;
+    city?: string;
+    school?: string;
+    role: UserRole;
+}
