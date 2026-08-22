@@ -49,3 +49,6 @@ export const post = <T>(path: string, options?: RequestOptions): Promise<T> =>
 
 export const put = <T>(path: string, options?: RequestOptions): Promise<T> =>
     request<T>(path, 'PUT', { auth: true, ...options });
+
+export const patch = <T>(path: string, options?: RequestOptions): Promise<T> =>
+    request<T>(path, 'PATCH', { auth: true, ...options });

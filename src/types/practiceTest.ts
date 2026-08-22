@@ -71,3 +71,17 @@ export type CreateQuestionData = {
     difficulty: Difficulty;
     answerChoices: CreateAnswerChoiceData[];
 }
+
+export type UpdateAnswerChoiceData = {
+    id: string;
+    content: string;
+    isCorrect: boolean;
+}
+
+export type UpdateQuestionData = {
+    domain: Domain;
+    passage?: string;
+    prompt: string;
+    difficulty: Difficulty;
+    answerChoices: UpdateAnswerChoiceData[];
+}

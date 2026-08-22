@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 import practiceTestService from '../../../services/practiceTestService';
 import type { CreateQuestionData, Difficulty, Domain, FullPracticeTest, SectionName } from '../../../types/practiceTest';
@@ -160,15 +162,10 @@ const AddQuestion = () => {
                                             </option>
                                         ))}
                                     </select>
-                                    <svg
+                                    <FontAwesomeIcon
+                                        icon={faChevronDown}
                                         className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5A6B7B]"
-                                        viewBox="0 0 20 20"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                    >
-                                        <path d="m5 7 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
+                                    />
                                 </div>
                                 {errors.moduleId && (
                                     <span className="mt-2 block text-xs font-bold text-red-500">
@@ -196,15 +193,10 @@ const AddQuestion = () => {
                                             </option>
                                         ))}
                                     </select>
-                                    <svg
+                                    <FontAwesomeIcon
+                                        icon={faChevronDown}
                                         className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5A6B7B]"
-                                        viewBox="0 0 20 20"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                    >
-                                        <path d="m5 7 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
+                                    />
                                 </div>
                                 {errors.domain && (
                                     <span className="mt-2 block text-xs font-bold text-red-500">
@@ -228,15 +220,10 @@ const AddQuestion = () => {
                                             </option>
                                         ))}
                                     </select>
-                                    <svg
+                                    <FontAwesomeIcon
+                                        icon={faChevronDown}
                                         className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5A6B7B]"
-                                        viewBox="0 0 20 20"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                    >
-                                        <path d="m5 7 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
+                                    />
                                 </div>
                             </label>
 

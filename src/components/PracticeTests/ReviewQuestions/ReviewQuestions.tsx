@@ -2,8 +2,22 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import practiceTestService from '../../../services/practiceTestService';
-import type { FullPracticeTest } from '../../../types/practiceTest';
-import { DOMAIN_LABELS, SECTION_LABELS } from '../ScoreReport/labels';
+import type { FullPracticeTest, Question } from '../../../types/practiceTest';
+import { SECTION_LABELS } from '../ScoreReport/labels';
+import QuestionCard from './QuestionCard';
+
+const replaceQuestionInTest = (test: FullPracticeTest, updatedQuestion: Question): FullPracticeTest => ({
+    ...test,
+    sections: test.sections.map((section) => ({
+        ...section,
+        modules: section.modules.map((module) => ({
+            ...module,
+            questions: module.questions.map((question) =>
+                question.id === updatedQuestion.id ? updatedQuestion : question,
+            ),
+        })),
+    })),
+});
 
 const ReviewQuestions = () => {
     const { testId } = useParams<{ testId: string }>();
@@ -26,6 +40,10 @@ const ReviewQuestions = () => {
                 setIsLoading(false);
             });
     }, [testId]);
+
+    const handleQuestionUpdated = (updatedQuestion: Question) => {
+        setTest((prev) => (prev ? replaceQuestionInTest(prev, updatedQuestion) : prev));
+    };
 
     return (
         <section className="min-h-[calc(100vh-73px)] bg-[#f4f7fb] px-6 py-12 sm:px-10 lg:px-16">
@@ -76,54 +94,12 @@ const ReviewQuestions = () => {
 
                                         <div className="space-y-4">
                                             {module.questions.map((question) => (
-                                                <div
+                                                <QuestionCard
                                                     key={question.id}
-                                                    className="rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_8px_24px_rgba(19,56,90,0.06)]"
-                                                >
-                                                    <div className="mb-3 flex flex-wrap items-center gap-2 text-sm font-semibold text-[#5A6B7B]">
-                                                        <span className="font-extrabold text-[#13385A]">Q{question.position}</span>
-                                                        <span>·</span>
-                                                        <span>{DOMAIN_LABELS[question.domain]}</span>
-                                                        <span>·</span>
-                                                        <span className="capitalize">{question.difficulty}</span>
-                                                    </div>
-
-                                                    {question.passage && (
-                                                        <p className="mb-4 whitespace-pre-line text-sm leading-7 text-[#1b1b1f]">
-                                                            {question.passage}
-                                                        </p>
-                                                    )}
-
-                                                    <p className="mb-4 font-semibold leading-7 text-[#13385A]">
-                                                        {question.prompt}
-                                                    </p>
-
-                                                    <div className="space-y-2">
-                                                        {question.answerChoices.map((choice) => (
-                                                            <div
-                                                                key={choice.id}
-                                                                className={`flex items-center gap-3 rounded-xl border-2 px-4 py-2.5 ${
-                                                                    choice.isCorrect
-                                                                        ? 'border-emerald-400 bg-emerald-50'
-                                                                        : 'border-slate-200 bg-white'
-                                                                }`}
-                                                            >
-                                                                <span
-                                                                    className={`flex h-7 w-7 flex-none items-center justify-center rounded-full border-2 text-xs font-extrabold ${
-                                                                        choice.isCorrect
-                                                                            ? 'border-emerald-500 bg-emerald-500 text-white'
-                                                                            : 'border-slate-300 text-[#13385A]'
-                                                                    }`}
-                                                                >
-                                                                    {choice.label}
-                                                                </span>
-                                                                <span className="text-sm font-semibold text-[#1b1b1f]">
-                                                                    {choice.content}
-                                                                </span>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
+                                                    question={question}
+                                                    sectionName={section.name}
+                                                    onUpdated={handleQuestionUpdated}
+                                                />
                                             ))}
                                         </div>
                                     </div>
