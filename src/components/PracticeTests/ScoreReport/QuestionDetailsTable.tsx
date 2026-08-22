@@ -30,16 +30,16 @@ const QuestionDetailsTable = ({ section, onSelectQuestion }: QuestionDetailsTabl
     );
 
     return (
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+        <div className="mt-6 max-h-105 overflow-auto rounded-2xl border border-slate-200 bg-white">
             <table className="w-full min-w-160 text-left text-sm">
                 <thead>
-                    <tr className="border-b border-slate-200 text-center text-xs font-extrabold uppercase tracking-wide text-[#5A6B7B]">
-                        <th className="px-4 py-3">Module</th>
-                        <th className="px-4 py-3">Question</th>
-                        <th className="px-4 py-3">Correct answer</th>
-                        <th className="px-4 py-3">Your answer</th>
-                        <th className="px-4 py-3">Difficulty</th>
-                        <th className="px-4 py-3">Domain</th>
+                    <tr className="text-center text-xs font-extrabold uppercase tracking-wide text-[#5A6B7B]">
+                        <th className="sticky top-0 z-10 border-b border-slate-200 bg-white px-4 py-3">Module</th>
+                        <th className="sticky top-0 z-10 border-b border-slate-200 bg-white px-4 py-3">Question</th>
+                        <th className="sticky top-0 z-10 border-b border-slate-200 bg-white px-4 py-3">Correct answer</th>
+                        <th className="sticky top-0 z-10 border-b border-slate-200 bg-white px-4 py-3">Your answer</th>
+                        <th className="sticky top-0 z-10 border-b border-slate-200 bg-white px-4 py-3">Difficulty</th>
+                        <th className="sticky top-0 z-10 border-b border-slate-200 bg-white px-4 py-3">Domain</th>
                     </tr>
                 </thead>
                 <tbody>
