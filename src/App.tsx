@@ -24,8 +24,11 @@ import Notebook from './components/Notebook/Notebook';
 
 function App() {
     return (
-        <Layout>
-            <Routes>
+        <Routes>
+            {/* Test-taking flow renders its own TestHeader, so it doesn't show the app header */}
+            <Route path="/practice-tests/:testId" element={<StudentGuard><PracticeTest /></StudentGuard>} />
+
+            <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
@@ -34,7 +37,6 @@ function App() {
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/practice-tests" element={<PracticeTestsList />} />
                 <Route path="/practice-tests/add" element={<TeacherGuard><AddPracticeTest /></TeacherGuard>} />
-                <Route path="/practice-tests/:testId" element={<StudentGuard><PracticeTest /></StudentGuard>} />
                 <Route path="/practice-tests/:testId/questions/add" element={<TeacherGuard><AddQuestion /></TeacherGuard>} />
                 <Route path="/practice-tests/:testId/review" element={<TeacherGuard><ReviewQuestions /></TeacherGuard>} />
                 <Route path="/practice-tests/:testId/results/:attemptId" element={<StudentGuard><ScoreReport /></StudentGuard>}/>
@@ -42,8 +44,8 @@ function App() {
                 <Route path="/study-plan-edit" element={<StudentGuard><StudyPlanEditForm /></StudentGuard>} />
                 <Route path="/admin/users" element={<AdminGuard><AdminUsers /></AdminGuard>} />
                 <Route path="/notebook" element={<StudentGuard><Notebook /></StudentGuard>} />
-            </Routes>
-        </Layout>
+            </Route>
+        </Routes>
     )
 }
 
