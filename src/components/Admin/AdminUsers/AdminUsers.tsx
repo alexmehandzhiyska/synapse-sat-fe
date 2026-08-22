@@ -4,10 +4,13 @@ import adminService from '../../../services/adminService';
 import type { AdminUser } from '../../../types/auth';
 import UserRow from './UserRow';
 
+const PAGE_SIZE = 20;
+
 const AdminUsers = () => {
     const [users, setUsers] = useState<AdminUser[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         adminService
@@ -24,6 +27,9 @@ const AdminUsers = () => {
     const handleUserUpdated = (updatedUser: AdminUser) => {
         setUsers((prev) => prev.map((user) => (user.id === updatedUser.id ? updatedUser : user)));
     };
+
+    const totalPages = Math.ceil(users.length / PAGE_SIZE);
+    const pageUsers = users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
     return (
         <section className="min-h-[calc(100vh-73px)] bg-[#f4f7fb] px-6 py-12 sm:px-10 lg:px-16">
@@ -55,11 +61,39 @@ const AdminUsers = () => {
                 )}
 
                 {!isLoading && !error && (
-                    <div className="space-y-4">
-                        {users.map((user) => (
-                            <UserRow key={user.id} user={user} onUpdated={handleUserUpdated} />
-                        ))}
-                    </div>
+                    <>
+                        <div className="space-y-4">
+                            {pageUsers.map((user) => (
+                                <UserRow key={user.id} user={user} onUpdated={handleUserUpdated} />
+                            ))}
+                        </div>
+
+                        {totalPages > 1 && (
+                            <div className="mt-8 flex items-center justify-between">
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((page) => page - 1)}
+                                    disabled={currentPage === 1}
+                                    className="inline-flex h-10 items-center justify-center rounded-xl border border-gray-200 px-4 text-sm font-bold text-[#1b1b1f] transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                >
+                                    Previous
+                                </button>
+
+                                <span className="text-sm font-semibold text-[#5A6B7B]">
+                                    Page {currentPage} of {totalPages}
+                                </span>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((page) => page + 1)}
+                                    disabled={currentPage === totalPages}
+                                    className="inline-flex h-10 items-center justify-center rounded-xl border border-gray-200 px-4 text-sm font-bold text-[#1b1b1f] transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
         </section>
