@@ -16,6 +16,7 @@ import StudyPlanEditForm from './components/StudyPlans/StudyPlanEditForm/StudyPl
 import StudentGuard from './components/common/guards/StudentGuard/StudentGuard';
 import TeacherGuard from './components/common/guards/TeacherGuard/TeacherGuard';
 import AddPracticeTest from './components/PracticeTests/AddPracticeTest/AddPracticeTest';
+import AddQuestion from './components/PracticeTests/AddQuestion/AddQuestion';
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/practice-tests" element={<PracticeTestsList />} />
                 <Route path="/practice-tests/add" element={<TeacherGuard><AddPracticeTest /></TeacherGuard>} />
+                <Route path="/practice-tests/:testId/questions/add" element={<TeacherGuard><AddQuestion /></TeacherGuard>} />
                 <Route path="/practice-tests/:testId" element={<StudentGuard><PracticeTest /></StudentGuard>} />
                 <Route path="/practice-tests/:testId/results/:attemptId" element={<StudentGuard><ScoreReport /></StudentGuard>}/>
                 <Route path="/study-plan-setup" element={<StudentGuard><StudyPlanSetup /></StudentGuard>} />

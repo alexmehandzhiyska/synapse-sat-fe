@@ -97,12 +97,21 @@ const PracticeTestsList = () => {
                                     </div>
 
                                     <div className="ml-auto flex min-w-32 flex-col items-end justify-center gap-3 px-2">
-                                        <Link
-                                            to={`/practice-tests/${test.id}`}
-                                            className="inline-flex items-center rounded-xl bg-[#13385A] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#0e2b45]"
-                                        >
-                                            Start test
-                                        </Link>
+                                        {isTeacher ? (
+                                            <Link
+                                                to={`/practice-tests/${test.id}/questions/add`}
+                                                className="inline-flex items-center rounded-xl bg-[#13385A] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#0e2b45]"
+                                            >
+                                                Add questions
+                                            </Link>
+                                        ) : (
+                                            <Link
+                                                to={`/practice-tests/${test.id}`}
+                                                className="inline-flex items-center rounded-xl bg-[#13385A] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#0e2b45]"
+                                            >
+                                                Start test
+                                            </Link>
+                                        )}
                                     </div>
                                 </article>
                             );

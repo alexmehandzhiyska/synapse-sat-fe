@@ -1,5 +1,15 @@
 export type PracticeTestType = 'diagnostic' | 'standard';
 export type SectionName = 'reading_writing' | 'math';
+export type Difficulty = 'easy' | 'medium' | 'hard';
+export type Domain =
+    'information_and_ideas'
+    | 'craft_and_structure'
+    | 'expression_of_ideas'
+    | 'standard_english_conventions'
+    | 'algebra'
+    | 'advanced_math'
+    | 'problem_solving_and_data_analysis'
+    | 'geometry_and_trigonometry';
 
 export interface PracticeTest {
     id: string;
@@ -45,4 +55,18 @@ export interface Section {
 
 export interface FullPracticeTest extends PracticeTest {
     sections: Section[];
+}
+
+export type CreateAnswerChoiceData = {
+    label: string;
+    content: string;
+    isCorrect: boolean;
+}
+
+export type CreateQuestionData = {
+    domain: Domain;
+    passage?: string;
+    prompt: string;
+    difficulty: Difficulty;
+    answerChoices: CreateAnswerChoiceData[];
 }
