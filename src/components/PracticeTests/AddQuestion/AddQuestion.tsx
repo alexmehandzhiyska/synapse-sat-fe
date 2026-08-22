@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import practiceTestService from '../../../services/practiceTestService';
 import type { CreateQuestionData, Difficulty, Domain, FullPracticeTest, SectionName } from '../../../types/practiceTest';
@@ -106,14 +106,25 @@ const AddQuestion = () => {
     return (
         <section className="min-h-[calc(100vh-73px)] bg-[#f4f7fb] px-6 py-12 sm:px-10 lg:px-16">
             <div className="mx-auto max-w-3xl">
-                <div className="mb-9">
-                    <h1 className="mb-3 font-['Space_Grotesk'] text-4xl font-extrabold leading-tight text-[#13385A] sm:text-5xl">
-                        Add question
-                    </h1>
-                    {test && (
-                        <p className="text-lg font-semibold leading-8 text-[#5A6B7B]">
-                            {test.title}
-                        </p>
+                <div className="mb-9 flex flex-wrap items-end justify-between gap-6">
+                    <div>
+                        <h1 className="mb-3 font-['Space_Grotesk'] text-4xl font-extrabold leading-tight text-[#13385A] sm:text-5xl">
+                            Add question
+                        </h1>
+                        {test && (
+                            <p className="text-lg font-semibold leading-8 text-[#5A6B7B]">
+                                {test.title}
+                            </p>
+                        )}
+                    </div>
+
+                    {testId && (
+                        <Link
+                            to={`/practice-tests/${testId}/review`}
+                            className="inline-flex h-12 items-center justify-center rounded-2xl border border-gray-200 px-6 text-sm font-extrabold text-[#1b1b1f] transition hover:bg-gray-50"
+                        >
+                            Review questions
+                        </Link>
                     )}
                 </div>
 

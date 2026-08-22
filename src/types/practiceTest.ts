@@ -28,6 +28,7 @@ export interface AnswerChoice {
     id: string;
     label: string;
     content: string;
+    isCorrect?: boolean;
 }
 
 export interface Question {
