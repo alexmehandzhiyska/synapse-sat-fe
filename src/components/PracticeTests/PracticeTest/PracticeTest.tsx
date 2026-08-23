@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import practiceTestService from '../../../services/practiceTestService';
 import testAttemptService from '../../../services/testAttemptService';
 import type { FullPracticeTest, Question as QuestionData, SectionName } from '../../../types/practiceTest';
+import ExitTestConfirmModal from './ExitTestConfirmModal';
 import ModuleCompletionInterstitial from './ModuleCompletionInterstitial';
 import Question from './Question';
 import QuestionNavigator from './QuestionNavigator';
@@ -51,6 +52,7 @@ const PracticeTest = () => {
     const [visitedQuestionIds, setVisitedQuestionIds] = useState<Set<string>>(new Set());
     const [isNavigatorOpen, setIsNavigatorOpen] = useState(false);
     const [isTransitioning, setIsTransitioning] = useState(false);
+    const [isExitConfirmOpen, setIsExitConfirmOpen] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -151,6 +153,10 @@ const PracticeTest = () => {
     const handleNavigatorSelect = (questionIdx: number) => {
         handleNavigate(questionIdx);
         setIsNavigatorOpen(false);
+    };
+
+    const handleExit = () => {
+        navigate('/practice-tests');
     };
 
     const finishTest = () => {
@@ -256,6 +262,7 @@ const PracticeTest = () => {
                 title={test.title}
                 sectionLabel={sectionLabel}
                 moduleLabel={moduleLabel}
+                onExit={() => setIsExitConfirmOpen(true)}
             />
 
             {saveError && (
@@ -324,6 +331,13 @@ const PracticeTest = () => {
                     statuses={questionStatuses}
                     onSelect={handleNavigatorSelect}
                     onClose={() => setIsNavigatorOpen(false)}
+                />
+            )}
+
+            {isExitConfirmOpen && (
+                <ExitTestConfirmModal
+                    onCancel={() => setIsExitConfirmOpen(false)}
+                    onConfirm={handleExit}
                 />
             )}
         </section>
