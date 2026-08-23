@@ -52,3 +52,16 @@ export interface ScoreReport {
     totalScaled: number;
     sections: SectionScore[];
 }
+
+export interface ScoreBucket {
+    bucketStart: number;
+    bucketEnd: number;
+    count: number;
+}
+
+export interface ScoreDistribution {
+    yourScore: number;
+    percentile: number;
+    totalAttempts: number;
+    buckets: ScoreBucket[];
+}

@@ -1,4 +1,4 @@
-import type { ScoreReport } from '../types/score';
+import type { ScoreDistribution, ScoreReport } from '../types/score';
 import type { TestAttempt, TestResult } from '../types/testAttempt';
 import { get, post, put } from './requester';
 
@@ -26,6 +26,9 @@ const submit = (attemptId: string): Promise<TestAttempt> =>
 const getScore = (attemptId: string): Promise<ScoreReport> =>
     get<ScoreReport>(`/test-attempts/${attemptId}/score`, { auth: true });
 
-const testAttemptService = { getAllCompleted, startOrResume, upsertAnswer, advanceModule, submit, getScore };
+const getScoreDistribution = (attemptId: string): Promise<ScoreDistribution> =>
+    get<ScoreDistribution>(`/test-attempts/${attemptId}/score-distribution`, { auth: true });
+
+const testAttemptService = { getAllCompleted, startOrResume, upsertAnswer, advanceModule, submit, getScore, getScoreDistribution };
 
 export default testAttemptService;

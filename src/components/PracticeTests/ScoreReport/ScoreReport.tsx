@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import testAttemptService from '../../../services/testAttemptService';
-import type { QuestionResult, ScoreReport as ScoreReportData } from '../../../types/score';
+import type { QuestionResult, ScoreDistribution, ScoreReport as ScoreReportData } from '../../../types/score';
+import DomainAccuracyChart from './DomainAccuracyChart';
+import PercentileChart from './PercentileChart';
 import QuestionReviewModal from './QuestionReviewModal';
 import SectionBreakdown from './SectionBreakdown';
 import { SECTION_LABELS } from './labels';
@@ -14,6 +16,7 @@ const ScoreReport = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
     const [selectedQuestion, setSelectedQuestion] = useState<QuestionResult | null>(null);
+    const [distribution, setDistribution] = useState<ScoreDistribution | null>(null);
 
     // Load test score
     useEffect(() => {
@@ -31,6 +34,20 @@ const ScoreReport = () => {
             })
             .finally(() => {
                 setIsLoading(false);
+            });
+    }, [attemptId]);
+
+    // Load percentile/score distribution
+    useEffect(() => {
+        if (!attemptId) {
+            return;
+        }
+
+        testAttemptService
+            .getScoreDistribution(attemptId)
+            .then(setDistribution)
+            .catch(() => {
+                // Leave distribution as null - the chart just won't render.
             });
     }, [attemptId]);
 
@@ -117,6 +134,13 @@ const ScoreReport = () => {
                             ))}
                         </div>
                     </div>
+                </div>
+
+                <div className="grid items-start gap-6 lg:grid-cols-2">
+                    {distribution && (
+                        <PercentileChart distribution={distribution} />
+                    )}
+                    <DomainAccuracyChart sections={report.sections} />
                 </div>
 
                 {!report.isDiagnostic && report.sections.map((section) => (

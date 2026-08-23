@@ -2,7 +2,8 @@ import type { QuestionResult, SectionScore } from '../../../types/score';
 import DomainCard from './DomainCard';
 import ModuleCard from './ModuleCard';
 import QuestionDetailsTable from './QuestionDetailsTable';
-import { SECTION_LABELS } from './labels';
+import SectionSkillsRadar from './SectionSkillsRadar';
+import { SECTION_COLORS, SECTION_LABELS } from './labels';
 
 interface SectionBreakdownProps {
     section: SectionScore;
@@ -36,10 +37,13 @@ const SectionBreakdown = ({ section, onSelectQuestion }: SectionBreakdownProps) 
             <h4 className="mt-6 mb-2 text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
                 Knowledge and skills
             </h4>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {section.domains.map((domain) => (
-                    <DomainCard key={domain.domain} domain={domain} />
-                ))}
+            <div className="grid gap-4 lg:grid-cols-[320px_1fr] lg:items-center">
+                <SectionSkillsRadar domains={section.domains} color={SECTION_COLORS[section.name]} />
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    {section.domains.map((domain) => (
+                        <DomainCard key={domain.domain} domain={domain} />
+                    ))}
+                </div>
             </div>
 
             <h4 className="mt-6 mb-2 text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
