@@ -5,7 +5,7 @@ interface QuestionProps {
     question: QuestionData;
     sectionName: SectionName;
     selectedChoiceId: string | null;
-    onSelect: (choiceId: string) => void;
+    onSelect: (choiceId: string | null) => void;
 }
 
 const Question = ({ question, sectionName, selectedChoiceId, onSelect }: QuestionProps) => {

@@ -3,7 +3,7 @@ import type { AnswerChoice } from '../../../types/practiceTest';
 interface AnswerChoicesProps {
     choices: AnswerChoice[];
     selectedChoiceId: string | null;
-    onSelect: (choiceId: string) => void;
+    onSelect: (choiceId: string | null) => void;
 }
 
 const AnswerChoices = ({ choices, selectedChoiceId, onSelect }: AnswerChoicesProps) => {
@@ -16,7 +16,7 @@ const AnswerChoices = ({ choices, selectedChoiceId, onSelect }: AnswerChoicesPro
                     <button
                         key={choice.id}
                         type="button"
-                        onClick={() => onSelect(choice.id)}
+                        onClick={() => onSelect(isSelected ? null : choice.id)}
                         className={`flex w-full items-center gap-4 rounded-xl border-2 px-4 py-3 text-left transition ${
                             isSelected
                                 ? 'border-[#2f61c9] bg-blue-50'

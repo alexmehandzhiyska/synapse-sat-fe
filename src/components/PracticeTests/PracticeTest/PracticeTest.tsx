@@ -125,7 +125,7 @@ const PracticeTest = () => {
         });
     }, [modules, currentModuleIndex, currentQuestionIndex]);
 
-    const handleSelect = (questionId: string, choiceId: string) => {
+    const handleSelect = (questionId: string, choiceId: string | null) => {
         if (!attemptId) {
             return;
         }
