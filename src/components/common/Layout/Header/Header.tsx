@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import authService from '../../../../services/authService';
 
 const navItems = [
-    { label: 'Courses', href: '/courses' },
+    { label: 'Lessons', href: '/lessons' },
     { label: 'Practice tests', href: '/practice-tests' },
     { label: 'About Us', href: '/about-us' },
 ];

@@ -23,8 +23,8 @@ const AddPracticeTest = () => {
         setSubmitError('');
 
         try {
-            const created = await practiceTestService.create(data);
-            navigate(`/practice-tests/${created.id}/questions/add`);
+            const createdTest = await practiceTestService.create(data);
+            navigate(`/practice-tests/${createdTest.id}/questions/add`);
         } catch (error) {
             setSubmitError(error instanceof Error ? error.message : 'Something went wrong.');
         }
