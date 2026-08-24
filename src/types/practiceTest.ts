@@ -1,4 +1,4 @@
-export type PracticeTestType = 'diagnostic' | 'standard' | 'check_in';
+export type PracticeTestType = 'diagnostic' | 'standard' | 'check_in' | 'custom';
 export type SectionName = 'reading_writing' | 'math';
 export type Difficulty = 'easy' | 'medium' | 'hard';
 export type Domain =
@@ -10,6 +10,18 @@ export type Domain =
     | 'advanced_math'
     | 'problem_solving_and_data_analysis'
     | 'geometry_and_trigonometry';
+
+// A question's status relative to a student's own answer history, based on
+// their most recent answer to it across any attempt of any test.
+export type QuestionStatusFilter = 'correct' | 'incorrect' | 'unsolved';
+
+export type GenerateCustomPacketData = {
+    section: SectionName;
+    domains: Domain[];
+    difficulties: Difficulty[];
+    statuses: QuestionStatusFilter[];
+    count: number;
+};
 
 export interface PracticeTest {
     id: string;

@@ -21,6 +21,7 @@ import ReviewQuestions from './components/PracticeTests/ReviewQuestions/ReviewQu
 import AdminGuard from './components/common/guards/AdminGuard/AdminGuard';
 import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
 import Notebook from './components/Notebook/Notebook';
+import CustomPacketBuilder from './components/PracticeTests/CustomPacketBuilder/CustomPacketBuilder';
 
 function App() {
     return (
@@ -36,6 +37,7 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/practice-tests" element={<PracticeTestsList />} />
+                <Route path="/practice-tests/custom-packet" element={<StudentGuard><CustomPacketBuilder /></StudentGuard>} />
                 <Route path="/practice-tests/add" element={<TeacherGuard><AddPracticeTest /></TeacherGuard>} />
                 <Route path="/practice-tests/:testId/questions/add" element={<TeacherGuard><AddQuestion /></TeacherGuard>} />
                 <Route path="/practice-tests/:testId/review" element={<TeacherGuard><ReviewQuestions /></TeacherGuard>} />

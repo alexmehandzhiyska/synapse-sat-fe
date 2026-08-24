@@ -39,7 +39,8 @@ const ScoreReport = () => {
 
     // Load percentile/score distribution
     useEffect(() => {
-        if (!attemptId) {
+        // Skipped for custom packets, since they're personal to the individual students
+        if (!attemptId || !report || report.isCustom) {
             return;
         }
 
@@ -49,7 +50,7 @@ const ScoreReport = () => {
             .catch(() => {
                 // Leave distribution as null - the chart just won't render.
             });
-    }, [attemptId]);
+    }, [attemptId, report]);
 
     if (isLoading) {
         return (
@@ -107,37 +108,50 @@ const ScoreReport = () => {
                             <p className="text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
                                 {report.isDiagnostic ? 'Your estimated score' : 'Your total score'}
                             </p>
-                            <p className={`mt-1 font-['Space_Grotesk'] font-extrabold leading-none text-[#13385A] ${report.isDiagnostic ? 'text-4xl' : 'text-5xl'}`}>
-                                {report.totalScaled}
-                                <span className="ml-2 text-xl font-bold text-[#5A6B7B]">
-                                    / 1600
-                                </span>
-                            </p>
-                            <p className="mt-2 text-sm font-semibold text-[#5A6B7B]">
-                                {report.totalRaw} questions correct
-                            </p>
+                            {report.isCustom ? (
+                                <p className="mt-1 font-['Space_Grotesk'] text-5xl font-extrabold leading-none text-[#13385A]">
+                                    {report.totalRaw}
+                                    <span className="ml-2 text-xl font-bold text-[#5A6B7B]">
+                                        / {report.sections.reduce((sum, section) => sum + section.total, 0)} correct
+                                    </span>
+                                </p>
+                            ) : (
+                                <>
+                                    <p className={`mt-1 font-['Space_Grotesk'] font-extrabold leading-none text-[#13385A] ${report.isDiagnostic ? 'text-4xl' : 'text-5xl'}`}>
+                                        {report.totalScaled}
+                                        <span className="ml-2 text-xl font-bold text-[#5A6B7B]">
+                                            / 1600
+                                        </span>
+                                    </p>
+                                    <p className="mt-2 text-sm font-semibold text-[#5A6B7B]">
+                                        {report.totalRaw} questions correct
+                                    </p>
+                                </>
+                            )}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                            {report.sections.map((section) => (
-                                <div
-                                    key={section.name}
-                                    className="flex flex-col justify-between rounded-xl bg-[#f4f7fb] px-5 py-3 text-center"
-                                >
-                                    <p className="text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
-                                        {SECTION_LABELS[section.name]}
-                                    </p>
-                                    <p className="mt-1 font-['Space_Grotesk'] text-2xl font-extrabold text-[#2f61c9]">
-                                        {section.scaled}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
+                        {!report.isCustom && (
+                            <div className="grid grid-cols-2 gap-3">
+                                {report.sections.map((section) => (
+                                    <div
+                                        key={section.name}
+                                        className="flex flex-col justify-between rounded-xl bg-[#f4f7fb] px-5 py-3 text-center"
+                                    >
+                                        <p className="text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
+                                            {SECTION_LABELS[section.name]}
+                                        </p>
+                                        <p className="mt-1 font-['Space_Grotesk'] text-2xl font-extrabold text-[#2f61c9]">
+                                            {section.scaled}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                <div className="grid items-start gap-6 lg:grid-cols-2">
-                    {distribution && (
+                <div className={`grid items-start gap-6 ${report.isCustom ? '' : 'lg:grid-cols-2'}`}>
+                    {distribution && !report.isCustom && (
                         <PercentileChart distribution={distribution} />
                     )}
                     <DomainAccuracyChart sections={report.sections} />

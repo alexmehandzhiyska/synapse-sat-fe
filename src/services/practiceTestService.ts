@@ -1,4 +1,4 @@
-import type { CreatePracticeTestData, CreateQuestionData, FullPracticeTest, PracticeTest, Question, UpdateQuestionData } from '../types/practiceTest';
+import type { CreatePracticeTestData, CreateQuestionData, FullPracticeTest, GenerateCustomPacketData, PracticeTest, Question, UpdateQuestionData } from '../types/practiceTest';
 import { del, get, patch, post } from './requester';
 
 const getAll = (): Promise<PracticeTest[]> =>
@@ -13,6 +13,9 @@ const getDiagnostic = (): Promise<PracticeTest> =>
 const create = (data: CreatePracticeTestData): Promise<PracticeTest> =>
     post<PracticeTest>('/practice-test', { body: data });
 
+const generateCustomPacket = (data: GenerateCustomPacketData): Promise<PracticeTest> =>
+    post<PracticeTest>('/practice-test/custom-packet', { body: data });
+
 const createQuestion = (moduleId: string, data: CreateQuestionData): Promise<Question> =>
     post<Question>(`/practice-test/modules/${moduleId}/questions`, { body: data });
 
@@ -22,6 +25,6 @@ const updateQuestion = (questionId: string, data: UpdateQuestionData): Promise<Q
 const remove = (id: string): Promise<void> =>
     del<void>(`/practice-test/${id}`);
 
-const practiceTestService = { getAll, getOne, getDiagnostic, create, createQuestion, updateQuestion, remove };
+const practiceTestService = { getAll, getOne, getDiagnostic, create, generateCustomPacket, createQuestion, updateQuestion, remove };
 
 export default practiceTestService;

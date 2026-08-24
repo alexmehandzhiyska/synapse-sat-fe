@@ -7,6 +7,7 @@ import type { PracticeTest } from '../../types/practiceTest';
 
 const PracticeTestsList = () => {
     const isTeacher = authService.getCurrentUser()?.role === 'teacher';
+    const isStudent = authService.getCurrentUser()?.role === 'student';
     const [tests, setTests] = useState<PracticeTest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -63,6 +64,15 @@ const PracticeTestsList = () => {
                             className="inline-flex h-12 items-center justify-center rounded-2xl bg-[#2f61c9] px-6 text-sm font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8]"
                         >
                             Add practice test
+                        </Link>
+                    )}
+
+                    {isStudent && (
+                        <Link
+                            to="/practice-tests/custom-packet"
+                            className="inline-flex h-12 items-center justify-center rounded-2xl bg-[#2f61c9] px-6 text-sm font-extrabold text-white transition-all duration-300 hover:bg-[#244fa8]"
+                        >
+                            Build custom packet
                         </Link>
                     )}
                 </div>
