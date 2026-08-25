@@ -22,7 +22,7 @@ import AdminGuard from './components/common/guards/AdminGuard/AdminGuard';
 import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
 import Notebook from './components/Notebook/Notebook';
 import CustomPacketBuilder from './components/PracticeTests/CustomPacketBuilder/CustomPacketBuilder';
-import LessonsList from './components/Lessons/LessonsList';
+import Course from './components/Lessons/Course';
 
 function App() {
     return (
@@ -37,7 +37,7 @@ function App() {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/about-us" element={<AboutUs />} />
-                <Route path="/lessons" element={<TeacherGuard><LessonsList /></TeacherGuard>} />
+                <Route path="/lessons" element={<Course />} />
                 <Route path="/practice-tests" element={<PracticeTestsList />} />
                 <Route path="/practice-tests/custom-packet" element={<StudentGuard><CustomPacketBuilder /></StudentGuard>} />
                 <Route path="/practice-tests/add" element={<TeacherGuard><AddPracticeTest /></TeacherGuard>} />

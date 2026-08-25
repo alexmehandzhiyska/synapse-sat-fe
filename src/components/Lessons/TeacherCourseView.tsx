@@ -12,7 +12,7 @@ const ALL_DOMAINS: Domain[] = [
     ...DOMAINS_BY_SECTION.math,
 ];
 
-const LessonsList = () => {
+const TeacherCourseView = () => {
     const [lessons, setLessons] = useState<Lesson[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -68,4 +68,4 @@ const LessonsList = () => {
     );
 };
 
-export default LessonsList;
+export default TeacherCourseView;

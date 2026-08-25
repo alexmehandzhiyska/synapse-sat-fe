@@ -2,17 +2,17 @@ import { useNavigate } from 'react-router-dom';
 
 import authService from '../../../../services/authService';
 
-const navItems = [
-    { label: 'Lessons', href: '/lessons' },
-    { label: 'Practice tests', href: '/practice-tests' },
-    { label: 'About Us', href: '/about-us' },
-];
-
 const Header = () => {
     const isLoggedIn = Boolean(localStorage.getItem('accessToken'));
     const isAdmin = authService.getCurrentUser()?.role === 'admin';
     const isStudent = authService.getCurrentUser()?.role === 'student';
     const navigate = useNavigate();
+
+    const navItems = [
+        { label: isStudent ? 'Course' : 'Lessons', href: '/lessons' },
+        { label: 'Practice tests', href: '/practice-tests' },
+        { label: 'About Us', href: '/about-us' },
+    ];
 
     const handleLogout = async () => {
         await authService.logout();

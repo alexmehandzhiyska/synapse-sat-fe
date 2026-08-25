@@ -1,6 +1,10 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import lessonsService from '../../../services/lessonsService';
 import type { StudyPlanData } from '../../../types/studyPlan';
+import type { DomainProgress } from '../../../types/lesson';
+import { DOMAIN_LABELS } from '../../PracticeTests/ScoreReport/labels';
 
 type StudyPlanOverviewProps = {
     studyPlan: StudyPlanData | null;
@@ -14,6 +18,19 @@ const daysBetween = (from: Date, to: Date) => {
 };
 
 const StudyPlanOverview = ({ studyPlan, bestScore }: StudyPlanOverviewProps) => {
+    const [nextDomains, setNextDomains] = useState<DomainProgress[]>([]);
+
+    useEffect(() => {
+        if (!studyPlan) {
+            return;
+        }
+
+        lessonsService.getProgress()
+            .then((domains) => {
+                setNextDomains(domains.filter((domain) => domain.status !== 'complete').slice(0, 3));
+            });
+    }, [studyPlan]);
+
     if (!studyPlan) {
         return (
             <div className="mb-9 rounded-2xl border border-dashed border-blue-200 bg-blue-50/50 p-8 text-center sm:p-10">
@@ -110,6 +127,35 @@ const StudyPlanOverview = ({ studyPlan, bestScore }: StudyPlanOverviewProps) => 
                     </p>
                 )}
             </div>
+
+            {nextDomains.length > 0 && (
+                <div className="mt-6 border-t border-slate-200 pt-6">
+                    <div className="mb-3 flex items-center justify-between">
+                        <span className="text-xs font-bold uppercase tracking-wide text-[#5A6B7B]">
+                            Up next
+                        </span>
+                        <Link
+                            to="/lessons"
+                            className="text-xs font-bold text-[#2f61c9] transition hover:text-[#244fa8]"
+                        >
+                            View course
+                        </Link>
+                    </div>
+                    <ul className="space-y-2">
+                        {nextDomains.map((domainProgress) => (
+                            <li
+                                key={domainProgress.domain}
+                                className="flex items-center justify-between rounded-xl bg-[#f4f7fb] px-4 py-2.5 text-sm font-semibold text-[#13385A]"
+                            >
+                                <span>{DOMAIN_LABELS[domainProgress.domain]}</span>
+                                <span className="text-xs font-bold text-[#5A6B7B]">
+                                    {domainProgress.lessons.length} {domainProgress.lessons.length === 1 ? 'lesson' : 'lessons'}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 };
