@@ -3,7 +3,14 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import practiceTestService from '../../../services/practiceTestService';
-import type { CreatePracticeTestData } from '../../../types/practiceTest';
+import type { CreatePracticeTestData, Domain } from '../../../types/practiceTest';
+import { DOMAINS_BY_SECTION } from '../AddQuestion/domains';
+import { DOMAIN_LABELS } from '../ScoreReport/labels';
+
+const ALL_DOMAINS: Domain[] = [
+    ...DOMAINS_BY_SECTION.reading_writing,
+    ...DOMAINS_BY_SECTION.math,
+];
 
 const AddPracticeTest = () => {
     const navigate = useNavigate();
@@ -11,13 +18,16 @@ const AddPracticeTest = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        watch,
+        formState: { errors, isSubmitting }
     } = useForm<CreatePracticeTestData>({
         defaultValues: {
             title: '',
             type: 'standard',
         },
     });
+
+    const isCheckIn = watch('type') === 'check_in';
 
     const handleFormSubmit = async (data: CreatePracticeTestData) => {
         setSubmitError('');
@@ -76,6 +86,33 @@ const AddPracticeTest = () => {
                                 <option value="check_in">Check-in</option>
                             </select>
                         </label>
+
+                        {isCheckIn && (
+                            <label className="block">
+                                <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.18em] text-[#2f61c9]">
+                                    Domain
+                                </span>
+                                
+                                <select
+                                    className="h-12 w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 text-sm font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
+                                    {...register('domain', { required: 'Select a domain' })}
+                                    defaultValue=""
+                                >
+                                    <option value="" disabled>Select a domain</option>
+                                    {ALL_DOMAINS.map((domain) => (
+                                        <option key={domain} value={domain}>
+                                            {DOMAIN_LABELS[domain]}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                {errors.domain && (
+                                    <span className="mt-2 block text-xs font-bold text-red-500">
+                                        {errors.domain.message}
+                                    </span>
+                                )}
+                            </label>
+                        )}
 
                         {submitError && (
                             <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-bold text-red-600">

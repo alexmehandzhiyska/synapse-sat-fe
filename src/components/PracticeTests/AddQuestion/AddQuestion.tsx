@@ -7,7 +7,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import practiceTestService from '../../../services/practiceTestService';
 import type { CreateQuestionData, Difficulty, Domain, FullPracticeTest, SectionName } from '../../../types/practiceTest';
 import { DOMAIN_LABELS, SECTION_LABELS } from '../ScoreReport/labels';
-import { CHOICE_LABELS, DIFFICULTY_OPTIONS, DOMAINS_BY_SECTION } from './domains';
+import { CHOICE_LABELS, DIFFICULTY_OPTIONS, DOMAINS_BY_SECTION, getSectionForDomain } from './domains';
 
 type QuestionFormData = {
     moduleId: string;
@@ -59,12 +59,29 @@ const AddQuestion = () => {
         handleSubmit,
         watch,
         reset,
+        setValue,
         formState: { errors, isSubmitting },
     } = useForm<QuestionFormData>({ defaultValues: defaultFormValues });
+
+    // A check-in test is already scoped to one domain - no need to ask again per question
+    const isCheckIn = test?.type === 'check_in' && test.domain != null;
+
+    useEffect(() => {
+        if (isCheckIn && test?.domain) {
+            setValue('domain', test.domain);
+        }
+    }, [isCheckIn, test?.domain, setValue]);
+
+    // A check-in test only ever needs questions in its own domain's section.
+    const checkInSection = isCheckIn && test?.domain ? getSectionForDomain(test.domain) : null;
 
     const moduleOptions: { id: string; sectionName: SectionName; label: string }[] = [];
 
     for (const section of test?.sections ?? []) {
+        if (checkInSection && section.name !== checkInSection) {
+            continue;
+        }
+
         for (const module of section.modules) {
             moduleOptions.push({
                 id: module.id,
@@ -73,6 +90,15 @@ const AddQuestion = () => {
             });
         }
     }
+
+    // A check-in test never needs a module choice - use first one by default
+    const autoModuleId = isCheckIn && moduleOptions.length > 0 ? moduleOptions[0].id : null;
+
+    useEffect(() => {
+        if (autoModuleId) {
+            setValue('moduleId', autoModuleId);
+        }
+    }, [autoModuleId, setValue]);
 
     const selectedModuleId = watch('moduleId');
     const selectedSection: SectionName | undefined = moduleOptions.find(
@@ -146,64 +172,72 @@ const AddQuestion = () => {
                 {!isLoading && !loadError && test && (
                     <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-[0_8px_24px_rgba(19,56,90,0.06)] sm:p-10">
                         <form className="space-y-6" onSubmit={handleSubmit(handleFormSubmit)}>
-                            <label className="block">
-                                <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.18em] text-[#2f61c9]">
-                                    Module
-                                </span>
-                                <div className="relative">
-                                    <select
-                                        className="h-12 w-full appearance-none rounded-2xl border border-gray-200 bg-gray-50 pl-5 pr-10 text-sm font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
-                                        {...register('moduleId', { required: 'Select a module' })}
-                                    >
-                                        <option value="">Select a module</option>
-                                        {moduleOptions.map((option) => (
-                                            <option key={option.id} value={option.id}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <FontAwesomeIcon
-                                        icon={faChevronDown}
-                                        className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5A6B7B]"
-                                    />
-                                </div>
-                                {errors.moduleId && (
-                                    <span className="mt-2 block text-xs font-bold text-red-500">
-                                        {errors.moduleId.message}
+                            {autoModuleId ? (
+                                <input type="hidden" {...register('moduleId', { required: true })} />
+                            ) : (
+                                <label className="block">
+                                    <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.18em] text-[#2f61c9]">
+                                        Module
                                     </span>
-                                )}
-                            </label>
+                                    <div className="relative">
+                                        <select
+                                            className="h-12 w-full appearance-none rounded-2xl border border-gray-200 bg-gray-50 pl-5 pr-10 text-sm font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
+                                            {...register('moduleId', { required: 'Select a module' })}
+                                        >
+                                            <option value="">Select a module</option>
+                                            {moduleOptions.map((option) => (
+                                                <option key={option.id} value={option.id}>
+                                                    {option.label}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <FontAwesomeIcon
+                                            icon={faChevronDown}
+                                            className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5A6B7B]"
+                                        />
+                                    </div>
+                                    {errors.moduleId && (
+                                        <span className="mt-2 block text-xs font-bold text-red-500">
+                                            {errors.moduleId.message}
+                                        </span>
+                                    )}
+                                </label>
+                            )}
 
-                            <label className="block">
-                                <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.18em] text-[#2f61c9]">
-                                    Domain
-                                </span>
-                                <div className="relative">
-                                    <select
-                                        className="h-12 w-full appearance-none rounded-2xl border border-gray-200 bg-gray-50 pl-5 pr-10 text-sm font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
-                                        disabled={!selectedSection}
-                                        {...register('domain', { required: 'Select a domain' })}
-                                    >
-                                        <option value="">
-                                            {selectedSection ? 'Select a domain' : 'Select a module first'}
-                                        </option>
-                                        {domainOptions.map((domain) => (
-                                            <option key={domain} value={domain}>
-                                                {DOMAIN_LABELS[domain]}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <FontAwesomeIcon
-                                        icon={faChevronDown}
-                                        className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5A6B7B]"
-                                    />
-                                </div>
-                                {errors.domain && (
-                                    <span className="mt-2 block text-xs font-bold text-red-500">
-                                        {errors.domain.message}
+                            {isCheckIn ? (
+                                <input type="hidden" {...register('domain', { required: true })} />
+                            ) : (
+                                <label className="block">
+                                    <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.18em] text-[#2f61c9]">
+                                        Domain
                                     </span>
-                                )}
-                            </label>
+                                    <div className="relative">
+                                        <select
+                                            className="h-12 w-full appearance-none rounded-2xl border border-gray-200 bg-gray-50 pl-5 pr-10 text-sm font-semibold text-[#1b1b1f] outline-none transition focus:border-[#2f61c9] focus:bg-white focus:ring-4 focus:ring-blue-100"
+                                            disabled={!selectedSection}
+                                            {...register('domain', { required: 'Select a domain' })}
+                                        >
+                                            <option value="">
+                                                {selectedSection ? 'Select a domain' : 'Select a module first'}
+                                            </option>
+                                            {domainOptions.map((domain) => (
+                                                <option key={domain} value={domain}>
+                                                    {DOMAIN_LABELS[domain]}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <FontAwesomeIcon
+                                            icon={faChevronDown}
+                                            className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5A6B7B]"
+                                        />
+                                    </div>
+                                    {errors.domain && (
+                                        <span className="mt-2 block text-xs font-bold text-red-500">
+                                            {errors.domain.message}
+                                        </span>
+                                    )}
+                                </label>
+                            )}
 
                             <label className="block">
                                 <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.18em] text-[#2f61c9]">

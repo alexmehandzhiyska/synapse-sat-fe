@@ -15,6 +15,9 @@ export const DOMAINS_BY_SECTION: Record<SectionName, Domain[]> = {
     ]
 };
 
+export const getSectionForDomain = (domain: Domain): SectionName =>
+    DOMAINS_BY_SECTION.reading_writing.includes(domain) ? 'reading_writing' : 'math';
+
 export const DIFFICULTY_OPTIONS: { value: Difficulty; label: string }[] = [
     { value: 'easy', label: 'Easy' },
     { value: 'medium', label: 'Medium' },

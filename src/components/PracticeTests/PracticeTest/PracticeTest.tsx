@@ -25,6 +25,17 @@ const SECTION_LABELS: Record<SectionName, string> = {
 const MODULE_TRANSITION_MS = 3000;
 
 const flattenModules = (test: FullPracticeTest): TestModule[] => {
+    if (test.type === 'check_in') {
+        // A check-in test has no modules - just one flat list of questions.
+        const questions = test.sections.flatMap((section) => section.modules.flatMap((module) => module.questions));
+
+        return [{
+            sectionName: test.sections[0]?.name ?? 'reading_writing',
+            position: 1,
+            questions,
+        }];
+    }
+
     const modules: TestModule[] = [];
 
     for (const section of test.sections) {
@@ -71,7 +82,8 @@ const PracticeTest = () => {
             .then(([fetchedTest, fetchedAttempt]) => {
                 setTest(fetchedTest);
                 setAttemptId(fetchedAttempt.id);
-                setCurrentModuleIndex(fetchedAttempt.currentModuleIndex);
+                // A check-in test is always one flat module
+                setCurrentModuleIndex(fetchedTest.type === 'check_in' ? 0 : fetchedAttempt.currentModuleIndex);
                 setAnswers(
                     Object.fromEntries(
                         fetchedAttempt.answers.map((answer) => [
@@ -232,14 +244,42 @@ const PracticeTest = () => {
 
     const currentModule = modules[currentModuleIndex];
     const moduleQuestions = currentModule.questions;
+    const isLastModule = currentModuleIndex === modules.length - 1;
+
+    if (moduleQuestions.length === 0) {
+        return (
+            <section className="flex min-h-screen items-center justify-center bg-[#f4f7fb] px-6">
+                <div className="max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center">
+                    <h2 className="mb-2 font-['Space_Grotesk'] text-xl font-extrabold text-[#1b1b1f]">
+                        No questions yet
+                    </h2>
+                    <p className="mb-6 font-semibold text-[#5A6B7B]">
+                        {test.type === 'check_in'
+                            ? "This check-in doesn't have any questions yet."
+                            : "This module doesn't have any questions yet."}
+                    </p>
+                    <button
+                        type="button"
+                        onClick={handleFinishModule}
+                        disabled={isSubmitting}
+                        className="inline-flex items-center justify-center rounded-xl bg-[#13385A] px-5 py-2.5 font-bold text-white disabled:opacity-60"
+                    >
+                        {isLastModule
+                            ? isSubmitting ? 'Submitting…' : 'Finish test'
+                            : 'Next module'}
+                    </button>
+                </div>
+            </section>
+        );
+    }
+
     const question = moduleQuestions[currentQuestionIndex];
     const selectedChoiceId = answers[question.id] ?? null;
 
     const isLastQuestion = currentQuestionIndex === moduleQuestions.length - 1;
-    const isLastModule = currentModuleIndex === modules.length - 1;
 
     const sectionLabel = SECTION_LABELS[currentModule.sectionName];
-    const moduleLabel = `Module ${currentModule.position}`;
+    const moduleLabel = test.type === 'check_in' ? '' : `Module ${currentModule.position}`;
     const questionStatuses: QuestionStatus[] = moduleQuestions.map((moduleQuestion, index) => {
         if (index === currentQuestionIndex) {
             return 'current';

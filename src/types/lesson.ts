@@ -17,6 +17,8 @@ export interface DomainProgress {
     domain: Domain;
     status: LessonProgressStatus;
     lessons: LessonWithProgress[];
+    checkInTestId: string | null;
+    isCheckInComplete: boolean;
 };
 
 export type CreateLessonData = {

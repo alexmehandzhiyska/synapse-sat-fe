@@ -42,7 +42,7 @@ const QuestionNavigator = ({
                 <div className="mb-4 flex items-start justify-between gap-4">
                     <div>
                         <span className="block text-xs font-extrabold uppercase tracking-[0.18em] text-[#2f61c9]">
-                            {sectionLabel} · {moduleLabel}
+                            {moduleLabel ? `${sectionLabel} · ${moduleLabel}` : sectionLabel}
                         </span>
                         <h2 className="font-['Space_Grotesk'] text-lg font-extrabold text-[#13385A]">
                             Go to question

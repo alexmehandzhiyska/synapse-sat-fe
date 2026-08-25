@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import lessonsService from '../../../services/lessonsService';
 import type { DomainProgress, LessonProgressStatus } from '../../../types/lesson';
@@ -152,6 +153,22 @@ const StudentCourseView = () => {
                                         </div>
                                     );
                                 })}
+
+                                {domainProgress.checkInTestId && (
+                                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-white p-4">
+                                        <span className="text-sm font-bold text-[#13385A]">Check-in test</span>
+                                        {domainProgress.isCheckInComplete ? (
+                                            <span className="text-xs font-bold text-emerald-600">Completed</span>
+                                        ) : (
+                                            <Link
+                                                to={`/practice-tests/${domainProgress.checkInTestId}`}
+                                                className="rounded-xl border-2 border-slate-200 px-4 py-2 text-xs font-bold text-[#13385A] transition hover:border-blue-200"
+                                            >
+                                                Take check-in test
+                                            </Link>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>

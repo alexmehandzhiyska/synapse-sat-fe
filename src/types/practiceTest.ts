@@ -27,6 +27,7 @@ export interface PracticeTest {
     id: string;
     title: string;
     type: PracticeTestType;
+    domain: Domain | null;
     createdAt: string;
     updatedAt: string;
 }
@@ -34,6 +35,7 @@ export interface PracticeTest {
 export type CreatePracticeTestData = {
     title: string;
     type: PracticeTestType;
+    domain?: Domain;
 }
 
 export interface AnswerChoice {
