@@ -12,8 +12,8 @@ type UserRowProps = {
 
 const UserRow = ({ user, onUpdated }: UserRowProps) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [actionError, setActionError] = useState('');
-    const [isProcessing, setIsProcessing] = useState(false);
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const isAdmin = user.role === 'admin';
 
@@ -22,30 +22,30 @@ const UserRow = ({ user, onUpdated }: UserRowProps) => {
             return;
         }
 
-        setActionError('');
-        setIsProcessing(true);
+        setError('');
+        setIsLoading(true);
 
         try {
             const updated = await adminService.deactivateUser(user.id);
             onUpdated(updated);
         } catch (error) {
-            setActionError(error instanceof Error ? error.message : 'Something went wrong.');
+            setError(error instanceof Error ? error.message : 'Something went wrong.');
         } finally {
-            setIsProcessing(false);
+            setIsLoading(false);
         }
     };
 
     const handleActivate = async () => {
-        setActionError('');
-        setIsProcessing(true);
+        setError('');
+        setIsLoading(true);
 
         try {
             const updated = await adminService.activateUser(user.id);
             onUpdated(updated);
         } catch (error) {
-            setActionError(error instanceof Error ? error.message : 'Something went wrong.');
+            setError(error instanceof Error ? error.message : 'Something went wrong.');
         } finally {
-            setIsProcessing(false);
+            setIsLoading(false);
         }
     };
 
@@ -102,27 +102,27 @@ const UserRow = ({ user, onUpdated }: UserRowProps) => {
                             <button
                                 type="button"
                                 onClick={handleDeactivate}
-                                disabled={isProcessing}
+                                disabled={isLoading}
                                 className="inline-flex h-10 items-center justify-center rounded-xl border border-red-200 px-4 text-sm font-bold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
                             >
-                                {isProcessing ? 'Deactivating...' : 'Deactivate'}
+                                {isLoading ? 'Deactivating...' : 'Deactivate'}
                             </button>
                         </>
                     ) : (
                         <button
                             type="button"
                             onClick={handleActivate}
-                            disabled={isProcessing}
+                            disabled={isLoading}
                             className="inline-flex h-10 items-center justify-center rounded-xl border border-emerald-200 px-4 text-sm font-bold text-emerald-700 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-60"
                         >
-                            {isProcessing ? 'Activating...' : 'Activate'}
+                            {isLoading ? 'Activating...' : 'Activate'}
                         </button>
                     )}
                 </div>
             )}
 
-            {actionError && (
-                <p className="w-full text-xs font-bold text-red-500">{actionError}</p>
+            {error && (
+                <p className="w-full text-xs font-bold text-red-500">{error}</p>
             )}
         </div>
     );

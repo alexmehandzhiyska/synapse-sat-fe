@@ -16,6 +16,7 @@ export interface LessonWithProgress extends Lesson {
 export interface DomainProgress {
     domain: Domain;
     status: LessonProgressStatus;
+    isRecommended: boolean;
     lessons: LessonWithProgress[];
     checkInTestId: string | null;
     isCheckInComplete: boolean;

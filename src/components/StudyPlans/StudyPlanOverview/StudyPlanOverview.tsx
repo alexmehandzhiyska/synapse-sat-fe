@@ -67,9 +67,7 @@ const StudyPlanOverview = ({ studyPlan, bestScore }: StudyPlanOverviewProps) => 
             label: 'Days into prep',
             value: daysIntoPrep >= 0
                 ? `Day ${daysIntoPrep}`
-                : daysIntoPrep === 0
-                    ? 'Day 1'
-                    : `${Math.abs(daysIntoPrep)} ${Math.abs(daysIntoPrep) === 1 ? 'day' : 'days'}`,
+                : `Starts in ${Math.abs(daysIntoPrep)} ${Math.abs(daysIntoPrep) === 1 ? 'day' : 'days'}`,
         },
     ];
 

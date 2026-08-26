@@ -81,9 +81,16 @@ const StudentCourseView = () => {
             <div className="space-y-4">
                 {domains.map((domainProgress) => (
                     <div key={domainProgress.domain} className={`rounded-2xl border-2 p-6 ${statusStyles[domainProgress.status]}`}>
-                        <h3 className="font-['Space_Grotesk'] text-lg font-extrabold text-[#13385A]">
-                            {DOMAIN_LABELS[domainProgress.domain]}
-                        </h3>
+                        <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="font-['Space_Grotesk'] text-lg font-extrabold text-[#13385A]">
+                                {DOMAIN_LABELS[domainProgress.domain]}
+                            </h3>
+                            {!domainProgress.isRecommended && (
+                                <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-700">
+                                    Stretch goal — may not fit your timeline
+                                </span>
+                            )}
+                        </div>
 
                         {domainProgress.status !== 'locked' && (
                             <div className="mt-4 space-y-4">
