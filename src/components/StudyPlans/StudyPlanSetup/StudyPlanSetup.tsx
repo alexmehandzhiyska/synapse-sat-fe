@@ -36,7 +36,7 @@ const StudyPlanSetup = () => {
 
         try {
             await studyPlanService.upsert({ goalScore, testDate, prepStartDate });
-            navigate('/practice-tests');
+            navigate('/lessons');
         } catch (error) {
             setSubmitError(error instanceof Error ? error.message : 'Something went wrong.');
         } finally {
