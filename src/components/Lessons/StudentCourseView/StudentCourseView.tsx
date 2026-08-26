@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import lessonsService from '../../../services/lessonsService';
 import type { DomainProgress, LessonProgressStatus } from '../../../types/lesson';
 import { DOMAIN_LABELS } from '../../PracticeTests/ScoreReport/labels';
-import { getYoutubeEmbedUrl } from '../getYoutubeEmbedUrl';
+import LessonEmbed from '../LessonEmbed/LessonEmbed';
 
 const statusStyles: Record<LessonProgressStatus, string> = {
     complete: 'border-emerald-200 bg-emerald-50',
@@ -16,21 +16,6 @@ const StudentCourseView = () => {
     const [domains, setDomains] = useState<DomainProgress[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
-    const [expandedLessonIds, setExpandedLessonIds] = useState<Set<string>>(new Set());
-
-    const handleToggleExpand = (lessonId: string) => {
-        setExpandedLessonIds((prev) => {
-            const next = new Set(prev);
-
-            if (next.has(lessonId)) {
-                next.delete(lessonId);
-            } else {
-                next.add(lessonId);
-            }
-
-            return next;
-        });
-    };
 
     const loadProgress = () => {
         lessonsService.getProgress()
@@ -94,72 +79,28 @@ const StudentCourseView = () => {
 
                         {domainProgress.status !== 'locked' && (
                             <div className="mt-4 space-y-4">
-                                {domainProgress.lessons.map((lesson) => {
-                                    const embedUrl = getYoutubeEmbedUrl(lesson.videoUrl);
-                                    const isExpanded = expandedLessonIds.has(lesson.id);
-
-                                    const markCompleteControl = lesson.isWatched ? (
-                                        <span className="text-xs font-bold text-emerald-600">Watched</span>
-                                    ) : (
-                                        <button
-                                            type="button"
-                                            onClick={(event) => {
-                                                event.stopPropagation();
-                                                handleMarkComplete(lesson.id);
-                                            }}
-                                            className="rounded-xl border-2 border-slate-200 px-4 py-2 text-xs font-bold text-[#13385A] transition hover:border-blue-200"
-                                        >
-                                            Mark complete
-                                        </button>
-                                    );
-
-                                    return (
-                                        <div key={lesson.id} className="space-y-3 rounded-xl bg-white p-4">
-                                            {embedUrl ? (
-                                                <div
-                                                    role="button"
-                                                    tabIndex={0}
-                                                    onClick={() => handleToggleExpand(lesson.id)}
-                                                    onKeyDown={(event) => {
-                                                        if (event.key === 'Enter' || event.key === ' ') {
-                                                            handleToggleExpand(lesson.id);
-                                                        }
-                                                    }}
-                                                    className="flex flex-wrap cursor-pointer items-center justify-between gap-3"
-                                                >
-                                                    <p className="text-sm font-bold text-[#2f61c9]">
-                                                        {lesson.title} {isExpanded ? '▾' : '▸'}
-                                                    </p>
-                                                    {markCompleteControl}
-                                                </div>
+                                {domainProgress.lessons.map((lesson) => (
+                                    <LessonEmbed
+                                        key={lesson.id}
+                                        lesson={lesson}
+                                        rightContent={
+                                            lesson.isWatched ? (
+                                                <span className="text-xs font-bold text-emerald-600">Watched</span>
                                             ) : (
-                                                <div className="flex flex-wrap items-center justify-between gap-3">
-                                                    <a
-                                                        href={lesson.videoUrl}
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                        className="text-sm font-bold text-[#2f61c9] hover:text-[#244fa8]"
-                                                    >
-                                                        {lesson.title} ↗
-                                                    </a>
-                                                    {markCompleteControl}
-                                                </div>
-                                            )}
-
-                                            {embedUrl && isExpanded && (
-                                                <div className="aspect-video w-full overflow-hidden rounded-lg">
-                                                    <iframe
-                                                        src={embedUrl}
-                                                        title={lesson.title}
-                                                        className="h-full w-full"
-                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                        allowFullScreen
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
+                                                <button
+                                                    type="button"
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        handleMarkComplete(lesson.id);
+                                                    }}
+                                                    className="rounded-xl border-2 border-slate-200 px-4 py-2 text-xs font-bold text-[#13385A] transition hover:border-blue-200"
+                                                >
+                                                    Mark complete
+                                                </button>
+                                            )
+                                        }
+                                    />
+                                ))}
 
                                 {domainProgress.checkInTestId && (
                                     <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-white p-4">

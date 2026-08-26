@@ -6,6 +6,7 @@ import type { Domain } from '../../types/practiceTest';
 import { DOMAINS_BY_SECTION } from '../PracticeTests/AddQuestion/domains';
 import { DOMAIN_LABELS } from '../PracticeTests/ScoreReport/labels';
 import AddLessonForm from './AddLessonForm/AddLessonForm';
+import LessonEmbed from './LessonEmbed/LessonEmbed';
 
 const ALL_DOMAINS: Domain[] = [
     ...DOMAINS_BY_SECTION.reading_writing,
@@ -50,13 +51,11 @@ const TeacherCourseView = () => {
                                     {DOMAIN_LABELS[domain]}
                                 </h3>
 
-                                <ul className="mt-3 space-y-1">
+                                <div className="mt-3 space-y-3">
                                     {domainLessons.map((lesson) => (
-                                        <li key={lesson.id} className="text-sm font-semibold text-[#1b1b1f]">
-                                            {lesson.title}
-                                        </li>
+                                        <LessonEmbed key={lesson.id} lesson={lesson} />
                                     ))}
-                                </ul>
+                                </div>
 
                                 <AddLessonForm domain={domain} onCreated={loadLessons} />
                             </div>
