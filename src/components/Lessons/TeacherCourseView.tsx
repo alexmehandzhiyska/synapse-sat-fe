@@ -19,6 +19,7 @@ const TeacherCourseView = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
     const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
+    const [deletingLessonId, setDeletingLessonId] = useState<string | null>(null);
 
     const loadLessons = () => {
         lessonsService.getAll()
@@ -30,6 +31,24 @@ const TeacherCourseView = () => {
     useEffect(() => {
         loadLessons();
     }, []);
+
+    const handleDelete = async (lesson: Lesson) => {
+        if (!window.confirm(`Delete "${lesson.title}"? This can't be undone.`)) {
+            return;
+        }
+
+        setError('');
+        setDeletingLessonId(lesson.id);
+
+        try {
+            await lessonsService.deleteLesson(lesson.id);
+            setLessons((prev) => prev.filter((item) => item.id !== lesson.id));
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Something went wrong.');
+        } finally {
+            setDeletingLessonId(null);
+        }
+    };
 
     return (
         <section className="min-h-[calc(100vh-73px)] bg-[#f4f7fb] px-6 py-12 sm:px-10 lg:px-16">
@@ -70,16 +89,29 @@ const TeacherCourseView = () => {
                                                 key={lesson.id}
                                                 lesson={lesson}
                                                 rightContent={
-                                                    <button
-                                                        type="button"
-                                                        onClick={(event) => {
-                                                            event.stopPropagation();
-                                                            setEditingLessonId(lesson.id);
-                                                        }}
-                                                        className="rounded-xl border-2 border-slate-200 px-4 py-2 text-xs font-bold text-[#13385A] transition hover:border-blue-200"
-                                                    >
-                                                        Edit
-                                                    </button>
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            type="button"
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
+                                                                setEditingLessonId(lesson.id);
+                                                            }}
+                                                            className="rounded-xl border-2 border-slate-200 px-4 py-2 text-xs font-bold text-[#13385A] transition hover:border-blue-200"
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            disabled={deletingLessonId === lesson.id}
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
+                                                                handleDelete(lesson);
+                                                            }}
+                                                            className="rounded-xl border-2 border-red-200 px-4 py-2 text-xs font-bold text-red-600 transition hover:border-red-300 disabled:cursor-not-allowed disabled:opacity-60"
+                                                        >
+                                                            {deletingLessonId === lesson.id ? 'Deleting...' : 'Delete'}
+                                                        </button>
+                                                    </div>
                                                 }
                                             />
                                         )
