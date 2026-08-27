@@ -26,3 +26,8 @@ export type CreateLessonData = {
     title: string;
     videoUrl: string;
 };
+
+export type UpdateLessonData = {
+    title: string;
+    videoUrl: string;
+};

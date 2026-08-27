@@ -6,6 +6,7 @@ import type { Domain } from '../../types/practiceTest';
 import { DOMAINS_BY_SECTION } from '../PracticeTests/AddQuestion/domains';
 import { DOMAIN_LABELS } from '../PracticeTests/ScoreReport/labels';
 import AddLessonForm from './AddLessonForm/AddLessonForm';
+import EditLessonForm from './EditLessonForm/EditLessonForm';
 import LessonEmbed from './LessonEmbed/LessonEmbed';
 
 const ALL_DOMAINS: Domain[] = [
@@ -17,6 +18,7 @@ const TeacherCourseView = () => {
     const [lessons, setLessons] = useState<Lesson[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
+    const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
 
     const loadLessons = () => {
         lessonsService.getAll()
@@ -53,7 +55,34 @@ const TeacherCourseView = () => {
 
                                 <div className="mt-3 space-y-3">
                                     {domainLessons.map((lesson) => (
-                                        <LessonEmbed key={lesson.id} lesson={lesson} />
+                                        editingLessonId === lesson.id ? (
+                                            <EditLessonForm
+                                                key={lesson.id}
+                                                lesson={lesson}
+                                                onSaved={() => {
+                                                    setEditingLessonId(null);
+                                                    loadLessons();
+                                                }}
+                                                onCancel={() => setEditingLessonId(null)}
+                                            />
+                                        ) : (
+                                            <LessonEmbed
+                                                key={lesson.id}
+                                                lesson={lesson}
+                                                rightContent={
+                                                    <button
+                                                        type="button"
+                                                        onClick={(event) => {
+                                                            event.stopPropagation();
+                                                            setEditingLessonId(lesson.id);
+                                                        }}
+                                                        className="rounded-xl border-2 border-slate-200 px-4 py-2 text-xs font-bold text-[#13385A] transition hover:border-blue-200"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                }
+                                            />
+                                        )
                                     ))}
                                 </div>
 
