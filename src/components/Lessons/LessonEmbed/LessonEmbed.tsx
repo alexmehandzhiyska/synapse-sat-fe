@@ -18,7 +18,7 @@ const LessonEmbed = ({ lesson, rightContent }: LessonEmbedProps) => {
     };
 
     return (
-        <div className="space-y-3 rounded-xl bg-white p-4">
+        <div className="space-y-3 rounded-xl bg-white px-4 py-2">
             {embedUrl ? (
                 <div
                     role="button"

@@ -53,7 +53,7 @@ const TeacherCourseView = () => {
                                     {DOMAIN_LABELS[domain]}
                                 </h3>
 
-                                <div className="mt-3 space-y-3">
+                                <div className="mt-3 mb-5">
                                     {domainLessons.map((lesson) => (
                                         editingLessonId === lesson.id ? (
                                             <EditLessonForm
