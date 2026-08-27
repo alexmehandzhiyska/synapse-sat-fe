@@ -1,10 +1,11 @@
-import type { Domain } from './practiceTest';
+import type { AnswerChoice, Domain } from './practiceTest';
 
 export type NotebookQuestion = {
     id: string;
     prompt: string;
     passage: string | null;
     domain: Domain;
+    answerChoices: AnswerChoice[];
 }
 
 export type NotebookEntry = {
