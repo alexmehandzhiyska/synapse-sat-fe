@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: synapse-sat-fe
+    runtime: static
+    branch: main
+    buildCommand: npm install --include=dev && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      # The deployed backend base URL, e.g. https://synapse-sat-be.onrender.com
+      # Baked in at build time, so set it before the first build.
+      - key: VITE_BASE_URL
+        sync: false
+    routes:
+      # SPA fallback so React Router client-side routes resolve.
+      - type: rewrite
+        source: /*
+        destination: /index.html
