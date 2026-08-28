@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import practiceTestService from '../../../services/practiceTestService';
 import testAttemptService from '../../../services/testAttemptService';
 import type { FullPracticeTest, Question as QuestionData, SectionName } from '../../../types/practiceTest';
-import ExitTestConfirmModal from './ExitTestConfirmModal';
+import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
 import ModuleCompletionInterstitial from './ModuleCompletionInterstitial';
 import Question from './Question';
 import QuestionNavigator from './QuestionNavigator';
@@ -375,7 +375,12 @@ const PracticeTest = () => {
             )}
 
             {isExitConfirmOpen && (
-                <ExitTestConfirmModal
+                <ConfirmModal
+                    title="Exit practice test?"
+                    message="Your progress is saved. You can resume this test later from where you left off."
+                    cancelLabel="Keep going"
+                    confirmLabel="Exit test"
+                    confirmVariant="danger"
                     onCancel={() => setIsExitConfirmOpen(false)}
                     onConfirm={handleExit}
                 />
