@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useEffectEvent, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import practiceTestService from '../../../services/practiceTestService';
 import testAttemptService from '../../../services/testAttemptService';
-import type { FullPracticeTest, Question as QuestionData, SectionName } from '../../../types/practiceTest';
+import type { FullPracticeTest, PracticeTestType, Question as QuestionData, SectionName } from '../../../types/practiceTest';
 import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
 import ModuleCompletionInterstitial from './ModuleCompletionInterstitial';
 import Question from './Question';
@@ -23,6 +23,18 @@ const SECTION_LABELS: Record<SectionName, string> = {
 };
 
 const MODULE_TRANSITION_MS = 3000;
+
+// Bluebook module time limits converted into seconds
+const MODULE_TIME_LIMITS: Record<SectionName, number> = {
+    reading_writing: 32 * 60,
+    math: 35 * 60,
+};
+
+const TIME_SAVE_INTERVAL_MS = 15000;
+
+const isTimedTestType = (type: PracticeTestType) => type === 'standard' || type === 'diagnostic';
+const getModuleEndsAt = (secondsRemaining: number) => Date.now() + secondsRemaining * 1000;
+const getSecondsUntil = (endsAt: number) => Math.max(0, Math.ceil((endsAt - Date.now()) / 1000));
 
 const flattenModules = (test: FullPracticeTest): TestModule[] => {
     if (test.type === 'check_in') {
@@ -64,6 +76,8 @@ const PracticeTest = () => {
     const [isNavigatorOpen, setIsNavigatorOpen] = useState(false);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [isExitConfirmOpen, setIsExitConfirmOpen] = useState(false);
+    const [secondsRemaining, setSecondsRemaining] = useState(0);
+    const [moduleEndsAt, setModuleEndsAt] = useState<number | null>(null);
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -83,7 +97,17 @@ const PracticeTest = () => {
                 setTest(fetchedTest);
                 setAttemptId(fetchedAttempt.id);
                 // A check-in test is always one flat module
-                setCurrentModuleIndex(fetchedTest.type === 'check_in' ? 0 : fetchedAttempt.currentModuleIndex);
+                const moduleIndex = fetchedTest.type === 'check_in' ? 0 : fetchedAttempt.currentModuleIndex;
+                setCurrentModuleIndex(moduleIndex);
+
+                if (isTimedTestType(fetchedTest.type)) {
+                    const sectionName = flattenModules(fetchedTest)[moduleIndex].sectionName;
+                    const startingSeconds = fetchedAttempt.moduleSecondsRemaining ?? MODULE_TIME_LIMITS[sectionName];
+
+                    setSecondsRemaining(startingSeconds);
+                    setModuleEndsAt(getModuleEndsAt(startingSeconds));
+                }
+
                 setAnswers(
                     Object.fromEntries(
                         fetchedAttempt.answers.map((answer) => [
@@ -101,23 +125,32 @@ const PracticeTest = () => {
             });
     }, [testId]);
 
+    const modules = useMemo(() => (test ? flattenModules(test) : []), [test]);
+    const isTimed = test !== null && isTimedTestType(test.type);
+
     // Once the current module is finished, hold intersitial for a bit and then transition to next module
     useEffect(() => {
         if (!isTransitioning) {
             return;
         }
 
-        const timer = setTimeout(() => {
-            setCurrentModuleIndex((index) => index + 1);
+        const transitionTimeout = setTimeout(() => {
+            const nextModuleIndex = currentModuleIndex + 1;
+            setCurrentModuleIndex(nextModuleIndex);
             setCurrentQuestionIndex(0);
             setIsNavigatorOpen(false);
             setIsTransitioning(false);
+
+            if (isTimed) {
+                const nextModuleSeconds = MODULE_TIME_LIMITS[modules[nextModuleIndex].sectionName];
+
+                setSecondsRemaining(nextModuleSeconds);
+                setModuleEndsAt(getModuleEndsAt(nextModuleSeconds));
+            }
         }, MODULE_TRANSITION_MS);
 
-        return () => clearTimeout(timer);
-    }, [isTransitioning]);
-
-    const modules = useMemo(() => (test ? flattenModules(test) : []), [test]);
+        return () => clearTimeout(transitionTimeout);
+    }, [isTransitioning, currentModuleIndex, modules, isTimed]);
 
     // Mark the question currently on screen as visited
     useEffect(() => {
@@ -167,8 +200,18 @@ const PracticeTest = () => {
         setIsNavigatorOpen(false);
     };
 
-    const handleExit = () => {
+    const handleExit = async () => {
+        if (moduleEndsAt !== null && attemptId) {
+            await testAttemptService.updateTimeRemaining(attemptId, getSecondsUntil(moduleEndsAt)).catch(() => {});
+        }
+
         navigate('/practice-tests');
+    };
+
+    const resumeClock = () => {
+        if (isTimed && secondsRemaining > 0) {
+            setModuleEndsAt(getModuleEndsAt(secondsRemaining));
+        }
     };
 
     const finishTest = () => {
@@ -187,6 +230,7 @@ const PracticeTest = () => {
             .catch(() => {
                 setSaveError("We couldn't submit the test. Try again.");
                 setIsSubmitting(false);
+                resumeClock();
             });
     };
 
@@ -194,6 +238,9 @@ const PracticeTest = () => {
         if (!attemptId) {
             return;
         }
+
+        // Stop the clock while the module is being finished
+        setModuleEndsAt(null);
 
         const isLastModule = currentModuleIndex === modules.length - 1;
 
@@ -208,8 +255,45 @@ const PracticeTest = () => {
         testAttemptService.advanceModule(attemptId).catch(() => {
             setIsTransitioning(false);
             setSaveError("We couldn't move to the next module. Try again.");
+            resumeClock();
         });
     };
+
+    // Module ends on its own when the time runs out
+    const handleTimeUp = useEffectEvent(() => {
+        handleFinishModule();
+    });
+
+    // Count the module's time down every second
+    useEffect(() => {
+        if (moduleEndsAt === null) {
+            return;
+        }
+
+        const interval = setInterval(() => {
+            const nextSecondsRemaining = getSecondsUntil(moduleEndsAt);
+            setSecondsRemaining(nextSecondsRemaining);
+
+            if (nextSecondsRemaining === 0) {
+                handleTimeUp();
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [moduleEndsAt]);
+
+    // Save the time left every 15 seconds, in case the student leaves without the Exit button (closing the tab, refreshing, etc.)
+    useEffect(() => {
+        if (moduleEndsAt === null || !attemptId) {
+            return;
+        }
+
+        const interval = setInterval(() => {
+            testAttemptService.updateTimeRemaining(attemptId, getSecondsUntil(moduleEndsAt)).catch(() => {});
+        }, TIME_SAVE_INTERVAL_MS);
+
+        return () => clearInterval(interval);
+    }, [moduleEndsAt, attemptId]);
 
     if (isLoading) {
         return (
@@ -302,8 +386,7 @@ const PracticeTest = () => {
                 title={test.title}
                 sectionLabel={sectionLabel}
                 moduleLabel={moduleLabel}
-                // TODO: remove temp value and make dynamic
-                secondsRemaining={500}
+                secondsRemaining={isTimed ? secondsRemaining : undefined}
                 onExit={() => setIsExitConfirmOpen(true)}
             />
 
