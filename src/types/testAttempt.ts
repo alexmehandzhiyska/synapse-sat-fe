@@ -12,6 +12,7 @@ export interface TestAttempt {
     testId: string;
     status: TestAttemptStatus;
     currentModuleIndex: number;
+    moduleSecondsRemaining: number | null;
     answers: AttemptAnswer[];
 }
 

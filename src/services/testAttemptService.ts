@@ -17,7 +17,12 @@ const upsertAnswer = (
         body: { selectedChoiceId },
     });
 
-const advanceModule = (attemptId: string): Promise<TestAttempt> =>
+const updateTimeRemaining = (attemptId: string, secondsRemaining: number): Promise<void> =>
+    put<void>(`/test-attempts/${attemptId}/time-remaining`, {
+        body: { secondsRemaining },
+    });
+
+const advanceModule =(attemptId: string): Promise<TestAttempt> =>
     post<TestAttempt>(`/test-attempts/${attemptId}/advance-module`);
 
 const submit = (attemptId: string): Promise<TestAttempt> =>
@@ -29,6 +34,6 @@ const getScore = (attemptId: string): Promise<ScoreReport> =>
 const getScoreDistribution = (attemptId: string): Promise<ScoreDistribution> =>
     get<ScoreDistribution>(`/test-attempts/${attemptId}/score-distribution`, { auth: true });
 
-const testAttemptService = { getAllCompleted, startOrResume, upsertAnswer, advanceModule, submit, getScore, getScoreDistribution };
+const testAttemptService = { getAllCompleted, startOrResume, upsertAnswer, updateTimeRemaining, advanceModule, submit, getScore, getScoreDistribution };
 
 export default testAttemptService;
