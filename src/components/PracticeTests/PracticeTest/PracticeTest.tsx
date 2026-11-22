@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import practiceTestService from '../../../services/practiceTestService';
 import testAttemptService from '../../../services/testAttemptService';
 import type { FullPracticeTest, PracticeTestType, Question as QuestionData, SectionName } from '../../../types/practiceTest';
+import type { ModuleRoutes } from '../../../types/testAttempt';
 import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
 import ModuleCompletionInterstitial from './ModuleCompletionInterstitial';
 import Question from './Question';
@@ -32,11 +33,13 @@ const MODULE_TIME_LIMITS: Record<SectionName, number> = {
 
 const TIME_SAVE_INTERVAL_MS = 15000;
 
-const isTimedTestType = (type: PracticeTestType) => type === 'standard' || type === 'diagnostic';
+// Only full tests are timed and have an easy and a hard module 2
+const isFullTestType = (type: PracticeTestType) => type === 'standard' || type === 'diagnostic';
 const getModuleEndsAt = (secondsRemaining: number) => Date.now() + secondsRemaining * 1000;
 const getSecondsUntil = (endsAt: number) => Math.max(0, Math.ceil((endsAt - Date.now()) / 1000));
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const flattenModules = (test: FullPracticeTest): TestModule[] => {
+const flattenModules = (test: FullPracticeTest, moduleRoutes: ModuleRoutes): TestModule[] => {
     if (test.type === 'check_in') {
         // A check-in test has no modules - just one flat list of questions.
         const questions = test.sections.flatMap((section) => section.modules.flatMap((module) => module.questions));
@@ -51,7 +54,14 @@ const flattenModules = (test: FullPracticeTest): TestModule[] => {
     const modules: TestModule[] = [];
 
     for (const section of test.sections) {
+        const route = moduleRoutes[section.name] ?? 'hard';
+
         for (const module of section.modules) {
+            // Full tests skip the version of module 2 the student wasn't routed to
+            if (isFullTestType(test.type) && module.position === 2 && module.variant !== route) {
+                continue;
+            }
+
             modules.push({
                 sectionName: section.name,
                 position: module.position,
@@ -70,6 +80,7 @@ const PracticeTest = () => {
     const [test, setTest] = useState<FullPracticeTest | null>(null);
     const [attemptId, setAttemptId] = useState<string | null>(null);
     const [answers, setAnswers] = useState<Record<string, string | null>>({});
+    const [moduleRoutes, setModuleRoutes] = useState<ModuleRoutes>({});
     const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [visitedQuestionIds, setVisitedQuestionIds] = useState<Set<string>>(new Set());
@@ -96,12 +107,14 @@ const PracticeTest = () => {
             .then(([fetchedTest, fetchedAttempt]) => {
                 setTest(fetchedTest);
                 setAttemptId(fetchedAttempt.id);
+                setModuleRoutes(fetchedAttempt.moduleRoutes);
+                
                 // A check-in test is always one flat module
                 const moduleIndex = fetchedTest.type === 'check_in' ? 0 : fetchedAttempt.currentModuleIndex;
                 setCurrentModuleIndex(moduleIndex);
 
-                if (isTimedTestType(fetchedTest.type)) {
-                    const sectionName = flattenModules(fetchedTest)[moduleIndex].sectionName;
+                if (isFullTestType(fetchedTest.type)) {
+                    const sectionName = flattenModules(fetchedTest, fetchedAttempt.moduleRoutes)[moduleIndex].sectionName;
                     const startingSeconds = fetchedAttempt.moduleSecondsRemaining ?? MODULE_TIME_LIMITS[sectionName];
 
                     setSecondsRemaining(startingSeconds);
@@ -125,32 +138,8 @@ const PracticeTest = () => {
             });
     }, [testId]);
 
-    const modules = useMemo(() => (test ? flattenModules(test) : []), [test]);
-    const isTimed = test !== null && isTimedTestType(test.type);
-
-    // Once the current module is finished, hold intersitial for a bit and then transition to next module
-    useEffect(() => {
-        if (!isTransitioning) {
-            return;
-        }
-
-        const transitionTimeout = setTimeout(() => {
-            const nextModuleIndex = currentModuleIndex + 1;
-            setCurrentModuleIndex(nextModuleIndex);
-            setCurrentQuestionIndex(0);
-            setIsNavigatorOpen(false);
-            setIsTransitioning(false);
-
-            if (isTimed) {
-                const nextModuleSeconds = MODULE_TIME_LIMITS[modules[nextModuleIndex].sectionName];
-
-                setSecondsRemaining(nextModuleSeconds);
-                setModuleEndsAt(getModuleEndsAt(nextModuleSeconds));
-            }
-        }, MODULE_TRANSITION_MS);
-
-        return () => clearTimeout(transitionTimeout);
-    }, [isTransitioning, currentModuleIndex, modules, isTimed]);
+    const modules = useMemo(() => (test ? flattenModules(test, moduleRoutes) : []), [test, moduleRoutes]);
+    const isTimed = test !== null && isFullTestType(test.type);
 
     // Mark the question currently on screen as visited
     useEffect(() => {
@@ -252,11 +241,33 @@ const PracticeTest = () => {
         setSaveError('');
         setIsTransitioning(true);
 
-        testAttemptService.advanceModule(attemptId).catch(() => {
-            setIsTransitioning(false);
-            setSaveError("We couldn't move to the next module. Try again.");
-            resumeClock();
-        });
+        // Once the current module is finished, hold intersitial for a bit and then transition to next module
+        // The interstitial also stays until the backend says which module 2 the student was routed to
+        Promise.all([testAttemptService.advanceModule(attemptId), wait(MODULE_TRANSITION_MS)])
+            .then(([updatedAttempt]) => {
+                setModuleRoutes(updatedAttempt.moduleRoutes);
+                moveToNextModule();
+            })
+            .catch(() => {
+                setIsTransitioning(false);
+                setSaveError("We couldn't move to the next module. Try again.");
+                resumeClock();
+            });
+    };
+
+    const moveToNextModule = () => {
+        const nextModuleIndex = currentModuleIndex + 1;
+        setCurrentModuleIndex(nextModuleIndex);
+        setCurrentQuestionIndex(0);
+        setIsNavigatorOpen(false);
+        setIsTransitioning(false);
+
+        if (isTimed) {
+            const nextModuleSeconds = MODULE_TIME_LIMITS[modules[nextModuleIndex].sectionName];
+
+            setSecondsRemaining(nextModuleSeconds);
+            setModuleEndsAt(getModuleEndsAt(nextModuleSeconds));
+        }
     };
 
     // Module ends on its own when the time runs out
