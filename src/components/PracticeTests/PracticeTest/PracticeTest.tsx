@@ -302,6 +302,8 @@ const PracticeTest = () => {
                 title={test.title}
                 sectionLabel={sectionLabel}
                 moduleLabel={moduleLabel}
+                // TODO: remove temp value and make dynamic
+                secondsRemaining={500}
                 onExit={() => setIsExitConfirmOpen(true)}
             />
 
