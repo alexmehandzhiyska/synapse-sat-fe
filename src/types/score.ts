@@ -1,4 +1,4 @@
-import type { Difficulty, Domain, SectionName } from './practiceTest';
+import type { Difficulty, Domain, ModuleVariant, SectionName } from './practiceTest';
 
 export type QuestionStatus = 'correct' | 'incorrect' | 'omitted';
 
@@ -23,6 +23,7 @@ export interface QuestionResult {
 
 export interface ModuleScore {
     position: number;
+    variant: ModuleVariant | null;
     correct: number;
     incorrect: number;
     omitted: number;

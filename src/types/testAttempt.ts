@@ -1,4 +1,4 @@
-import type { SectionName } from './practiceTest';
+import type { ModuleVariant, SectionName } from './practiceTest';
 
 export type TestAttemptStatus = 'in_progress' | 'completed';
 
@@ -7,12 +7,16 @@ export interface AttemptAnswer {
     selectedChoiceId: string | null;
 }
 
+// Which module 2 the student was routed to in each section of a full test
+export type ModuleRoutes = Partial<Record<SectionName, ModuleVariant>>;
+
 export interface TestAttempt {
     id: string;
     testId: string;
     status: TestAttemptStatus;
     currentModuleIndex: number;
     moduleSecondsRemaining: number | null;
+    moduleRoutes: ModuleRoutes;
     answers: AttemptAnswer[];
 }
 

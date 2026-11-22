@@ -1,6 +1,7 @@
 export type PracticeTestType = 'diagnostic' | 'standard' | 'check_in' | 'custom';
 export type SectionName = 'reading_writing' | 'math';
 export type Difficulty = 'easy' | 'medium' | 'hard';
+export type ModuleVariant = 'easy' | 'hard';
 export type Domain =
     'information_and_ideas'
     | 'craft_and_structure'
@@ -58,6 +59,7 @@ export interface Question {
 export interface Module {
     id: string;
     position: number;
+    variant: ModuleVariant | null;
     questions: Question[];
 }
 
