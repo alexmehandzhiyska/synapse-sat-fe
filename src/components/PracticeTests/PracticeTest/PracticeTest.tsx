@@ -25,16 +25,18 @@ const SECTION_LABELS: Record<SectionName, string> = {
 
 const MODULE_TRANSITION_MS = 3000;
 
-// Bluebook module time limits converted into seconds
-const MODULE_TIME_LIMITS: Record<SectionName, number> = {
-    reading_writing: 32 * 60,
-    math: 35 * 60,
+type FullTestType = 'standard' | 'diagnostic';
+
+// Bluebook module time limits converted into seconds. The diagnostic - half the length => half the time
+const MODULE_TIME_LIMITS: Record<FullTestType, Record<SectionName, number>> = {
+    standard: { reading_writing: 32 * 60, math: 35 * 60 },
+    diagnostic: { reading_writing: 16 * 60, math: 17.5 * 60 },
 };
 
 const TIME_SAVE_INTERVAL_MS = 15000;
 
 // Only full tests are timed and have an easy and a hard module 2
-const isFullTestType = (type: PracticeTestType) => type === 'standard' || type === 'diagnostic';
+const isFullTestType = (type: PracticeTestType): type is FullTestType => type === 'standard' || type === 'diagnostic';
 const getModuleEndsAt = (secondsRemaining: number) => Date.now() + secondsRemaining * 1000;
 const getSecondsUntil = (endsAt: number) => Math.max(0, Math.ceil((endsAt - Date.now()) / 1000));
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -115,7 +117,7 @@ const PracticeTest = () => {
 
                 if (isFullTestType(fetchedTest.type)) {
                     const sectionName = flattenModules(fetchedTest, fetchedAttempt.moduleRoutes)[moduleIndex].sectionName;
-                    const startingSeconds = fetchedAttempt.moduleSecondsRemaining ?? MODULE_TIME_LIMITS[sectionName];
+                    const startingSeconds = fetchedAttempt.moduleSecondsRemaining ?? MODULE_TIME_LIMITS[fetchedTest.type][sectionName];
 
                     setSecondsRemaining(startingSeconds);
                     setModuleEndsAt(getModuleEndsAt(startingSeconds));
@@ -262,8 +264,8 @@ const PracticeTest = () => {
         setIsNavigatorOpen(false);
         setIsTransitioning(false);
 
-        if (isTimed) {
-            const nextModuleSeconds = MODULE_TIME_LIMITS[modules[nextModuleIndex].sectionName];
+        if (test && isFullTestType(test.type)) {
+            const nextModuleSeconds = MODULE_TIME_LIMITS[test.type][modules[nextModuleIndex].sectionName];
 
             setSecondsRemaining(nextModuleSeconds);
             setModuleEndsAt(getModuleEndsAt(nextModuleSeconds));
