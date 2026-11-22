@@ -6,7 +6,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import practiceTestService from '../../../services/practiceTestService';
 import type { FullPracticeTest, Question } from '../../../types/practiceTest';
 import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
-import { SECTION_LABELS } from '../ScoreReport/labels';
+import { MODULE_VARIANT_LABELS, SECTION_LABELS } from '../ScoreReport/labels';
 import QuestionCard from './QuestionCard';
 
 const replaceQuestionInTest = (test: FullPracticeTest, updatedQuestion: Question): FullPracticeTest => ({
@@ -130,6 +130,7 @@ const ReviewQuestions = () => {
                                         <div key={module.id} className="mb-8">
                                             <h3 className="mb-3 text-sm font-extrabold uppercase tracking-[0.18em] text-[#2f61c9]">
                                                 Module {module.position}
+                                                {module.variant && ` (${MODULE_VARIANT_LABELS[module.variant]})`}
                                             </h3>
 
                                             {module.questions.length === 0 && (

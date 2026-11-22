@@ -1,8 +1,13 @@
-import type { SectionName } from '../../../types/practiceTest';
+import type { ModuleVariant, SectionName } from '../../../types/practiceTest';
 
 export const SECTION_LABELS: Record<SectionName, string> = {
     reading_writing: 'Reading and Writing',
     math: 'Math',
+};
+
+export const MODULE_VARIANT_LABELS: Record<ModuleVariant, string> = {
+    easy: 'Easy',
+    hard: 'Hard',
 };
 
 export const SECTION_COLORS: Record<SectionName, string> = {

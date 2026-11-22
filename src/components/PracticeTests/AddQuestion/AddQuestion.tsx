@@ -6,7 +6,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 import practiceTestService from '../../../services/practiceTestService';
 import type { CreateQuestionData, Difficulty, Domain, FullPracticeTest, SectionName } from '../../../types/practiceTest';
-import { DOMAIN_LABELS, SECTION_LABELS } from '../ScoreReport/labels';
+import { DOMAIN_LABELS, MODULE_VARIANT_LABELS, SECTION_LABELS } from '../ScoreReport/labels';
 import { CHOICE_LABELS, DIFFICULTY_OPTIONS, DOMAINS_BY_SECTION, getSectionForDomain } from './domains';
 
 type QuestionFormData = {
@@ -83,10 +83,12 @@ const AddQuestion = () => {
         }
 
         for (const module of section.modules) {
+            const variantLabel = module.variant ? ` (${MODULE_VARIANT_LABELS[module.variant]})` : '';
+
             moduleOptions.push({
                 id: module.id,
                 sectionName: section.name,
-                label: `${SECTION_LABELS[section.name]} – Module ${module.position}`,
+                label: `${SECTION_LABELS[section.name]} – Module ${module.position}${variantLabel}`,
             });
         }
     }
