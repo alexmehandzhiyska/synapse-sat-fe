@@ -1,4 +1,6 @@
 import type { ModuleScore, QuestionResult } from '../../../types/score';
+import { MODULE_VARIANT_LABELS } from './labels';
+
 import QuestionTiles from './QuestionTiles';
 
 interface ModuleCardProps {
@@ -12,6 +14,7 @@ const ModuleCard = ({ module, onSelectQuestion }: ModuleCardProps) => {
             <div className="flex items-baseline justify-between">
                 <h4 className="font-['Space_Grotesk'] text-sm font-extrabold text-[#13385A]">
                     Module {module.position}
+                    {module.variant && ` · ${MODULE_VARIANT_LABELS[module.variant]}`}
                 </h4>
                 <p className="font-['Space_Grotesk'] text-xl font-extrabold text-[#13385A]">
                     {module.correct}
