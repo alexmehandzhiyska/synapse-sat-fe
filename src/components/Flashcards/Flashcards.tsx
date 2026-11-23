@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import flashcardService from '../../services/flashcardService';
 import type { Flashcard } from '../../types/flashcard';
+import FlashcardCard from './FlashcardCard';
 
 const Flashcards = () => {
     const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
@@ -68,19 +69,8 @@ const Flashcards = () => {
 
                 {!isLoading && !error && flashcards.length > 0 && (
                     <>
-                        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm sm:p-10">
-                            <h2 className="mb-4 font-['Space_Grotesk'] text-3xl font-extrabold text-[#13385A]">
-                                {currentFlashcard.word}
-                            </h2>
-                            <p className="mb-6 whitespace-pre-line text-lg font-semibold leading-8 text-[#1b1b1f]">
-                                {currentFlashcard.definition}
-                            </p>
-                            {currentFlashcard.context && (
-                                <p className="border-l-4 border-slate-200 pl-4 text-sm font-medium italic text-[#5A6B7B]">
-                                    "{currentFlashcard.context}"
-                                </p>
-                            )}
-                        </div>
+                        {/* Keyed by id so each new card starts on the word side */}
+                        <FlashcardCard key={currentFlashcard.id} flashcard={currentFlashcard} />
 
                         <div className="mt-6 flex items-center justify-between">
                             <button
