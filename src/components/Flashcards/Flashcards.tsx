@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 
 import flashcardService from '../../services/flashcardService';
 import type { Flashcard } from '../../types/flashcard';
-import FlashcardCard from './FlashcardCard';
+import FlashcardReview from './FlashcardReview';
 
 const Flashcards = () => {
     const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -22,16 +21,10 @@ const Flashcards = () => {
             });
     }, []);
 
-    const currentFlashcard = flashcards[currentIndex];
-    const isFirst = currentIndex === 0;
-    const isLast = currentIndex === flashcards.length - 1;
-
-    const handlePrevious = () => {
-        setCurrentIndex((prev) => prev - 1);
-    };
-
-    const handleNext = () => {
-        setCurrentIndex((prev) => prev + 1);
+    const handleReviewed = (reviewedFlashcard: Flashcard) => {
+        setFlashcards((prev) =>
+            prev.map((flashcard) => (flashcard.id === reviewedFlashcard.id ? reviewedFlashcard : flashcard)),
+        );
     };
 
     return (
@@ -68,32 +61,7 @@ const Flashcards = () => {
                 )}
 
                 {!isLoading && !error && flashcards.length > 0 && (
-                    <>
-                        {/* Keyed by id so each new card starts on the word side */}
-                        <FlashcardCard key={currentFlashcard.id} flashcard={currentFlashcard} />
-
-                        <div className="mt-6 flex items-center justify-between">
-                            <button
-                                type="button"
-                                onClick={handlePrevious}
-                                disabled={isFirst}
-                                className="rounded-xl border-2 border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-[#13385A] transition hover:border-blue-200 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                Previous
-                            </button>
-                            <span className="text-sm font-bold text-[#5A6B7B]">
-                                Card {currentIndex + 1} of {flashcards.length}
-                            </span>
-                            <button
-                                type="button"
-                                onClick={handleNext}
-                                disabled={isLast}
-                                className="rounded-xl bg-[#13385A] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#0e2b45] disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                Next
-                            </button>
-                        </div>
-                    </>
+                    <FlashcardReview flashcards={flashcards} onReviewed={handleReviewed} />
                 )}
             </div>
         </section>

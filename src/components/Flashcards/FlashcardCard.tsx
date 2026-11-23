@@ -1,22 +1,16 @@
-import { useState } from 'react';
-
 import type { Flashcard } from '../../types/flashcard';
 
 interface FlashcardCardProps {
     flashcard: Flashcard;
+    isFlipped: boolean;
+    onFlip: () => void;
 }
 
-const FlashcardCard = ({ flashcard }: FlashcardCardProps) => {
-    const [isFlipped, setIsFlipped] = useState(false);
-
-    const handleFlip = () => {
-        setIsFlipped((prev) => !prev);
-    };
-
+const FlashcardCard = ({ flashcard, isFlipped, onFlip }: FlashcardCardProps) => {
     return (
         <button
             type="button"
-            onClick={handleFlip}
+            onClick={onFlip}
             aria-label={isFlipped ? 'Show word' : 'Show definition'}
             className="block h-80 w-full cursor-pointer perspective-distant"
         >
