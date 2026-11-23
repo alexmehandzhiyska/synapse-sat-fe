@@ -3,6 +3,9 @@ import { useState } from 'react';
 import notebookService from '../../../services/notebookService';
 import type { QuestionResult } from '../../../types/score';
 import { DOMAIN_LABELS } from './labels';
+import getSelectedWord, { type SelectedWord } from '../../Flashcards/getSelectedWord';
+
+import AddFlashcardModal from '../../Flashcards/AddFlashcardModal/AddFlashcardModal';
 
 interface QuestionReviewModalProps {
     question: QuestionResult;
@@ -29,6 +32,15 @@ const QuestionReviewModal = ({ question, onClose }: QuestionReviewModalProps) =>
     const [how, setHow] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const [selectedWord, setSelectedWord] = useState<SelectedWord | null>(null);
+
+    const handleDoubleClick = () => {
+        const word = getSelectedWord();
+
+        if (word) {
+            setSelectedWord(word);
+        }
+    };
 
     const handleAddToNotebook = async () => {
         setError('');
@@ -71,51 +83,53 @@ const QuestionReviewModal = ({ question, onClose }: QuestionReviewModalProps) =>
                     </button>
                 </div>
 
-                {question.passage && (
-                    <p className="mb-4 whitespace-pre-line text-sm leading-7 text-[#1b1b1f]">
-                        {question.passage}
+                <div onDoubleClick={handleDoubleClick}>
+                    {question.passage && (
+                        <p className="mb-4 whitespace-pre-line text-sm leading-7 text-[#1b1b1f]">
+                            {question.passage}
+                        </p>
+                    )}
+
+                    <p className="mb-4 font-semibold leading-7 text-[#13385A]">
+                        {question.prompt}
                     </p>
-                )}
 
-                <p className="mb-4 font-semibold leading-7 text-[#13385A]">
-                    {question.prompt}
-                </p>
+                    <div className="mb-6 space-y-2">
+                        {question.answerChoices.map((choice) => {
+                            const isSelected = choice.id === question.selectedChoiceId;
 
-                <div className="mb-6 space-y-2">
-                    {question.answerChoices.map((choice) => {
-                        const isSelected = choice.id === question.selectedChoiceId;
-
-                        return (
-                            <div
-                                key={choice.id}
-                                className={`flex items-center gap-3 rounded-xl border-2 px-4 py-2.5 ${
-                                    choice.isCorrect
-                                        ? 'border-emerald-400 bg-emerald-50'
-                                        : isSelected
-                                            ? 'border-red-400 bg-red-50'
-                                            : 'border-slate-200 bg-white'
-                                }`}
-                            >
-                                <span
-                                    className={`flex h-7 w-7 flex-none items-center justify-center rounded-full border-2 text-xs font-extrabold ${
+                            return (
+                                <div
+                                    key={choice.id}
+                                    className={`flex items-center gap-3 rounded-xl border-2 px-4 py-2.5 ${
                                         choice.isCorrect
-                                            ? 'border-emerald-500 bg-emerald-500 text-white'
+                                            ? 'border-emerald-400 bg-emerald-50'
                                             : isSelected
-                                                ? 'border-red-500 bg-red-500 text-white'
-                                                : 'border-slate-300 text-[#13385A]'
+                                                ? 'border-red-400 bg-red-50'
+                                                : 'border-slate-200 bg-white'
                                     }`}
                                 >
-                                    {choice.label}
-                                </span>
-                                <span className="text-sm font-semibold text-[#1b1b1f]">
-                                    {choice.content}
-                                </span>
-                                {isSelected && !choice.isCorrect && (
-                                    <span className="ml-auto text-xs font-bold text-red-600">Your answer</span>
-                                )}
-                            </div>
-                        );
-                    })}
+                                    <span
+                                        className={`flex h-7 w-7 flex-none items-center justify-center rounded-full border-2 text-xs font-extrabold ${
+                                            choice.isCorrect
+                                                ? 'border-emerald-500 bg-emerald-500 text-white'
+                                                : isSelected
+                                                    ? 'border-red-500 bg-red-500 text-white'
+                                                    : 'border-slate-300 text-[#13385A]'
+                                        }`}
+                                    >
+                                        {choice.label}
+                                    </span>
+                                    <span className="text-sm font-semibold text-[#1b1b1f]">
+                                        {choice.content}
+                                    </span>
+                                    {isSelected && !choice.isCorrect && (
+                                        <span className="ml-auto text-xs font-bold text-red-600">Your answer</span>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
 
                 {isAdded && (
@@ -200,6 +214,15 @@ const QuestionReviewModal = ({ question, onClose }: QuestionReviewModalProps) =>
                             </button>
                         </div>
                     </div>
+                )}
+
+                {selectedWord && (
+                    <AddFlashcardModal
+                        word={selectedWord.word}
+                        context={selectedWord.context}
+                        questionId={question.id}
+                        onClose={() => setSelectedWord(null)}
+                    />
                 )}
             </div>
         </div>
