@@ -23,6 +23,7 @@ import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
 import Notebook from './components/Notebook/Notebook';
 import CustomPacketBuilder from './components/PracticeTests/CustomPacketBuilder/CustomPacketBuilder';
 import Course from './components/Lessons/Course';
+import Flashcards from './components/Flashcards/Flashcards';
 
 function App() {
     return (
@@ -48,6 +49,7 @@ function App() {
                 <Route path="/study-plan-edit" element={<StudentGuard><StudyPlanEditForm /></StudentGuard>} />
                 <Route path="/admin/users" element={<AdminGuard><AdminUsers /></AdminGuard>} />
                 <Route path="/notebook" element={<StudentGuard><Notebook /></StudentGuard>} />
+                <Route path="/flashcards" element={<StudentGuard><Flashcards /></StudentGuard>} />
             </Route>
         </Routes>
     )
