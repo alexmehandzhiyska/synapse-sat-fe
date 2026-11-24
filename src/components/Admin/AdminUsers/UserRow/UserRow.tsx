@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-import adminService from '../../../services/adminService';
-import type { AdminUser } from '../../../types/auth';
-import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
-import UserEditForm from './UserEditForm';
-import { ROLE_LABELS } from './roles';
+import adminService from '../../../../services/adminService';
+import type { AdminUser } from '../../../../types/auth';
+import ConfirmModal from '../../../common/ConfirmModal/ConfirmModal';
+import UserEditForm from '../UserEditForm/UserEditForm';
+import { ROLE_LABELS } from '../roles';
 
 type UserRowProps = {
     user: AdminUser;

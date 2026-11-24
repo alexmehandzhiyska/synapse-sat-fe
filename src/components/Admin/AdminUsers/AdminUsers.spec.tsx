@@ -9,7 +9,7 @@ vi.mock('../../../services/adminService', () => ({
     default: { getAllUsers: vi.fn() },
 }));
 
-vi.mock('./UserRow', () => ({
+vi.mock('./UserRow/UserRow', () => ({
     default: ({ user, onUpdated }: { user: AdminUser; onUpdated: (user: AdminUser) => void }) => (
         <div>
             <h3>{user.id}: {user.firstName}</h3>

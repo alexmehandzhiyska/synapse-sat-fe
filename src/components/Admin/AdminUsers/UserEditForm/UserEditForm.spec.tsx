@@ -1,11 +1,11 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import adminService from '../../../services/adminService';
-import type { AdminUser } from '../../../types/auth';
+import adminService from '../../../../services/adminService';
+import type { AdminUser } from '../../../../types/auth';
 import UserEditForm from './UserEditForm';
 
-vi.mock('../../../services/adminService', () => ({
+vi.mock('../../../../services/adminService', () => ({
     default: { updateUser: vi.fn() },
 }));
 

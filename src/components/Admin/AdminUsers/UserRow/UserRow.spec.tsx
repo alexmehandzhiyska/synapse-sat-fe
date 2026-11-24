@@ -1,15 +1,15 @@
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import adminService from '../../../services/adminService';
-import type { AdminUser } from '../../../types/auth';
+import adminService from '../../../../services/adminService';
+import type { AdminUser } from '../../../../types/auth';
 import UserRow from './UserRow';
 
-vi.mock('../../../services/adminService', () => ({
+vi.mock('../../../../services/adminService', () => ({
     default: { deactivateUser: vi.fn(), activateUser: vi.fn() },
 }));
 
-vi.mock('./UserEditForm', () => ({
+vi.mock('../UserEditForm/UserEditForm', () => ({
     default: ({ user, onSave, onCancel }: { user: AdminUser; onSave: (user: AdminUser) => void; onCancel: () => void }) => (
         <div>
             <p>Editing {user.firstName}</p>

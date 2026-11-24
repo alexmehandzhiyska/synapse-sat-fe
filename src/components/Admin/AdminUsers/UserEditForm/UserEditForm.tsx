@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
-import adminService from '../../../services/adminService';
-import type { AdminUser, UpdateUserData } from '../../../types/auth';
-import { ROLE_OPTIONS } from './roles';
+import adminService from '../../../../services/adminService';
+import type { AdminUser, UpdateUserData } from '../../../../types/auth';
+import { ROLE_OPTIONS } from '../roles';
 
 type UserEditFormProps = {
     user: AdminUser;

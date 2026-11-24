@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import adminService from '../../../services/adminService';
 import type { AdminUser } from '../../../types/auth';
-import UserRow from './UserRow';
+import UserRow from './UserRow/UserRow';
 
 const PAGE_SIZE = 20;
 
