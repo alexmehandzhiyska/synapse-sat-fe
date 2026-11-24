@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { Question as QuestionData, SectionName } from '../../../../types/practiceTest';
-import getSelectedWord, { type SelectedWord } from '../../../Flashcards/getSelectedWord';
+import getSelectedWord, { type SelectedWord } from '../../../../utils/getSelectedWord';
 
 import AddFlashcardModal from '../../../Flashcards/AddFlashcardModal/AddFlashcardModal';
 import AnswerChoices from '../AnswerChoices/AnswerChoices';
