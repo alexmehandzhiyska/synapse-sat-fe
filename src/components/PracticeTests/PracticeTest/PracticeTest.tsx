@@ -6,11 +6,11 @@ import testAttemptService from '../../../services/testAttemptService';
 import type { FullPracticeTest, PracticeTestType, Question as QuestionData, SectionName } from '../../../types/practiceTest';
 import type { ModuleRoutes } from '../../../types/testAttempt';
 import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
-import ModuleCompletionInterstitial from './ModuleCompletionInterstitial';
-import Question from './Question';
-import QuestionNavigator from './QuestionNavigator';
-import type { QuestionStatus } from './QuestionNavigator';
-import TestHeader from './TestHeader';
+import ModuleCompletionInterstitial from './ModuleCompletionInterstitial/ModuleCompletionInterstitial';
+import Question from './Question/Question';
+import QuestionNavigator from './QuestionNavigator/QuestionNavigator';
+import type { QuestionStatus } from './QuestionNavigator/QuestionNavigator';
+import TestHeader from './TestHeader/TestHeader';
 
 interface TestModule {
     sectionName: SectionName;

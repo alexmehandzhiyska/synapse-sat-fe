@@ -1,4 +1,4 @@
-import type { AnswerChoice } from '../../../types/practiceTest';
+import type { AnswerChoice } from '../../../../types/practiceTest';
 
 interface AnswerChoicesProps {
     choices: AnswerChoice[];

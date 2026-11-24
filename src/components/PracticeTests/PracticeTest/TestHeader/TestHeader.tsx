@@ -1,4 +1,4 @@
-import TestTimer from './TestTimer';
+import TestTimer from '../TestTimer/TestTimer';
 
 interface TestHeaderProps {
     title: string;
