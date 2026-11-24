@@ -7,7 +7,7 @@ import practiceTestService from '../../../services/practiceTestService';
 import type { FullPracticeTest, Question } from '../../../types/practiceTest';
 import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
 import { MODULE_VARIANT_LABELS, SECTION_LABELS } from '../ScoreReport/labels';
-import QuestionCard from './QuestionCard';
+import QuestionCard from './QuestionCard/QuestionCard';
 
 const replaceQuestionInTest = (test: FullPracticeTest, updatedQuestion: Question): FullPracticeTest => ({
     ...test,

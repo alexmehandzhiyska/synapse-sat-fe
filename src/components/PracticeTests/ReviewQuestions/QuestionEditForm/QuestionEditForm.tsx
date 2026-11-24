@@ -3,10 +3,10 @@ import { useForm } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
-import practiceTestService from '../../../services/practiceTestService';
-import type { Difficulty, Domain, Question, SectionName, UpdateQuestionData } from '../../../types/practiceTest';
-import { DIFFICULTY_OPTIONS, DOMAINS_BY_SECTION } from '../AddQuestion/domains';
-import { DOMAIN_LABELS } from '../ScoreReport/labels';
+import practiceTestService from '../../../../services/practiceTestService';
+import type { Difficulty, Domain, Question, SectionName, UpdateQuestionData } from '../../../../types/practiceTest';
+import { DIFFICULTY_OPTIONS, DOMAINS_BY_SECTION } from '../../AddQuestion/domains';
+import { DOMAIN_LABELS } from '../../ScoreReport/labels';
 
 type QuestionEditFormProps = {
     question: Question;

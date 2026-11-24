@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import type { Question, SectionName } from '../../../types/practiceTest';
-import { DOMAIN_LABELS } from '../ScoreReport/labels';
-import QuestionEditForm from './QuestionEditForm';
+import type { Question, SectionName } from '../../../../types/practiceTest';
+import { DOMAIN_LABELS } from '../../ScoreReport/labels';
+import QuestionEditForm from '../QuestionEditForm/QuestionEditForm';
 
 type QuestionCardProps = {
     question: Question;
