@@ -30,6 +30,12 @@ const request = async <T>(
         body: body === undefined ? undefined : JSON.stringify(body),
     });
 
+    if (auth && response.status === 401) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+    }
+
     // Empty bodies have nothing to parse.
     const responseText = await response.text();
     const data = responseText ? JSON.parse(responseText) : null;

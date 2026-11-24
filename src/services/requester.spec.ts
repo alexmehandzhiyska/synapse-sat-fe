@@ -98,7 +98,7 @@ describe('requester', () => {
         it('throws the message sent by the backend', async () => {
             givenResponse(JSON.stringify({ message: 'Invalid credentials.' }), 401);
 
-            await expect(post('/auth/login')).rejects.toThrow('Invalid credentials.');
+            await expect(post('/auth/login', { auth: false })).rejects.toThrow('Invalid credentials.');
         });
 
         it('throws a generic message when the backend sends none', async () => {
