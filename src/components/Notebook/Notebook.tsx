@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import notebookService from '../../services/notebookService';
 import type { NotebookEntry } from '../../types/notebook';
-import NotebookEntryCard from './NotebookEntryCard';
+import NotebookEntryCard from './NotebookEntryCard/NotebookEntryCard';
 
 const Notebook = () => {
     const navigate = useNavigate();

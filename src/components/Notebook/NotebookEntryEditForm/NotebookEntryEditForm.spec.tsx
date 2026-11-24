@@ -1,11 +1,11 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import notebookService from '../../services/notebookService';
-import type { NotebookEntry } from '../../types/notebook';
+import notebookService from '../../../services/notebookService';
+import type { NotebookEntry } from '../../../types/notebook';
 import NotebookEntryEditForm from './NotebookEntryEditForm';
 
-vi.mock('../../services/notebookService', () => ({
+vi.mock('../../../services/notebookService', () => ({
     default: { update: vi.fn() },
 }));
 

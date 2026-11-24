@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import notebookService from '../../services/notebookService';
-import type { NotebookEntry, UpdateNotebookEntryData } from '../../types/notebook';
+import notebookService from '../../../services/notebookService';
+import type { NotebookEntry, UpdateNotebookEntryData } from '../../../types/notebook';
 
 type NotebookEntryEditFormProps = {
     entry: NotebookEntry;

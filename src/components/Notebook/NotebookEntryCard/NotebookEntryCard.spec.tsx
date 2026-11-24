@@ -1,15 +1,15 @@
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import notebookService from '../../services/notebookService';
-import type { NotebookEntry } from '../../types/notebook';
+import notebookService from '../../../services/notebookService';
+import type { NotebookEntry } from '../../../types/notebook';
 import NotebookEntryCard from './NotebookEntryCard';
 
-vi.mock('../../services/notebookService', () => ({
+vi.mock('../../../services/notebookService', () => ({
     default: { remove: vi.fn() },
 }));
 
-vi.mock('./NotebookEntryEditForm', () => ({
+vi.mock('../NotebookEntryEditForm/NotebookEntryEditForm', () => ({
     default: ({ entry, onSave, onCancel }: { entry: NotebookEntry; onSave: (entry: NotebookEntry) => void; onCancel: () => void }) => (
         <div>
             <p>Editing {entry.id}</p>

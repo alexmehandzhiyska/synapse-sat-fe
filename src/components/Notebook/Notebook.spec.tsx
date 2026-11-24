@@ -17,7 +17,7 @@ vi.mock('../../services/notebookService', () => ({
     default: { getAll: vi.fn() },
 }));
 
-vi.mock('./NotebookEntryCard', () => ({
+vi.mock('./NotebookEntryCard/NotebookEntryCard', () => ({
     default: ({ entry, onUpdated, onDeleted }: { entry: NotebookEntry; onUpdated: (entry: NotebookEntry) => void; onDeleted: (entryId: string) => void }) => (
         <div>
             <h2>{entry.id}: {entry.what}</h2>
