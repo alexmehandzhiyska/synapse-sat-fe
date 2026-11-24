@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react';
 
 import flashcardService from '../../services/flashcardService';
 import type { Flashcard } from '../../types/flashcard';
+import FlashcardList from './FlashcardList';
 import FlashcardReview from './FlashcardReview';
+
+type FlashcardsTab = 'review' | 'all';
 
 const Flashcards = () => {
     const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
+    const [activeTab, setActiveTab] = useState<FlashcardsTab>('review');
+    const [pageOpenedAt] = useState(() => Date.now());
 
     useEffect(() => {
         flashcardService
@@ -26,6 +31,12 @@ const Flashcards = () => {
             prev.map((flashcard) => (flashcard.id === reviewedFlashcard.id ? reviewedFlashcard : flashcard)),
         );
     };
+
+    const handleDeleted = (flashcardId: string) => {
+        setFlashcards((prev) => prev.filter((flashcard) => flashcard.id !== flashcardId));
+    };
+
+    const dueCount = flashcards.filter((flashcard) => new Date(flashcard.dueAt).getTime() <= pageOpenedAt).length;
 
     return (
         <section className="min-h-[calc(100vh-73px)] bg-[#f4f7fb] px-6 py-12 sm:px-10 lg:px-16">
@@ -61,7 +72,30 @@ const Flashcards = () => {
                 )}
 
                 {!isLoading && !error && flashcards.length > 0 && (
-                    <FlashcardReview flashcards={flashcards} onReviewed={handleReviewed} />
+                    <>
+                        <div className="mb-6 inline-flex gap-1 rounded-xl border border-slate-200 bg-white p-1">
+                            <button
+                                type="button"
+                                onClick={() => setActiveTab('review')}
+                                className={`rounded-lg px-4 py-2 text-sm font-bold transition ${activeTab === 'review' ? 'bg-[#13385A] text-white' : 'text-[#13385A] hover:bg-slate-100'}`}
+                            >
+                                Review ({dueCount} due)
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setActiveTab('all')}
+                                className={`rounded-lg px-4 py-2 text-sm font-bold transition ${activeTab === 'all' ? 'bg-[#13385A] text-white' : 'text-[#13385A] hover:bg-slate-100'}`}
+                            >
+                                All cards ({flashcards.length})
+                            </button>
+                        </div>
+
+                        {activeTab === 'review' ? (
+                            <FlashcardReview flashcards={flashcards} onReviewed={handleReviewed} />
+                        ) : (
+                            <FlashcardList flashcards={flashcards} onDeleted={handleDeleted} />
+                        )}
+                    </>
                 )}
             </div>
         </section>

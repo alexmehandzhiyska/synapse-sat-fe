@@ -1,5 +1,5 @@
 import type { CreateFlashcardData, Flashcard, FlashcardRating, SuggestedDefinition } from '../types/flashcard';
-import { get, patch, post } from './requester';
+import { del, get, patch, post } from './requester';
 
 const getAll = (): Promise<Flashcard[]> =>
     get<Flashcard[]>('/flashcards', { auth: true });
@@ -13,6 +13,9 @@ const getSuggestedDefinition = (word: string): Promise<SuggestedDefinition> =>
 const review = (id: string, rating: FlashcardRating): Promise<Flashcard> =>
     patch<Flashcard>(`/flashcards/${id}/review`, { body: { rating } });
 
-const flashcardService = { getAll, create, getSuggestedDefinition, review };
+const remove = (id: string): Promise<void> =>
+    del<void>(`/flashcards/${id}`);
+
+const flashcardService = { getAll, create, getSuggestedDefinition, review, remove };
 
 export default flashcardService;
