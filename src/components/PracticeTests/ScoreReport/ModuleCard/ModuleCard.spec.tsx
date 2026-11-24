@@ -18,6 +18,7 @@ const question: QuestionResult = {
 
 const module: ModuleScore = {
     position: 2,
+    variant: null,
     correct: 5,
     incorrect: 3,
     omitted: 1,

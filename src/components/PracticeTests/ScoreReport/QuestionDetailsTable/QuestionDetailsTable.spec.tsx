@@ -47,8 +47,8 @@ const createSection = (firstModuleQuestions: QuestionResult[], secondModuleQuest
     total: 0,
     scaled: 0,
     modules: [
-        { position: 1, correct: 0, incorrect: 0, omitted: 0, total: 0, questions: firstModuleQuestions },
-        { position: 2, correct: 0, incorrect: 0, omitted: 0, total: 0, questions: secondModuleQuestions },
+        { position: 1, variant: null, correct: 0, incorrect: 0, omitted: 0, total: 0, questions: firstModuleQuestions },
+        { position: 2, variant: null, correct: 0, incorrect: 0, omitted: 0, total: 0, questions: secondModuleQuestions },
     ],
     domains: [],
 });

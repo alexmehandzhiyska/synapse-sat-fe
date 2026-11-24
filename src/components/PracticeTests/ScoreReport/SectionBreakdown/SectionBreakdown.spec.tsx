@@ -30,8 +30,8 @@ const section: SectionScore = {
     total: 44,
     scaled: 650,
     modules: [
-        { position: 1, correct: 1, incorrect: 0, omitted: 0, total: 1, questions: [question] },
-        { position: 2, correct: 0, incorrect: 0, omitted: 0, total: 0, questions: [] },
+        { position: 1, variant: null, correct: 1, incorrect: 0, omitted: 0, total: 1, questions: [question] },
+        { position: 2, variant: null, correct: 0, incorrect: 0, omitted: 0, total: 0, questions: [] },
     ],
     domains: [
         { domain: 'algebra', correct: 10, total: 13 },
