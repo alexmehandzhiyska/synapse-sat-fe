@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 
 import type { Lesson } from '../../../types/lesson';
-import { getYoutubeEmbedUrl } from '../getYoutubeEmbedUrl';
+import { getYoutubeEmbedUrl } from './getYoutubeEmbedUrl';
 
 type LessonEmbedProps = {
     lesson: Lesson;
