@@ -14,7 +14,7 @@ vi.mock('./StudentCourseView/StudentCourseView', () => ({
     default: () => <div>Student course view</div>,
 }));
 
-vi.mock('./TeacherCourseView', () => ({
+vi.mock('./TeacherCourseView/TeacherCourseView', () => ({
     default: () => <div>Teacher course view</div>,
 }));
 

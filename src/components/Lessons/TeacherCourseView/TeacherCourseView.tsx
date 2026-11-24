@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import lessonsService from '../../services/lessonsService';
-import type { Lesson } from '../../types/lesson';
-import type { Domain } from '../../types/practiceTest';
-import ConfirmModal from '../common/ConfirmModal/ConfirmModal';
-import { DOMAINS_BY_SECTION } from '../PracticeTests/AddQuestion/domains';
-import { DOMAIN_LABELS } from '../PracticeTests/ScoreReport/labels';
-import AddLessonForm from './AddLessonForm/AddLessonForm';
-import EditLessonForm from './EditLessonForm/EditLessonForm';
-import LessonEmbed from './LessonEmbed/LessonEmbed';
+import lessonsService from '../../../services/lessonsService';
+import type { Lesson } from '../../../types/lesson';
+import type { Domain } from '../../../types/practiceTest';
+import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
+import { DOMAINS_BY_SECTION } from '../../PracticeTests/AddQuestion/domains';
+import { DOMAIN_LABELS } from '../../PracticeTests/ScoreReport/labels';
+import AddLessonForm from '../AddLessonForm/AddLessonForm';
+import EditLessonForm from '../EditLessonForm/EditLessonForm';
+import LessonEmbed from '../LessonEmbed/LessonEmbed';
 
 const ALL_DOMAINS: Domain[] = [
     ...DOMAINS_BY_SECTION.reading_writing,

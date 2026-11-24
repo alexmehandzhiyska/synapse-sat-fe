@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import authService from '../../services/authService';
 import StudentCourseView from './StudentCourseView/StudentCourseView';
-import TeacherCourseView from './TeacherCourseView';
+import TeacherCourseView from './TeacherCourseView/TeacherCourseView';
 
 const Course = () => {
     const isTeacher = authService.getCurrentUser()?.role === 'teacher';

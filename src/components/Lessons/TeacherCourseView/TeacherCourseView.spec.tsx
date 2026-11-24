@@ -1,22 +1,22 @@
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import lessonsService from '../../services/lessonsService';
-import type { Lesson } from '../../types/lesson';
-import type { Domain } from '../../types/practiceTest';
+import lessonsService from '../../../services/lessonsService';
+import type { Lesson } from '../../../types/lesson';
+import type { Domain } from '../../../types/practiceTest';
 import TeacherCourseView from './TeacherCourseView';
 
-vi.mock('../../services/lessonsService', () => ({
+vi.mock('../../../services/lessonsService', () => ({
     default: { getAll: vi.fn(), deleteLesson: vi.fn() },
 }));
 
-vi.mock('./AddLessonForm/AddLessonForm', () => ({
+vi.mock('../AddLessonForm/AddLessonForm', () => ({
     default: ({ domain, onCreated }: { domain: Domain; onCreated: () => void }) => (
         <button onClick={onCreated}>Add lesson to {domain}</button>
     ),
 }));
 
-vi.mock('./EditLessonForm/EditLessonForm', () => ({
+vi.mock('../EditLessonForm/EditLessonForm', () => ({
     default: ({ lesson, onSaved, onCancel }: { lesson: Lesson; onSaved: () => void; onCancel: () => void }) => (
         <div>
             <p>Editing {lesson.title}</p>
