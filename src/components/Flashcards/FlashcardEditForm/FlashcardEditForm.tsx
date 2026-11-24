@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import flashcardService from '../../services/flashcardService';
-import type { Flashcard } from '../../types/flashcard';
+import flashcardService from '../../../services/flashcardService';
+import type { Flashcard } from '../../../types/flashcard';
 
 interface FlashcardEditFormProps {
     flashcard: Flashcard;

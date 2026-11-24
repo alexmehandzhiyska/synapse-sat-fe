@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 import flashcardService from '../../services/flashcardService';
 import type { Flashcard } from '../../types/flashcard';
-import FlashcardList from './FlashcardList';
-import FlashcardReview from './FlashcardReview';
+import FlashcardList from './FlashcardList/FlashcardList';
+import FlashcardReview from './FlashcardReview/FlashcardReview';
 
 type FlashcardsTab = 'review' | 'all';
 

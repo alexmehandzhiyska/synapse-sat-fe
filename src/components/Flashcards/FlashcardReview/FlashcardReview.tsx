@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import flashcardService from '../../services/flashcardService';
-import type { Flashcard, FlashcardRating } from '../../types/flashcard';
-import FlashcardCard from './FlashcardCard';
+import flashcardService from '../../../services/flashcardService';
+import type { Flashcard, FlashcardRating } from '../../../types/flashcard';
+import FlashcardCard from '../FlashcardCard/FlashcardCard';
 
 interface FlashcardReviewProps {
     flashcards: Flashcard[];

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import flashcardService from '../../services/flashcardService';
-import type { Flashcard } from '../../types/flashcard';
-import ConfirmModal from '../common/ConfirmModal/ConfirmModal';
-import FlashcardEditForm from './FlashcardEditForm';
+import flashcardService from '../../../services/flashcardService';
+import type { Flashcard } from '../../../types/flashcard';
+import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
+import FlashcardEditForm from '../FlashcardEditForm/FlashcardEditForm';
 
 interface FlashcardListProps {
     flashcards: Flashcard[];
