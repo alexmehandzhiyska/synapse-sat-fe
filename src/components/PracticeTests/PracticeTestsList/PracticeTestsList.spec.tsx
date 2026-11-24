@@ -2,17 +2,17 @@ import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-li
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import authService from '../../services/authService';
-import practiceTestService from '../../services/practiceTestService';
-import type { AuthUser, UserRole } from '../../types/auth';
-import type { PracticeTest, PracticeTestType } from '../../types/practiceTest';
+import authService from '../../../services/authService';
+import practiceTestService from '../../../services/practiceTestService';
+import type { AuthUser, UserRole } from '../../../types/auth';
+import type { PracticeTest, PracticeTestType } from '../../../types/practiceTest';
 import PracticeTestsList from './PracticeTestsList';
 
-vi.mock('../../services/authService', () => ({
+vi.mock('../../../services/authService', () => ({
     default: { getCurrentUser: vi.fn() },
 }));
 
-vi.mock('../../services/practiceTestService', () => ({
+vi.mock('../../../services/practiceTestService', () => ({
     default: { getAll: vi.fn(), remove: vi.fn() },
 }));
 

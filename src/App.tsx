@@ -8,7 +8,7 @@ import Login from './components/Login/Login';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import Profile from './components/Profile/Profile';
 import AboutUs from './components/AboutUs/AboutUs';
-import PracticeTestsList from './components/PracticeTests/PracticeTestsList';
+import PracticeTestsList from './components/PracticeTests/PracticeTestsList/PracticeTestsList';
 import PracticeTest from './components/PracticeTests/PracticeTest/PracticeTest';
 import ScoreReport from './components/PracticeTests/ScoreReport/ScoreReport';
 import StudyPlanSetup from './components/StudyPlans/StudyPlanSetup/StudyPlanSetup';

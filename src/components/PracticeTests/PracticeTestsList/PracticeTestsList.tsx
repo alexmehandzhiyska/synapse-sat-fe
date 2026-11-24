@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import authService from '../../services/authService';
-import practiceTestService from '../../services/practiceTestService';
-import type { PracticeTest } from '../../types/practiceTest';
-import ConfirmModal from '../common/ConfirmModal/ConfirmModal';
+import authService from '../../../services/authService';
+import practiceTestService from '../../../services/practiceTestService';
+import type { PracticeTest } from '../../../types/practiceTest';
+import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
 
 const PracticeTestsList = () => {
     const isTeacher = authService.getCurrentUser()?.role === 'teacher';
     const isStudent = authService.getCurrentUser()?.role === 'student';
+    
     const [tests, setTests] = useState<PracticeTest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
