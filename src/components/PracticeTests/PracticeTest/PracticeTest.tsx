@@ -10,6 +10,7 @@ import ModuleCompletionInterstitial from './ModuleCompletionInterstitial/ModuleC
 import Question from './Question/Question';
 import QuestionNavigator from './QuestionNavigator/QuestionNavigator';
 import type { QuestionStatus } from './QuestionNavigator/QuestionNavigator';
+import TestFooter from './TestFooter/TestFooter';
 import TestHeader from './TestHeader/TestHeader';
 
 interface TestModule {
@@ -373,8 +374,6 @@ const PracticeTest = () => {
     const question = moduleQuestions[currentQuestionIndex];
     const selectedChoiceId = answers[question.id] ?? null;
 
-    const isLastQuestion = currentQuestionIndex === moduleQuestions.length - 1;
-
     const sectionLabel = SECTION_LABELS[currentModule.sectionName];
     const moduleLabel = test.type === 'check_in' ? '' : `Module ${currentModule.position}`;
     const questionStatuses: QuestionStatus[] = moduleQuestions.map((moduleQuestion, index) => {
@@ -418,49 +417,16 @@ const PracticeTest = () => {
                 />
             </div>
 
-            <div className="flex items-center justify-between gap-3 border-t border-slate-200 bg-white px-6 py-4 sm:px-10">
-                <button
-                    type="button"
-                    onClick={() => handleNavigate(currentQuestionIndex - 1)}
-                    disabled={currentQuestionIndex === 0}
-                    className="rounded-xl border-2 border-slate-200 px-5 py-2.5 text-sm font-bold text-[#13385A] transition hover:border-blue-200 disabled:opacity-40"
-                >
-                    Back
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => setIsNavigatorOpen((open) => !open)}
-                    aria-expanded={isNavigatorOpen}
-                    className="rounded-xl border-2 border-slate-200 px-4 py-2.5 text-sm font-bold text-[#13385A] transition hover:border-blue-200"
-                >
-                    Question {currentQuestionIndex + 1} of {moduleQuestions.length}
-                    <span className="ml-2 text-xs text-[#5A6B7B]">{isNavigatorOpen ? '▾' : '▴'}</span>
-                </button>
-
-                {isLastQuestion ? (
-                    <button
-                        type="button"
-                        onClick={handleFinishModule}
-                        disabled={isSubmitting}
-                        className="rounded-xl bg-[#13385A] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#0e2b45] disabled:opacity-60"
-                    >
-                        {isLastModule
-                            ? isSubmitting
-                                ? 'Submitting…'
-                                : 'Finish test'
-                            : 'Next module'}
-                    </button>
-                ) : (
-                    <button
-                        type="button"
-                        onClick={() => handleNavigate(currentQuestionIndex + 1)}
-                        className="rounded-xl bg-[#2f61c9] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#2450a8]"
-                    >
-                        Next
-                    </button>
-                )}
-            </div>
+            <TestFooter
+                currentIndex={currentQuestionIndex}
+                questionCount={moduleQuestions.length}
+                isLastModule={isLastModule}
+                isSubmitting={isSubmitting}
+                isNavigatorOpen={isNavigatorOpen}
+                onNavigate={handleNavigate}
+                onToggleNavigator={() => setIsNavigatorOpen((open) => !open)}
+                onFinishModule={handleFinishModule}
+            />
 
             {isNavigatorOpen && (
                 <QuestionNavigator
