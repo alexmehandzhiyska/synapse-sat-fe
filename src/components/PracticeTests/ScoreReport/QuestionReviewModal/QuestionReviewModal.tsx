@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-import notebookService from '../../../services/notebookService';
-import type { QuestionResult } from '../../../types/score';
-import { DOMAIN_LABELS } from './labels';
-import getSelectedWord, { type SelectedWord } from '../../Flashcards/getSelectedWord';
+import notebookService from '../../../../services/notebookService';
+import type { QuestionResult } from '../../../../types/score';
+import { DOMAIN_LABELS } from '../labels';
+import getSelectedWord, { type SelectedWord } from '../../../Flashcards/getSelectedWord';
 
-import AddFlashcardModal from '../../Flashcards/AddFlashcardModal/AddFlashcardModal';
+import AddFlashcardModal from '../../../Flashcards/AddFlashcardModal/AddFlashcardModal';
 
 interface QuestionReviewModalProps {
     question: QuestionResult;

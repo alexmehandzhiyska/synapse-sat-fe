@@ -1,11 +1,11 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import notebookService from '../../../services/notebookService';
-import type { QuestionResult } from '../../../types/score';
+import notebookService from '../../../../services/notebookService';
+import type { QuestionResult } from '../../../../types/score';
 import QuestionReviewModal from './QuestionReviewModal';
 
-vi.mock('../../../services/notebookService', () => ({
+vi.mock('../../../../services/notebookService', () => ({
     default: { create: vi.fn() },
 }));
 

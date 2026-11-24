@@ -3,10 +3,10 @@ import { Link, useParams } from 'react-router-dom';
 
 import testAttemptService from '../../../services/testAttemptService';
 import type { QuestionResult, ScoreDistribution, ScoreReport as ScoreReportData } from '../../../types/score';
-import DomainAccuracyChart from './DomainAccuracyChart';
-import PercentileChart from './PercentileChart';
-import QuestionReviewModal from './QuestionReviewModal';
-import SectionBreakdown from './SectionBreakdown';
+import DomainAccuracyChart from './DomainAccuracyChart/DomainAccuracyChart';
+import PercentileChart from './PercentileChart/PercentileChart';
+import QuestionReviewModal from './QuestionReviewModal/QuestionReviewModal';
+import SectionBreakdown from './SectionBreakdown/SectionBreakdown';
 import { SECTION_LABELS } from './labels';
 
 const ScoreReport = () => {

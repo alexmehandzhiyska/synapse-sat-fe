@@ -1,5 +1,5 @@
-import type { DomainScore } from '../../../types/score';
-import { DOMAIN_LABELS } from './labels';
+import type { DomainScore } from '../../../../types/score';
+import { DOMAIN_LABELS } from '../labels';
 
 interface DomainCardProps {
     domain: DomainScore;

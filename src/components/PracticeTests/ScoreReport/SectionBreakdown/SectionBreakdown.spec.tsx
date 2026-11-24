@@ -1,14 +1,14 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { QuestionResult, SectionScore } from '../../../types/score';
+import type { QuestionResult, SectionScore } from '../../../../types/score';
 import SectionBreakdown from './SectionBreakdown';
 
-vi.mock('./SectionSkillsRadar', () => ({
+vi.mock('../SectionSkillsRadar/SectionSkillsRadar', () => ({
     default: ({ color }: { color: string }) => <div data-testid="skills-radar" data-color={color} />,
 }));
 
-vi.mock('./QuestionDetailsTable', () => ({
+vi.mock('../QuestionDetailsTable/QuestionDetailsTable', () => ({
     default: ({ section }: { section: SectionScore }) => <div data-testid="details-table">{section.name}</div>,
 }));
 

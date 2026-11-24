@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { QuestionResult, SectionScore } from '../../../types/score';
+import type { QuestionResult, SectionScore } from '../../../../types/score';
 import QuestionDetailsTable from './QuestionDetailsTable';
 
 const answerChoices = [

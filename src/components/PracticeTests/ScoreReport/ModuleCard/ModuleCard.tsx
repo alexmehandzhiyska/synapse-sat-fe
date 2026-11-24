@@ -1,7 +1,7 @@
-import type { ModuleScore, QuestionResult } from '../../../types/score';
-import { MODULE_VARIANT_LABELS } from './labels';
+import type { ModuleScore, QuestionResult } from '../../../../types/score';
+import { MODULE_VARIANT_LABELS } from '../labels';
 
-import QuestionTiles from './QuestionTiles';
+import QuestionTiles from '../QuestionTiles/QuestionTiles';
 
 interface ModuleCardProps {
     module: ModuleScore;

@@ -8,7 +8,7 @@ import {
 } from 'recharts';
 import type { TooltipContentProps } from 'recharts';
 
-import type { ScoreDistribution } from '../../../types/score';
+import type { ScoreDistribution } from '../../../../types/score';
 
 type PercentileChartProps = {
     distribution: ScoreDistribution;

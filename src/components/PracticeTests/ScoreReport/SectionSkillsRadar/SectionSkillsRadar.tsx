@@ -9,8 +9,8 @@ import {
 } from 'recharts';
 import type { TooltipContentProps } from 'recharts';
 
-import type { DomainScore } from '../../../types/score';
-import { DOMAIN_LABELS, SHORT_DOMAIN_LABELS } from './labels';
+import type { DomainScore } from '../../../../types/score';
+import { DOMAIN_LABELS, SHORT_DOMAIN_LABELS } from '../labels';
 
 type SectionSkillsRadarProps = {
     domains: DomainScore[];

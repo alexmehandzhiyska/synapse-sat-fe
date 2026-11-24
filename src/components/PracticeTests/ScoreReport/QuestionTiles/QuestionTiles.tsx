@@ -1,4 +1,4 @@
-import type { QuestionResult, QuestionStatus } from '../../../types/score';
+import type { QuestionResult, QuestionStatus } from '../../../../types/score';
 
 const STATUS_CLASSES: Record<QuestionStatus, string> = {
     correct: 'border-emerald-500 bg-emerald-500',

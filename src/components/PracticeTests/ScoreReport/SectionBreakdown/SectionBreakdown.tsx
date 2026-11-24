@@ -1,9 +1,9 @@
-import type { QuestionResult, SectionScore } from '../../../types/score';
-import DomainCard from './DomainCard';
-import ModuleCard from './ModuleCard';
-import QuestionDetailsTable from './QuestionDetailsTable';
-import SectionSkillsRadar from './SectionSkillsRadar';
-import { SECTION_COLORS, SECTION_LABELS } from './labels';
+import type { QuestionResult, SectionScore } from '../../../../types/score';
+import DomainCard from '../DomainCard/DomainCard';
+import ModuleCard from '../ModuleCard/ModuleCard';
+import QuestionDetailsTable from '../QuestionDetailsTable/QuestionDetailsTable';
+import SectionSkillsRadar from '../SectionSkillsRadar/SectionSkillsRadar';
+import { SECTION_COLORS, SECTION_LABELS } from '../labels';
 
 interface SectionBreakdownProps {
     section: SectionScore;
