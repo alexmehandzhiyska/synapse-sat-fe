@@ -13,9 +13,12 @@ const getSuggestedDefinition = (word: string): Promise<SuggestedDefinition> =>
 const review = (id: string, rating: FlashcardRating): Promise<Flashcard> =>
     patch<Flashcard>(`/flashcards/${id}/review`, { body: { rating } });
 
+const update = (id: string, definition: string): Promise<Flashcard> =>
+    patch<Flashcard>(`/flashcards/${id}`, { body: { definition } });
+
 const remove = (id: string): Promise<void> =>
     del<void>(`/flashcards/${id}`);
 
-const flashcardService = { getAll, create, getSuggestedDefinition, review, remove };
+const flashcardService = { getAll, create, getSuggestedDefinition, review, update, remove };
 
 export default flashcardService;

@@ -26,9 +26,9 @@ const Flashcards = () => {
             });
     }, []);
 
-    const handleReviewed = (reviewedFlashcard: Flashcard) => {
+    const handleUpdated = (updatedFlashcard: Flashcard) => {
         setFlashcards((prev) =>
-            prev.map((flashcard) => (flashcard.id === reviewedFlashcard.id ? reviewedFlashcard : flashcard)),
+            prev.map((flashcard) => (flashcard.id === updatedFlashcard.id ? updatedFlashcard : flashcard)),
         );
     };
 
@@ -91,9 +91,9 @@ const Flashcards = () => {
                         </div>
 
                         {activeTab === 'review' ? (
-                            <FlashcardReview flashcards={flashcards} onReviewed={handleReviewed} />
+                            <FlashcardReview flashcards={flashcards} onReviewed={handleUpdated} />
                         ) : (
-                            <FlashcardList flashcards={flashcards} onDeleted={handleDeleted} />
+                            <FlashcardList flashcards={flashcards} onUpdated={handleUpdated} onDeleted={handleDeleted} />
                         )}
                     </>
                 )}

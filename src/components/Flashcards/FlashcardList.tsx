@@ -3,9 +3,11 @@ import { useState } from 'react';
 import flashcardService from '../../services/flashcardService';
 import type { Flashcard } from '../../types/flashcard';
 import ConfirmModal from '../common/ConfirmModal/ConfirmModal';
+import FlashcardEditForm from './FlashcardEditForm';
 
 interface FlashcardListProps {
     flashcards: Flashcard[];
+    onUpdated: (flashcard: Flashcard) => void;
     onDeleted: (flashcardId: string) => void;
 }
 
@@ -14,9 +16,15 @@ const getNextReviewLabel = (dueAt: string): string => {
     return dueDate.getTime() <= Date.now() ? 'Due now' : `Next review: ${dueDate.toLocaleDateString()}`;
 };
 
-const FlashcardList = ({ flashcards, onDeleted }: FlashcardListProps) => {
+const FlashcardList = ({ flashcards, onUpdated, onDeleted }: FlashcardListProps) => {
+    const [flashcardToEdit, setFlashcardToEdit] = useState<Flashcard | null>(null);
     const [flashcardToDelete, setFlashcardToDelete] = useState<Flashcard | null>(null);
     const [error, setError] = useState('');
+
+    const handleSave = (updatedFlashcard: Flashcard) => {
+        setFlashcardToEdit(null);
+        onUpdated(updatedFlashcard);
+    };
 
     const handleDelete = async (flashcard: Flashcard) => {
         setFlashcardToDelete(null);
@@ -46,17 +54,38 @@ const FlashcardList = ({ flashcards, onDeleted }: FlashcardListProps) => {
                             <h2 className="font-['Space_Grotesk'] text-2xl font-extrabold text-[#13385A]">
                                 {flashcard.word}
                             </h2>
-                            <button
-                                type="button"
-                                onClick={() => setFlashcardToDelete(flashcard)}
-                                className="inline-flex h-9 flex-none items-center justify-center rounded-xl border border-red-200 px-4 text-sm font-bold text-red-600 transition hover:bg-red-50"
-                            >
-                                Delete
-                            </button>
+                            {flashcardToEdit?.id !== flashcard.id && (
+                                <div className="flex flex-none gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setFlashcardToEdit(flashcard)}
+                                        className="inline-flex h-9 items-center justify-center rounded-xl border border-gray-200 px-4 text-sm font-bold text-[#13385A] transition hover:bg-gray-50"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setFlashcardToDelete(flashcard)}
+                                        className="inline-flex h-9 items-center justify-center rounded-xl border border-red-200 px-4 text-sm font-bold text-red-600 transition hover:bg-red-50"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            )}
                         </div>
-                        <p className="mb-3 whitespace-pre-line font-semibold leading-7 text-[#1b1b1f]">
-                            {flashcard.definition}
-                        </p>
+                        {flashcardToEdit?.id === flashcard.id ? (
+                            <div className="mb-3">
+                                <FlashcardEditForm
+                                    flashcard={flashcard}
+                                    onSave={handleSave}
+                                    onCancel={() => setFlashcardToEdit(null)}
+                                />
+                            </div>
+                        ) : (
+                            <p className="mb-3 whitespace-pre-line font-semibold leading-7 text-[#1b1b1f]">
+                                {flashcard.definition}
+                            </p>
+                        )}
                         {flashcard.context && (
                             <p className="mb-3 border-l-4 border-slate-200 pl-4 text-sm font-medium italic text-[#5A6B7B]">
                                 "{flashcard.context}"
