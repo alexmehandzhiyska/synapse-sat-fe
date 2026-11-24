@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { Question, SectionName } from '../../../../types/practiceTest';
-import { DOMAIN_LABELS } from '../../ScoreReport/labels';
+import { DOMAIN_LABELS } from '../../../../constants/labels';
 import QuestionEditForm from '../QuestionEditForm/QuestionEditForm';
 
 type QuestionCardProps = {

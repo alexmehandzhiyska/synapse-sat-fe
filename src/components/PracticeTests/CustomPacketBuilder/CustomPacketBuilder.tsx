@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import practiceTestService from '../../../services/practiceTestService';
 import type { Difficulty, Domain, GenerateCustomPacketData, QuestionStatusFilter, SectionName } from '../../../types/practiceTest';
-import { DIFFICULTY_OPTIONS, DOMAINS_BY_SECTION } from '../AddQuestion/domains';
-import { DOMAIN_LABELS, SECTION_LABELS } from '../ScoreReport/labels';
+import { DIFFICULTY_OPTIONS, DOMAINS_BY_SECTION } from '../../../constants/domains';
+import { DOMAIN_LABELS, SECTION_LABELS } from '../../../constants/labels';
 
 const SECTION_OPTIONS: SectionName[] = ['reading_writing', 'math'];
 

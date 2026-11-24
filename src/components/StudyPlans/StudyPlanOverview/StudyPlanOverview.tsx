@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import lessonsService from '../../../services/lessonsService';
 import type { StudyPlanData } from '../../../types/studyPlan';
 import type { DomainProgress } from '../../../types/lesson';
-import { DOMAIN_LABELS } from '../../PracticeTests/ScoreReport/labels';
+import { DOMAIN_LABELS } from '../../../constants/labels';
 
 type StudyPlanOverviewProps = {
     studyPlan: StudyPlanData | null;

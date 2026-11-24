@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import lessonsService from '../../../services/lessonsService';
 import type { DomainProgress, LessonProgressStatus } from '../../../types/lesson';
-import { DOMAIN_LABELS } from '../../PracticeTests/ScoreReport/labels';
+import { DOMAIN_LABELS } from '../../../constants/labels';
 import LessonEmbed from '../LessonEmbed/LessonEmbed';
 
 const statusStyles: Record<LessonProgressStatus, string> = {

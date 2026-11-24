@@ -3,7 +3,7 @@ import DomainCard from '../DomainCard/DomainCard';
 import ModuleCard from '../ModuleCard/ModuleCard';
 import QuestionDetailsTable from '../QuestionDetailsTable/QuestionDetailsTable';
 import SectionSkillsRadar from '../SectionSkillsRadar/SectionSkillsRadar';
-import { SECTION_COLORS, SECTION_LABELS } from '../labels';
+import { SECTION_COLORS, SECTION_LABELS } from '../../../../constants/labels';
 
 interface SectionBreakdownProps {
     section: SectionScore;

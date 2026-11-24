@@ -1,4 +1,4 @@
-import type { ModuleVariant, SectionName } from '../../../types/practiceTest';
+import type { ModuleVariant, SectionName } from '../types/practiceTest';
 
 export const SECTION_LABELS: Record<SectionName, string> = {
     reading_writing: 'Reading and Writing',

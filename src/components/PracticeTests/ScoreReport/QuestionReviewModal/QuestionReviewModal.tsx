@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import notebookService from '../../../../services/notebookService';
 import type { QuestionResult } from '../../../../types/score';
-import { DOMAIN_LABELS } from '../labels';
+import { DOMAIN_LABELS } from '../../../../constants/labels';
 import getSelectedWord, { type SelectedWord } from '../../../Flashcards/getSelectedWord';
 
 import AddFlashcardModal from '../../../Flashcards/AddFlashcardModal/AddFlashcardModal';

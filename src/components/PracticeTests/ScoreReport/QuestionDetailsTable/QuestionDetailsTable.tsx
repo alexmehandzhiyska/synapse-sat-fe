@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import type { Difficulty } from '../../../../types/practiceTest';
 import type { ModuleScore, QuestionResult, SectionScore } from '../../../../types/score';
-import { DOMAIN_LABELS } from '../labels';
+import { DOMAIN_LABELS } from '../../../../constants/labels';
 
 interface QuestionDetailsTableProps {
     section: SectionScore;

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import notebookService from '../../../services/notebookService';
 import type { NotebookEntry } from '../../../types/notebook';
 import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
-import { DOMAIN_LABELS } from '../../PracticeTests/ScoreReport/labels';
+import { DOMAIN_LABELS } from '../../../constants/labels';
 import NotebookEntryEditForm from '../NotebookEntryEditForm/NotebookEntryEditForm';
 
 type NotebookEntryCardProps = {

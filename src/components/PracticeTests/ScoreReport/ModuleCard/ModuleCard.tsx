@@ -1,5 +1,5 @@
 import type { ModuleScore, QuestionResult } from '../../../../types/score';
-import { MODULE_VARIANT_LABELS } from '../labels';
+import { MODULE_VARIANT_LABELS } from '../../../../constants/labels';
 
 import QuestionTiles from '../QuestionTiles/QuestionTiles';
 

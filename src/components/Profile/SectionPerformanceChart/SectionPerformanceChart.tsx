@@ -11,7 +11,7 @@ import {
 import type { DefaultLegendContentProps, TooltipContentProps } from 'recharts';
 
 import type { TestResult } from '../../../types/testAttempt';
-import { SECTION_LABELS } from '../../PracticeTests/ScoreReport/labels';
+import { SECTION_LABELS } from '../../../constants/labels';
 
 type SectionPerformanceChartProps = {
     testResults: TestResult[];

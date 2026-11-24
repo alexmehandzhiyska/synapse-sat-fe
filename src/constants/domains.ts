@@ -1,4 +1,4 @@
-import type { Difficulty, Domain, SectionName } from '../../../types/practiceTest';
+import type { Difficulty, Domain, SectionName } from '../types/practiceTest';
 
 export const DOMAINS_BY_SECTION: Record<SectionName, Domain[]> = {
     reading_writing: [

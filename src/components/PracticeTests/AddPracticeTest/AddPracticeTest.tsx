@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 import practiceTestService from '../../../services/practiceTestService';
 import type { CreatePracticeTestData, Domain } from '../../../types/practiceTest';
-import { DOMAINS_BY_SECTION } from '../AddQuestion/domains';
-import { DOMAIN_LABELS } from '../ScoreReport/labels';
+import { DOMAINS_BY_SECTION } from '../../../constants/domains';
+import { DOMAIN_LABELS } from '../../../constants/labels';
 
 const ALL_DOMAINS: Domain[] = [
     ...DOMAINS_BY_SECTION.reading_writing,

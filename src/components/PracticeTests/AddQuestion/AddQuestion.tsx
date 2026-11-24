@@ -6,8 +6,8 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 import practiceTestService from '../../../services/practiceTestService';
 import type { CreateQuestionData, Difficulty, Domain, FullPracticeTest, SectionName } from '../../../types/practiceTest';
-import { DOMAIN_LABELS, MODULE_VARIANT_LABELS, SECTION_LABELS } from '../ScoreReport/labels';
-import { CHOICE_LABELS, DIFFICULTY_OPTIONS, DOMAINS_BY_SECTION, getSectionForDomain } from './domains';
+import { DOMAIN_LABELS, MODULE_VARIANT_LABELS, SECTION_LABELS } from '../../../constants/labels';
+import { CHOICE_LABELS, DIFFICULTY_OPTIONS, DOMAINS_BY_SECTION, getSectionForDomain } from '../../../constants/domains';
 
 type QuestionFormData = {
     moduleId: string;

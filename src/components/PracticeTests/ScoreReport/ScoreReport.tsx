@@ -7,7 +7,7 @@ import DomainAccuracyChart from './DomainAccuracyChart/DomainAccuracyChart';
 import PercentileChart from './PercentileChart/PercentileChart';
 import QuestionReviewModal from './QuestionReviewModal/QuestionReviewModal';
 import SectionBreakdown from './SectionBreakdown/SectionBreakdown';
-import { SECTION_LABELS } from './labels';
+import { SECTION_LABELS } from '../../../constants/labels';
 
 const ScoreReport = () => {
     const { attemptId } = useParams<{ attemptId: string }>();

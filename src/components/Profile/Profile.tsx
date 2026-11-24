@@ -8,7 +8,7 @@ import studyPlanService from '../../services/studyPlanService';
 import type { UserProfile } from '../../types/auth';
 import type { TestResult } from '../../types/testAttempt';
 import type { StudyPlanData } from '../../types/studyPlan';
-import { SECTION_LABELS } from '../PracticeTests/ScoreReport/labels';
+import { SECTION_LABELS } from '../../constants/labels';
 
 import EditProfileForm from './EditProfileForm/EditProfileForm';
 import ScoreTrendChart from './ScoreTrendChart/ScoreTrendChart';
